@@ -53,7 +53,7 @@ BlynkTimer timer;
 BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
-  Blynk.setProperty(V0, "label", BLYNK_AUTH_TOKEN, "-EEPROM ", data.save_num);
+  Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 
 ICACHE_RAM_ATTR void buttonPressed() {
@@ -67,7 +67,7 @@ void savedata() {
     // Serial.println("\nWrite bytes to EEPROM memory...");
     data.save_num = data.save_num + 1;
     cs.write(data);
-    Blynk.setProperty(V0, "label", BLYNK_AUTH_TOKEN, "-EEPROM ", data.save_num);
+    Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
 
@@ -207,7 +207,8 @@ void setup() {
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
   delay(5000);
-
+  
+  Wire.begin();
   ee.begin();
   cs.begin(ee, PAGE_SIZE, MEMORY_SIZE / PAGE_SIZE);
   cs.read(data);
