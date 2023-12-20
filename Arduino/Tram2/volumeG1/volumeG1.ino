@@ -8,8 +8,8 @@
 
 const char* ssid = "Nha May Nuoc So 2";
 const char* password = "02723841572";
-//const char* ssid = "Wifi";
-//const char* password = "Password";
+//const char* ssid = "tram bom so 45";
+//const char* password = "0943950555";
 
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -28,7 +28,7 @@ const char* password = "02723841572";
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
+String Main = "ESzia3fpA-29cs8gt85pGnrPq_rICcqf";
 #define URL_fw_Bin "https://github.com/quangtran3110/IOT/raw/main/Arduino/Tram2/volumeG1/build/esp8266.esp8266.nodemcuv2/volumeG1.ino.bin"
 
 bool blynk_first_connect = false;
@@ -58,6 +58,7 @@ BLYNK_CONNECTED() {
 
 ICACHE_RAM_ATTR void buttonPressed() {
   data.pulse++;
+  //Serial.println(data.pulse);
 }
 
 void savedata() {
@@ -139,11 +140,13 @@ void rtc_time() {
 //-------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    //Serial.println("Khong ket noi WIFI");
+    Serial.println("Khong ket noi WIFI");
+    WiFi.begin(ssid, password);
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
     reboot_num = reboot_num + 1;
     if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
       WiFi.disconnect();
       delay(1000);
       WiFi.begin(ssid, password);
@@ -202,6 +205,7 @@ void setup() {
   attachInterrupt(D6, buttonPressed, RISING);
 
   timer.setInterval(15003, rtc_time);
+  timer.setInterval(61005, connectionstatus);
 }
 
 void loop() {

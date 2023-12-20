@@ -57,7 +57,7 @@
 #define BLYNK_TEMPLATE_NAME "Trạm Số 2"
 #define BLYNK_AUTH_TOKEN "ESzia3fpA-29cs8gt85pGnrPq_rICcqf"
 
-#define BLYNK_FIRMWARE_VERSION "231219.T2.MAIN"
+#define BLYNK_FIRMWARE_VERSION "231220.T2.MAIN"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 //-----------------------------
@@ -1507,7 +1507,7 @@ BLYNK_WRITE(V52) {
   if (param.asInt() == 1) {
     DateTime dt(data.time_clo);
     terminal_luuluong.clear();
-    Blynk.virtualWrite(V50, "Số mới nhất:\n G1:", data.ll_g1, "m3\n G2:", data.ll_g2, "m3\n Châm CLO:", data.clo, "kg vào lúc", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
+    Blynk.virtualWrite(V50, "Châm CLO:", data.clo, "kg vào lúc", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
   }
 }
 //----------------------------------------------------
