@@ -29,7 +29,7 @@ WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/tram4/volume.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram4/volume/build/esp8266.esp8266.nodemcuv2/volume.ino.bin"
 
 bool blynk_first_connect = false;
 int var_10m3;
@@ -65,10 +65,9 @@ void savedata() {
     // Serial.println("\nWrite bytes to EEPROM memory...");
     data.save_num = data.save_num + 1;
     cs.write(data);
-    Blynk.setProperty(V12, "label", BLYNK_AUTH_TOKEN,"-EEPROM ", data.save_num);
+    Blynk.setProperty(V12, "label", BLYNK_AUTH_TOKEN, "-EEPROM ", data.save_num);
   }
 }
-
 
 void send_LL_24h() {
   String server_path = server_name + "batch/update?token=" + Main
@@ -165,6 +164,42 @@ void update_fw() {
   }
 }
 //-------------------------
+void scanI2C() {
+  byte error, address;
+  int nDevices;
+
+  Blynk.virtualWrite(V0, "Scanning...");
+
+  nDevices = 0;
+  for (address = 1; address < 127; address++) {
+    // The i2c_scanner uses the return value of
+    // the Write.endTransmisstion to see if
+    // a device did acknowledge to the address.
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+
+    if (error == 0) {
+      Blynk.virtualWrite(V0, "I2C device found at address 0x");
+      if (address < 16)
+        Blynk.virtualWrite(V0, "0");
+      Blynk.virtualWrite(V0, address, HEX);
+      Blynk.virtualWrite(V0, "  !\n");
+
+      nDevices++;
+    } else if (error == 4) {
+      Blynk.virtualWrite(V0, "Unknown error at address 0x");
+      if (address < 16)
+        Blynk.virtualWrite(V0, "0");
+      Blynk.virtualWrite(V0, address, HEX, "\n");
+    }
+  }
+  if (nDevices == 0)
+    Blynk.virtualWrite(V0, "No I2C devices found\n");
+  else
+    Blynk.virtualWrite(V0, "done\n");
+
+  delay(5000);  // wait 5 seconds for next scan
+}
 void setup() {
   Serial.begin(9600);
   WiFi.mode(WIFI_STA);
@@ -179,6 +214,7 @@ void setup() {
   attachInterrupt(D6, buttonPressed, RISING);
 
   timer.setInterval(15003, rtc_time);
+  timer.setInterval(5013, scanI2C);
 }
 
 void loop() {
