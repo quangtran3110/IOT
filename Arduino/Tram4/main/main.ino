@@ -61,7 +61,7 @@
 #define BLYNK_TEMPLATE_ID "TMPLJp_sN4GN"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 4"
 #define BLYNK_AUTH_TOKEN "o-H-k28kNBIzgNIAP89f2AElv--eWuVO"
-#define BLYNK_FIRMWARE_VERSION "231220.T4.MAIN"
+#define BLYNK_FIRMWARE_VERSION "231221.T4.MAIN"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
@@ -86,7 +86,7 @@ RTC_DS3231 rtc_module;
 
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/raw/main/Arduino/Tram4/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram4/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
