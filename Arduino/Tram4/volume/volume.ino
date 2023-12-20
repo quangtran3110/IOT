@@ -2,7 +2,7 @@
 #define BLYNK_TEMPLATE_ID "TMPL0DBjAEt-"
 #define BLYNK_TEMPLATE_NAME "VOLUME"
 #define BLYNK_AUTH_TOKEN "XBbjtsi_sGTyvvs_zF4yN2s_4OoRvMjA"
-#define BLYNK_FIRMWARE_VERSION "231215.T4.VL"
+#define BLYNK_FIRMWARE_VERSION "231221.T4.VL"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -44,7 +44,7 @@ Data data, dataCheck;
 const struct Data dataDefault = { 0, 0, 0 };
 
 
-I2C_eeprom ee(0x80, MEMORY_SIZE);
+I2C_eeprom ee(0x50, MEMORY_SIZE);
 I2C_eeprom_cyclic_store<Data> cs;
 
 WidgetTerminal terminal(V0);
@@ -58,7 +58,6 @@ BLYNK_CONNECTED() {
 
 ICACHE_RAM_ATTR void buttonPressed() {
   data.pulse++;
-  savedata();
 }
 
 void savedata() {
@@ -170,7 +169,7 @@ void update_fw() {
 void scanI2C() {
   byte error, address;
   int nDevices;
-
+  char result[2];
   Blynk.virtualWrite(V0, "Scanning...");
 
   nDevices = 0;
@@ -180,11 +179,13 @@ void scanI2C() {
     // a device did acknowledge to the address.
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
+
     if (error == 0) {
       Blynk.virtualWrite(V0, "I2C device found at address 0x");
       if (address < 16)
         Blynk.virtualWrite(V0, "0");
-      Blynk.virtualWrite(V0, address, HEX);
+      String stringOne =  String(address, HEX);
+      Blynk.virtualWrite(V0, stringOne);
       Blynk.virtualWrite(V0, "  !\n");
 
       nDevices++;
@@ -192,15 +193,14 @@ void scanI2C() {
       Blynk.virtualWrite(V0, "Unknown error at address 0x");
       if (address < 16)
         Blynk.virtualWrite(V0, "0");
-      Blynk.virtualWrite(V0, address, HEX, "\n");
+      String stringOne =  String(address, HEX);
+      Blynk.virtualWrite(V0, stringOne);
     }
   }
   if (nDevices == 0)
     Blynk.virtualWrite(V0, "No I2C devices found\n");
   else
     Blynk.virtualWrite(V0, "done\n");
-
-  delay(5000);  // wait 5 seconds for next scan
 }
 void setup() {
   Serial.begin(9600);
@@ -217,7 +217,7 @@ void setup() {
   attachInterrupt(D6, buttonPressed, RISING);
 
   timer.setInterval(15003, rtc_time);
-  //timer.setInterval(5013, scanI2C);
+  timer.setInterval(5013, scanI2C);
 }
 
 void loop() {
