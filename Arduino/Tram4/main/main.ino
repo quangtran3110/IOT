@@ -86,7 +86,7 @@ RTC_DS3231 rtc_module;
 
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://github.com/quangtran3110/IOT/raw/main/Arduino/Tram4/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/raw/main/Arduino/Tram4/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
@@ -294,15 +294,15 @@ void hidden_all() {
   Blynk.setProperty(V7, "isHidden", true);
 }
 void visible_all() {
-  Blynk.setProperty(V3, "isHidden", false);
-  Blynk.setProperty(V18, "isHidden", false);
-  Blynk.setProperty(V11, "isHidden", false);
-  Blynk.setProperty(V16, "isHidden", false);
-  Blynk.setProperty(V13, "isHidden", false);
-  Blynk.setProperty(V8, "isHidden", false);
-  Blynk.setProperty(V5, "isHidden", false);
-  Blynk.setProperty(V6, "isHidden", false);
-  Blynk.setProperty(V7, "isHidden", false);
+  Blynk.setProperty(V3, V18, V11, V16, V13, V8, V5, V6, V7, V4, V9, "isHidden", false);
+  //Blynk.setProperty(V18, "isHidden", false);
+  //Blynk.setProperty(V11, "isHidden", false);
+  //Blynk.setProperty(V16, "isHidden", false);
+  //Blynk.setProperty(V13, "isHidden", false);
+  //Blynk.setProperty(V8, "isHidden", false);
+  //Blynk.setProperty(V5, "isHidden", false);
+  //Blynk.setProperty(V6, "isHidden", false);
+  //Blynk.setProperty(V7, "isHidden", false);
 }
 void hidden_auto() {
   Blynk.setProperty(V0, "isHidden", true);

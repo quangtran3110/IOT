@@ -51,8 +51,6 @@
    V64-LLG1_RL
    V65-LLG2_RL
 */
-
-
 #define BLYNK_TEMPLATE_ID "TMPLK0N90h0w"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 2"
 #define BLYNK_AUTH_TOKEN "ESzia3fpA-29cs8gt85pGnrPq_rICcqf"
@@ -60,6 +58,7 @@
 #define BLYNK_FIRMWARE_VERSION "231220.T2.MAIN"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
+
 //-----------------------------
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -111,7 +110,7 @@ HTTPClient http;
 String server_local = "http://blynkkwaco.ddns.net:8080/";
 String Tram2_Rualoc = "1nmLSMB-Q2dVjnPGKYbrGaEXcJ_droWB";
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-#define URL_fw_Bin "https://github.com/quangtran3110/IOT/raw/main/Arduino/Tram2/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram2/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 //-----------------------------
 const int S0 = 14;
 const int S1 = 12;
