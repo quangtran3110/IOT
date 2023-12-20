@@ -17,6 +17,7 @@ const char* password = "Password";
 #include <WidgetRTC.h>
 #include "RTClib.h"
 
+#include <Wire.h>
 #include <I2C_eeprom.h>
 #include <I2C_eeprom_cyclic_store.h>
 #define MEMORY_SIZE 0x4000  // Total capacity of the EEPROM
@@ -29,9 +30,9 @@ WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "ESzia3fpA-29cs8gt85pGnrPq_rICcqf";
-#define URL_fw_Bin "https://github.com/quangtran3110/IOT/raw/main/Arduino/Tram2/volumeG2/build/esp8266.esp8266.nodemcuv2/volumeG2.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram2/volumeG2/build/esp8266.esp8266.nodemcuv2/volumeG2.ino.bin"
 
-bool blynk_first_connect = false;
+bool blynk_first_connect = false, key_i2c = false;
 int var_10m3;
 byte reboot_num;
 
@@ -53,12 +54,12 @@ BlynkTimer timer;
 BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
-  Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
+  Blynk.virtualWrite(V1, BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 
 ICACHE_RAM_ATTR void buttonPressed() {
   data.pulse++;
-  Serial.println(data.pulse);
+  //Serial.println(data.pulse);
 }
 
 void savedata() {
@@ -69,7 +70,7 @@ void savedata() {
     data.save_num = data.save_num + 1;
     cs.write(data);
   }
-  Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
+  Blynk.virtualWrite(V1, BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 void send_LL_24h() {
   String server_path = server_name + "batch/update?token=" + Main
@@ -110,6 +111,9 @@ BLYNK_WRITE(V0) {
     data.pulse = 0;
     savedata();
     Blynk.virtualWrite(V0, "\nSản lượng hôm nay là:", data.pulse, "m3");
+  } else if (dataS == "i2c") {
+    terminal.clear();
+    key_i2c = !key_i2c;
   } else if (dataS == "savedata") {
     terminal.clear();
     savedata();
@@ -189,6 +193,42 @@ void update_fw() {
   }
 }
 //-------------------------
+void scanI2C() {
+  if (key_i2c) {
+    byte error, address;
+    int nDevices;
+    char result[2];
+    Blynk.virtualWrite(V0, "Scanning...");
+    nDevices = 0;
+    for (address = 1; address < 127; address++) {
+      // The i2c_scanner uses the return value of
+      // the Write.endTransmisstion to see if
+      // a device did acknowledge to the address.
+      Wire.beginTransmission(address);
+      error = Wire.endTransmission();
+      if (error == 0) {
+        Blynk.virtualWrite(V0, "I2C device address 0x");
+        if (address < 16)
+          Blynk.virtualWrite(V0, "0");
+        String stringOne = String(address, HEX);
+        Blynk.virtualWrite(V0, stringOne);
+        Blynk.virtualWrite(V0, " !\n");
+        nDevices++;
+      } else if (error == 4) {
+        Blynk.virtualWrite(V0, "Unknown error at address 0x");
+        if (address < 16)
+          Blynk.virtualWrite(V0, "0");
+        String stringOne = String(address, HEX);
+        Blynk.virtualWrite(V0, stringOne);
+      }
+    }
+    if (nDevices == 0)
+      Blynk.virtualWrite(V0, "No I2C devices found\n");
+    else
+      Blynk.virtualWrite(V0, "Done\n");
+  }
+}
+//-------------------------
 void setup() {
   Serial.begin(9600);
   WiFi.mode(WIFI_STA);
@@ -196,13 +236,16 @@ void setup() {
   Blynk.config(BLYNK_AUTH_TOKEN);
   delay(5000);
 
+  Wire.begin();
   ee.begin();
   cs.begin(ee, PAGE_SIZE, MEMORY_SIZE / PAGE_SIZE);
   cs.read(data);
 
   attachInterrupt(D6, buttonPressed, RISING);
 
+  timer.setInterval(61005, connectionstatus);
   timer.setInterval(15003, rtc_time);
+  timer.setInterval(5013, scanI2C);
 }
 
 void loop() {

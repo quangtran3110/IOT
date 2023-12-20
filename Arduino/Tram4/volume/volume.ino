@@ -32,6 +32,7 @@ String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
 
 bool blynk_first_connect = false, key_i2c = false;
 int var_10m3;
+byte reboot_num;
 
 struct Data {
 public:
@@ -139,6 +140,29 @@ void rtc_time() {
   }
 }
 //-------------------------
+void connectionstatus() {
+  if ((WiFi.status() != WL_CONNECTED)) {
+    //Serial.println("Khong ket noi WIFI");
+  }
+  if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      WiFi.disconnect();
+      delay(1000);
+      WiFi.begin(ssid, password);
+    }
+    if (reboot_num % 5 == 0) {
+      WiFi.disconnect();
+      delay(1000);
+      WiFi.begin(ssid, password);
+    }
+  }
+  if (Blynk.connected()) {
+    if (reboot_num != 0) {
+      reboot_num = 0;
+    }
+  }
+}
 void update_started() {
   Serial.println("CALLBACK:  HTTP update process started");
 }
@@ -216,6 +240,7 @@ void setup() {
 
   attachInterrupt(D6, buttonPressed, RISING);
 
+  timer.setInterval(61005, connectionstatus);
   timer.setInterval(15003, rtc_time);
   timer.setInterval(5013, scanI2C);
 }
