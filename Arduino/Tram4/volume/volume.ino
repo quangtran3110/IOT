@@ -44,7 +44,7 @@ Data data, dataCheck;
 const struct Data dataDefault = { 0, 0, 0 };
 
 
-I2C_eeprom ee(0x50, MEMORY_SIZE);
+I2C_eeprom ee(0x80, MEMORY_SIZE);
 I2C_eeprom_cyclic_store<Data> cs;
 
 WidgetTerminal terminal(V0);
@@ -53,11 +53,12 @@ BlynkTimer timer;
 BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
-  Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
+  Blynk.virtualWrite(V1, BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 
 ICACHE_RAM_ATTR void buttonPressed() {
   data.pulse++;
+  savedata();
 }
 
 void savedata() {
@@ -67,7 +68,7 @@ void savedata() {
     // Serial.println("\nWrite bytes to EEPROM memory...");
     data.save_num = data.save_num + 1;
     cs.write(data);
-    Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
+    Blynk.virtualWrite(V1, BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
 
@@ -207,7 +208,7 @@ void setup() {
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
   delay(5000);
-  
+
   Wire.begin();
   ee.begin();
   cs.begin(ee, PAGE_SIZE, MEMORY_SIZE / PAGE_SIZE);
@@ -216,7 +217,7 @@ void setup() {
   attachInterrupt(D6, buttonPressed, RISING);
 
   timer.setInterval(15003, rtc_time);
-  timer.setInterval(5013, scanI2C);
+  //timer.setInterval(5013, scanI2C);
 }
 
 void loop() {
