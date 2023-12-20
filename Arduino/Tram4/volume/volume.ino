@@ -17,6 +17,7 @@ const char* password = "0943950555";
 #include <WidgetRTC.h>
 #include "RTClib.h"
 
+#include <Wire.h>
 #include <I2C_eeprom.h>
 #include <I2C_eeprom_cyclic_store.h>
 #define MEMORY_SIZE 0x4000  // Total capacity of the EEPROM
@@ -52,6 +53,7 @@ BlynkTimer timer;
 BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
+  Blynk.setProperty(V0, "label", BLYNK_AUTH_TOKEN, "-EEPROM ", data.save_num);
 }
 
 ICACHE_RAM_ATTR void buttonPressed() {
@@ -65,7 +67,7 @@ void savedata() {
     // Serial.println("\nWrite bytes to EEPROM memory...");
     data.save_num = data.save_num + 1;
     cs.write(data);
-    Blynk.setProperty(V12, "label", BLYNK_AUTH_TOKEN, "-EEPROM ", data.save_num);
+    Blynk.setProperty(V0, "label", BLYNK_AUTH_TOKEN, "-EEPROM ", data.save_num);
   }
 }
 
@@ -177,7 +179,6 @@ void scanI2C() {
     // a device did acknowledge to the address.
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
-
     if (error == 0) {
       Blynk.virtualWrite(V0, "I2C device found at address 0x");
       if (address < 16)
