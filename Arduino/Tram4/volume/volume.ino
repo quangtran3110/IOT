@@ -2,14 +2,12 @@
 #define BLYNK_TEMPLATE_ID "TMPL0DBjAEt-"
 #define BLYNK_TEMPLATE_NAME "VOLUME"
 #define BLYNK_AUTH_TOKEN "XBbjtsi_sGTyvvs_zF4yN2s_4OoRvMjA"
-#define BLYNK_FIRMWARE_VERSION "231221.T4.VL"
+#define BLYNK_FIRMWARE_VERSION "231220.T4.VL"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
 const char* ssid = "tram bom so 4";
 const char* password = "0943950555";
-//const char* ssid = "Wifi";
-//const char* password = "Password";
 
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -32,7 +30,7 @@ String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram4/volume/build/esp8266.esp8266.nodemcuv2/volume.ino.bin"
 
-bool blynk_first_connect = false;
+bool blynk_first_connect = false, key_i2c = false;
 int var_10m3;
 
 struct Data {
@@ -114,6 +112,9 @@ BLYNK_WRITE(V0) {
     terminal.clear();
     savedata();
     Blynk.virtualWrite(V0, "DATA_SAVE... ok!");
+  } else if (dataS == "i2c") {
+    terminal.clear();
+    key_i2c = !key_i2c;
   } else {
     Blynk.virtualWrite(V0, "Mật mã sai.\nVui lòng nhập lại!\n");
   }
@@ -167,40 +168,39 @@ void update_fw() {
 }
 //-------------------------
 void scanI2C() {
-  byte error, address;
-  int nDevices;
-  char result[2];
-  Blynk.virtualWrite(V0, "Scanning...");
-
-  nDevices = 0;
-  for (address = 1; address < 127; address++) {
-    // The i2c_scanner uses the return value of
-    // the Write.endTransmisstion to see if
-    // a device did acknowledge to the address.
-    Wire.beginTransmission(address);
-    error = Wire.endTransmission();
-
-    if (error == 0) {
-      Blynk.virtualWrite(V0, "I2C device found at address 0x");
-      if (address < 16)
-        Blynk.virtualWrite(V0, "0");
-      String stringOne =  String(address, HEX);
-      Blynk.virtualWrite(V0, stringOne);
-      Blynk.virtualWrite(V0, "  !\n");
-
-      nDevices++;
-    } else if (error == 4) {
-      Blynk.virtualWrite(V0, "Unknown error at address 0x");
-      if (address < 16)
-        Blynk.virtualWrite(V0, "0");
-      String stringOne =  String(address, HEX);
-      Blynk.virtualWrite(V0, stringOne);
+  if (key_i2c) {
+    byte error, address;
+    int nDevices;
+    char result[2];
+    Blynk.virtualWrite(V0, "Scanning...");
+    nDevices = 0;
+    for (address = 1; address < 127; address++) {
+      // The i2c_scanner uses the return value of
+      // the Write.endTransmisstion to see if
+      // a device did acknowledge to the address.
+      Wire.beginTransmission(address);
+      error = Wire.endTransmission();
+      if (error == 0) {
+        Blynk.virtualWrite(V0, "I2C device address 0x");
+        if (address < 16)
+          Blynk.virtualWrite(V0, "0");
+        String stringOne = String(address, HEX);
+        Blynk.virtualWrite(V0, stringOne);
+        Blynk.virtualWrite(V0, " !\n");
+        nDevices++;
+      } else if (error == 4) {
+        Blynk.virtualWrite(V0, "Unknown error at address 0x");
+        if (address < 16)
+          Blynk.virtualWrite(V0, "0");
+        String stringOne = String(address, HEX);
+        Blynk.virtualWrite(V0, stringOne);
+      }
     }
+    if (nDevices == 0)
+      Blynk.virtualWrite(V0, "No I2C devices found\n");
+    else
+      Blynk.virtualWrite(V0, "Done\n");
   }
-  if (nDevices == 0)
-    Blynk.virtualWrite(V0, "No I2C devices found\n");
-  else
-    Blynk.virtualWrite(V0, "done\n");
 }
 void setup() {
   Serial.begin(9600);
