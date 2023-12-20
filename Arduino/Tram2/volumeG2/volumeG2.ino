@@ -8,8 +8,8 @@
 
 const char* ssid = "Hiddennet";
 const char* password = "Password";
-//const char* ssid = "Wifi";
-//const char* password = "Password";
+//const char* ssid = "tram bom so 4";
+//const char* password = "0943950555";
 
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -28,7 +28,7 @@ const char* password = "Password";
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
+String Main = "ESzia3fpA-29cs8gt85pGnrPq_rICcqf";
 #define URL_fw_Bin "https://github.com/quangtran3110/IOT/raw/main/Arduino/Tram2/volumeG2/build/esp8266.esp8266.nodemcuv2/volumeG2.ino.bin"
 
 bool blynk_first_connect = false;
@@ -58,6 +58,7 @@ BLYNK_CONNECTED() {
 
 ICACHE_RAM_ATTR void buttonPressed() {
   data.pulse++;
+  Serial.println(data.pulse);
 }
 
 void savedata() {

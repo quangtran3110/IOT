@@ -61,7 +61,7 @@
 #define BLYNK_TEMPLATE_ID "TMPLJp_sN4GN"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 4"
 #define BLYNK_AUTH_TOKEN "o-H-k28kNBIzgNIAP89f2AElv--eWuVO"
-#define BLYNK_FIRMWARE_VERSION "231114"
+#define BLYNK_FIRMWARE_VERSION "231220.T4.MAIN"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
@@ -86,7 +86,7 @@ RTC_DS3231 rtc_module;
 
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/tram4/main.ino.bin"
+#define URL_fw_Bin "https://github.com/quangtran3110/IOT/raw/main/Arduino/Tram4/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
@@ -179,7 +179,7 @@ int timer_2, timer_1, timer_3, timer_4, timer_5;
 int RelayState = LOW, RelayState2 = HIGH, RelayState1 = LOW;
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0, xSetAmpe4 = 0;
 int btnState = HIGH, btnState1 = HIGH, btnState2 = HIGH, AppState, AppState1, AppState2;
-int statusRualoc = LOW, var_LLG, count_LLG_RL = 0;
+int var_LLG;
 float Irms0, Irms1, Irms2, Irms3, Irms4, value, Result1, temp[3];
 unsigned long int xIrms0 = 0, xIrms1 = 0, xIrms2 = 0, xIrms3 = 0, xIrms4 = 0;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0, yIrms4 = 0;
@@ -199,9 +199,10 @@ struct Data {
   int save_num;
   int time_run_nenkhi, time_stop_nenkhi;
   float clo;
-  int time_clo;
+  int time_clo, LL_RL;
+  byte statusRualoc;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V10);
 WidgetTerminal terminal_luuluong(V31);
@@ -211,6 +212,7 @@ BlynkTimer timer, timer1;
 BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
+  Blynk.setProperty(V10, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 //-------------------------------------------------------------------
 void up() {
@@ -239,11 +241,12 @@ void savedata() {
     // Serial.println("\nWrite bytes to EEPROM memory...");
     data.save_num = data.save_num + 1;
     eeprom.writeBytes(address, sizeof(dataDefault), (byte*)&data);
+    Blynk.setProperty(V10, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
 void rualoc() {
-  if (statusRualoc == HIGH) {
-    mcp.digitalWrite(pinvandien, !statusRualoc);
+  if (data.statusRualoc == HIGH) {
+    mcp.digitalWrite(pinvandien, !data.statusRualoc);
     timer1.setTimeout(long(data.time_run_nenkhi * 1000), []() {
       mcp.digitalWrite(pinvandien, HIGH);
     });
@@ -443,8 +446,9 @@ void readPower4()  // C0 - Van điện - I4
     if ((yIrms4 > 3) && ((Irms4 >= data.SetAmpe4max) || (Irms4 <= data.SetAmpe4min))) {
       xSetAmpe4 = xSetAmpe4 + 1;
       if ((xSetAmpe4 >= 2) && (keyp)) {
-        statusRualoc = LOW;
-        mcp.digitalWrite(pinvandien, !statusRualoc);
+        data.statusRualoc = LOW;
+        savedata();
+        mcp.digitalWrite(pinvandien, !data.statusRualoc);
         xSetAmpe4 = 0;
         trip4 = true;
         if (keynoti)
@@ -1029,20 +1033,22 @@ BLYNK_WRITE(V17)  // Chế độ rửa lọc
 {
   if (key) {
     if (param.asInt() == LOW) {
-      statusRualoc = LOW;
-      mcp.digitalWrite(pinvandien, !statusRualoc);
-      if (count_LLG_RL != 0) {
-        Blynk.virtualWrite(V38, var_LLG - count_LLG_RL);
-        count_LLG_RL = 0;
+      data.statusRualoc = LOW;
+      mcp.digitalWrite(pinvandien, !data.statusRualoc);
+      if (data.LL_RL != 0) {
+        Blynk.virtualWrite(V38, var_LLG - data.LL_RL);
+        data.LL_RL = 0;
+        savedata();
       }
     } else {
-      statusRualoc = HIGH;
-      if (count_LLG_RL == 0) {
-        count_LLG_RL = var_LLG;
+      data.statusRualoc = HIGH;
+      if (data.LL_RL == 0) {
+        data.LL_RL = var_LLG;
+        savedata();
       }
     }
   } else {
-    Blynk.virtualWrite(V17, statusRualoc);
+    Blynk.virtualWrite(V17, data.statusRualoc);
   }
 }
 BLYNK_WRITE(V18)  // Time input

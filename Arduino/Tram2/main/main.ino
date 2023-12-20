@@ -209,6 +209,7 @@ BlynkTimer timer, timer1;
 BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
+  Blynk.setProperty(V5, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 
 void bridge_Tram2C(String token, int virtual_pin, float(value_to_send)) {
