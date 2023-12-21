@@ -45,8 +45,8 @@
    V58-G2 LL1m3
    V59-G2 LL24h
    V60-statusVLG2
-   V61-G1 LL1m3
-   V62-G1 LL24h
+   V61-G1 LL24h
+   V62-G1 LL1m3
    V63-statusVLG1
    V64-LLG1_RL
    V65-LLG2_RL
@@ -55,7 +55,7 @@
 #define BLYNK_TEMPLATE_NAME "Trạm Số 2"
 #define BLYNK_AUTH_TOKEN "ESzia3fpA-29cs8gt85pGnrPq_rICcqf"
 
-#define BLYNK_FIRMWARE_VERSION "231220.T2.MAIN"
+#define BLYNK_FIRMWARE_VERSION "231221.T2.MAIN"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -208,7 +208,6 @@ BlynkTimer timer, timer1;
 BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
-  Blynk.setProperty(V5, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 
 void bridge_Tram2C(String token, int virtual_pin, float(value_to_send)) {
@@ -1051,7 +1050,7 @@ BLYNK_WRITE(V58)  // Lưu lượng 1m3 G2
 {
   LLG2_1m3 = param.asInt();
 }
-BLYNK_WRITE(V61)  // Lưu lượng 1m3 G1
+BLYNK_WRITE(V62)  // Lưu lượng 1m3 G1
 {
   LLG1_1m3 = param.asInt();
 }
