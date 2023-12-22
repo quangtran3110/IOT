@@ -66,7 +66,7 @@ float temp[3];
 //-----------------------------
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/T2BPThanh/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram2BPT/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 #include <ModbusRTU.h>
@@ -110,9 +110,9 @@ bool key = false, blynk_first_connect = false;
 byte c;
 int temp_vdf;
 //-----------------------------
-const int dai = 2000;
-const int rong = 1000;
-const int dosau = 515;
+int dai = 640;
+int rong = 590;
+int dosau = 240;
 int volume, dungtich, smoothDistance;
 long distance;
 int zeropointTank = 199, fullpointTank = 936;
@@ -288,6 +288,7 @@ void temperature() {  // Nhiệt độ
   sensors.requestTemperatures();
   for (byte i = 0; i < sensors.getDeviceCount(); i++) {
     temp[i] = sensors.getTempCByIndex(i);
+    if (temp[i] < 0) temp[i] = 0;
   }
   //Serial.println(temp[0]);
 }
@@ -493,7 +494,6 @@ void rtctime() {
   */
 }
 //-------------------------------------------------------------------
-
 BLYNK_WRITE(V0)  // Gieng
 {
   if ((key) && (!trip0)) {
