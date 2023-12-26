@@ -25,10 +25,10 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "231225"
+#define BLYNK_FIRMWARE_VERSION "231226"
 
-const char* ssid = "tram bom so 4";
-const char* password = "0943950555";
+const char* ssid = "BPT2";
+const char* password = "0919126757";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -59,7 +59,7 @@ const word address = 0;
 //-----------------------------
 #include <OneWire.h>
 #include <DallasTemperature.h>
-#define ONE_WIRE_BUS D5
+#define ONE_WIRE_BUS D1
 OneWire oneWire(ONE_WIRE_BUS);
 DallasTemperature sensors(&oneWire);
 float temp[3];
@@ -74,6 +74,8 @@ String server_name = "http://sgp1.blynk.cloud/external/api/";
 //connect TX to D4 (GPIO0), RX to D3 (GPIO2)/SoftwareSerial S(TX, RX);
 SoftwareSerial S(0, 2);
 ModbusRTU mb;
+bool key_read = true;
+int time_delay;
 bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
   return true;
 }
@@ -97,8 +99,9 @@ const int pin_G1 = P7;
 const int pin_B1 = P6;
 const int pin_B2 = P5;
 const int pin_NK = P4;
-const int pin_5 = P3;
-const int pin_Fan = P2;
+const int pin_Fan = P3;
+const int pin_rst = P2;
+
 //-----------------------------
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
@@ -106,16 +109,17 @@ int timer_I;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
 float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
-bool key = false, blynk_first_connect = false;
+bool key = false, blynk_first_connect = false, status_fan = HIGH;
+;
 byte c;
 int temp_vdf;
 //-----------------------------
-int dai = 640;
-int rong = 590;
-int dosau = 240;
+int dai = 510;
+int rong = 510;
+int dosau = 260;
 int volume, dungtich, smoothDistance;
 long distance;
-int zeropointTank = 199, fullpointTank = 936;
+int zeropointTank = 189, fullpointTank = 850;
 int sensSmoothArray1[filterSamples];
 int digitalSmooth(int rawIn, int* sensSmoothArray) {
   int j, k, temp, top, bottom;
@@ -254,6 +258,17 @@ void off_nenkhi() {
   Blynk.virtualWrite(V3, data.status_nenkhi);
   savedata();
 }
+void on_fan() {  //NC
+  status_fan = HIGH;
+  pcf8575_1.digitalWrite(pin_Fan, status_fan);
+}
+void off_fan() {
+  status_fan = LOW;
+  pcf8575_1.digitalWrite(pin_Fan, status_fan);
+}
+void rst_module() {
+  pcf8575_1.digitalWrite(pin_rst, LOW);
+}
 void hidden() {
   Blynk.setProperty(V9, "isHidden", true);
   Blynk.setProperty(V10, "isHidden", true);
@@ -272,9 +287,9 @@ void MeasureCmForSmoothing()  //C1
   digitalWrite(S2, LOW);
   digitalWrite(S3, LOW);
   float sensorValue = analogRead(A0);
-  distance = (((sensorValue - zeropointTank) * 800) / (fullpointTank - zeropointTank));
-  //Serial.print("sensorValue ");
-  //Serial.println(distance);
+  distance = (((sensorValue - zeropointTank) * 500) / (fullpointTank - zeropointTank));
+  Serial.print("sensorValue ");
+  Serial.println(distance);
   if (distance > 0) {
     smoothDistance = digitalSmooth(distance, sensSmoothArray1);
     volume = (dai * smoothDistance * rong) / 1000000;
@@ -289,8 +304,8 @@ void temperature() {  // Nhiệt độ
   for (byte i = 0; i < sensors.getDeviceCount(); i++) {
     temp[i] = sensors.getTempCByIndex(i);
     if (temp[i] < 0) temp[i] = 0;
+    //Serial.println(temp[0]);
   }
-  //Serial.println(temp[0]);
 }
 //-------------------------------------------------------------------
 void readcurrent()  // C2 - Cấp 1   - I0
@@ -524,6 +539,16 @@ BLYNK_WRITE(V2)  // Bơm 2
     }
   } else Blynk.virtualWrite(V2, data.status_b2);
 }
+BLYNK_WRITE(V3)  // Nen Khi
+{
+  if ((key) && (!trip3)) {
+    if (param.asInt() == LOW) {
+      off_nenkhi();
+    } else {
+      on_nenkhi();
+    }
+  } else Blynk.virtualWrite(V3, data.status_nenkhi);
+}
 BLYNK_WRITE(V4)  // hidden/visible
 {
   if (param.asInt() == HIGH) {
@@ -636,7 +661,8 @@ BLYNK_WRITE(V12)  // String
     terminal.clear();
     Blynk.virtualWrite(V12, "ESP Khởi động lại sau 3s");
     delay(3000);
-    ESP.restart();
+    //ESP.restart();
+    rst_module();
   } else if (dataS == "update") {
     terminal.clear();
     Blynk.virtualWrite(V12, "ESP UPDATE...");
@@ -663,96 +689,75 @@ BLYNK_WRITE(V18)  // Cai ap luc bien tan
 }
 //-------------------------------------------------------------------
 void read_modbus() {
-  {  //Nhiệt độ biến tần
-    uint16_t nhietdo_bientan[1];
-    mb.readHreg(1, 16339, nhietdo_bientan, 1, cbWrite);
-    while (mb.slave()) {
-      mb.task();
-      yield();
-      delay(10);
-    }
-    temp_vdf = (nhietdo_bientan[0]);
-  }
-  if (temp_vdf > 0) {
-    //-------------
-    {  //Tần số
-      uint16_t tanso[1];
-      mb.readHreg(1, 16129, tanso, 1, cbWrite);
+  if (key_read) {
+    {  //Nhiệt độ biến tần
+      uint16_t nhietdo_bientan[1];
+      mb.readHreg(1, 16339, nhietdo_bientan, 1, cbWrite);
       while (mb.slave()) {
         mb.task();
         yield();
         delay(10);
       }
-      hz = tanso[0] / 10;
+      temp_vdf = (nhietdo_bientan[0]);
     }
-    //-------------
-    {  //Dòng điện
-      uint16_t dongdien[2];
-      mb.readHreg(1, 16139, dongdien, 2, cbWrite);
-      while (mb.slave()) {  // Check if transaction is active
-        mb.task();
-        yield();
-        delay(10);
+    if ((temp_vdf > 20) && (temp_vdf < 90)) {
+      time_delay = 0;
+      //-------------
+      {  //Fan
+        if ((temp_vdf < 55) && (status_fan == HIGH)) {
+          off_fan();
+        }
+        if ((temp_vdf > 60) && (status_fan == LOW)) {
+          on_fan();
+        }
       }
-      I_vdf = float(int32_2int16(dongdien[1], dongdien[0])) / 100;
-    }
-    //-------------
-    {  //Áp lực
-      uint16_t apluc[2];
-      mb.readHreg(1, 16519, apluc, 2, cbWrite);
-      while (mb.slave()) {  // Check if transaction is active
-        mb.task();
-        yield();
-        delay(10);
+      //-------------
+      {  //Tần số
+        uint16_t tanso[1];
+        mb.readHreg(1, 16129, tanso, 1, cbWrite);
+        while (mb.slave()) {
+          mb.task();
+          yield();
+          delay(10);
+        }
+        hz = tanso[0] / 10;
       }
-      pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
-    }
-    //-------------
-    {  //Áp lực set
-      uint16_t ref_percent_[1];
-      mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
-      while (mb.slave()) {  // Check if transaction is active
-        mb.task();
-        yield();
-        delay(10);
+      //-------------
+      {  //Dòng điện
+        uint16_t dongdien[2];
+        mb.readHreg(1, 16139, dongdien, 2, cbWrite);
+        while (mb.slave()) {  // Check if transaction is active
+          mb.task();
+          yield();
+          delay(10);
+        }
+        I_vdf = float(int32_2int16(dongdien[1], dongdien[0])) / 100;
       }
-      ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
-      float ref_bar = ref_percent / 10;                                           //Áp lực tham chiếu tổng dạng bar
+      //-------------
+      {  //Áp lực
+        uint16_t apluc[2];
+        mb.readHreg(1, 16519, apluc, 2, cbWrite);
+        while (mb.slave()) {  // Check if transaction is active
+          mb.task();
+          yield();
+          delay(10);
+        }
+        pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
+      }
+      //-------------
+      {  //Áp lực set
+        uint16_t ref_percent_[1];
+        mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
+        while (mb.slave()) {  // Check if transaction is active
+          mb.task();
+          yield();
+          delay(10);
+        }
+        ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
+        float ref_bar = ref_percent / 10;                                           //Áp lực tham chiếu tổng dạng bar
 
-      if (ref_bar != data.pre_set) {
-        if (ref_bar == 0) {
-          int send_ref = int((data.pre_set * 10) / 100 * 16384);
-          mb.writeHreg(1, 50009, send_ref, cbWrite);
-          while (mb.slave()) {  // Check if transaction is active
-            mb.task();
-            yield();
-            delay(10);
-          }
-          Blynk.virtualWrite(V18, data.pre_set);
-        } else {
-          uint16_t ref_blynk_[1];
-          mb.readHreg(1, 50009, ref_blynk_, 1, cbWrite);
-          while (mb.slave()) {
-            mb.task();
-            yield();
-            delay(10);
-          }
-          ref_blynk = ref_blynk_[0];                          //Áp lực tham chiếu nhập từ Blynk (0-16384)
-          float ref_blynk_percent = ref_blynk / 16384 * 100;  //Áp lực tham chiếu nhập từ Blynk dạng %
-          int ref_bientro_percent = ref_percent - ref_blynk_percent;
-          if (ref_bientro_percent != 0) {
-            Serial.println(ref_bientro_percent);
-            if (ref_blynk != 0) {
-              mb.writeHreg(1, 50009, 0, cbWrite);
-              while (mb.slave()) {  // Check if transaction is active
-                mb.task();
-                yield();
-                delay(10);
-              }
-            }
-            data.pre_set = ref_bar;
-            Blynk.virtualWrite(V18, data.pre_set);
-          } else {
+        if (ref_bar != data.pre_set) {
+          if (ref_bar == 0) {
             int send_ref = int((data.pre_set * 10) / 100 * 16384);
             mb.writeHreg(1, 50009, send_ref, cbWrite);
             while (mb.slave()) {  // Check if transaction is active
@@ -761,13 +766,54 @@ void read_modbus() {
               delay(10);
             }
             Blynk.virtualWrite(V18, data.pre_set);
+          } else {
+            uint16_t ref_blynk_[1];
+            mb.readHreg(1, 50009, ref_blynk_, 1, cbWrite);
+            while (mb.slave()) {
+              mb.task();
+              yield();
+              delay(10);
+            }
+            ref_blynk = ref_blynk_[0];                          //Áp lực tham chiếu nhập từ Blynk (0-16384)
+            float ref_blynk_percent = ref_blynk / 16384 * 100;  //Áp lực tham chiếu nhập từ Blynk dạng %
+            int ref_bientro_percent = ref_percent - ref_blynk_percent;
+            if (ref_bientro_percent != 0) {
+              //Serial.println(ref_bientro_percent);
+              if (ref_blynk != 0) {
+                mb.writeHreg(1, 50009, 0, cbWrite);
+                while (mb.slave()) {  // Check if transaction is active
+                  mb.task();
+                  yield();
+                  delay(10);
+                }
+              }
+              data.pre_set = ref_bar;
+              Blynk.virtualWrite(V18, data.pre_set);
+            } else {
+              int send_ref = int((data.pre_set * 10) / 100 * 16384);
+              mb.writeHreg(1, 50009, send_ref, cbWrite);
+              while (mb.slave()) {  // Check if transaction is active
+                mb.task();
+                yield();
+                delay(10);
+              }
+              Blynk.virtualWrite(V18, data.pre_set);
+            }
           }
         }
       }
+      //-------------
+    } else {
+      key_read = false;
+      time_delay = time_delay + 10000;
+      if (time_delay == 10000) {
+        Blynk.logEvent("info", String("RS485 lỗi!"));
+      }
+      timer1.setTimeout(time_delay, []() {
+        key_read = true;
+      });
+      hz = I_vdf = pre = temp_vdf = 0;
     }
-    //-------------
-  } else {
-    hz = I_vdf = pre = temp_vdf = 0;
   }
 }
 //-------------------------
@@ -833,6 +879,7 @@ void setup() {
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
   //-----------------------
+  delay(10000);
   Wire.begin();
   sensors.begin();
   S.begin(9600, SWSERIAL_8N1);
@@ -845,8 +892,9 @@ void setup() {
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
   //-----------------------
   emon0.current(A0, 110);
-  emon1.current(A0, 112);
-  emon2.current(A0, 112);
+  emon1.current(A0, 110);
+  emon2.current(A0, 110);
+  emon3.current(A0, 110);
   //-----------------------
   pcf8575_1.begin();
   pcf8575_1.pinMode(pin_G1, OUTPUT);
@@ -857,8 +905,8 @@ void setup() {
   pcf8575_1.digitalWrite(pin_B2, data.status_b2);
   pcf8575_1.pinMode(pin_NK, OUTPUT);
   pcf8575_1.digitalWrite(pin_NK, data.status_nenkhi);
-  pcf8575_1.pinMode(pin_5, OUTPUT);
-  pcf8575_1.digitalWrite(pin_5, HIGH);
+  pcf8575_1.pinMode(pin_rst, OUTPUT);
+  pcf8575_1.digitalWrite(pin_rst, HIGH);
   pcf8575_1.pinMode(pin_Fan, OUTPUT);
   pcf8575_1.digitalWrite(pin_Fan, HIGH);
 
@@ -882,6 +930,7 @@ void setup() {
       connectionstatus();
       timer.restartTimer(timer_I);
     });
+    timer.setInterval(230L, MeasureCmForSmoothing);
   });
 }
 void loop() {
