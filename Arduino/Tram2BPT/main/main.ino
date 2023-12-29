@@ -849,7 +849,7 @@ void read_modbus() {
       key_read = false;
       time_delay = time_delay + 10000;
       if (time_delay == 10000) {
-        Blynk.logEvent("info", String("RS485 lỗi!"));
+        //Blynk.logEvent("info", String("RS485 lỗi!"));
       }
       timer1.setTimeout(time_delay, []() {
         key_read = true;
