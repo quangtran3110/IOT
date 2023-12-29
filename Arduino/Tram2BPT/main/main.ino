@@ -929,7 +929,7 @@ void setup() {
       timer.restartTimer(timer_I);
     });
     timer.setInterval(230L, MeasureCmForSmoothing);
-    timer.setInterval(15005L, []() {
+    timer.setInterval(5005L, []() {
       rtctime();
       timer.restartTimer(timer_I);
     });
