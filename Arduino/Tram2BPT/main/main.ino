@@ -194,7 +194,8 @@ void up() {
                        + "&V15=" + smoothDistance
                        + "&V16=" + volume
                        + "&V19=" + temp_vdf
-                       + "&V21=" + temp[0];
+                       + "&V21=" + temp[0]
+                       + "&V22=" + temp[1];
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
