@@ -25,7 +25,7 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "231227"
+#define BLYNK_FIRMWARE_VERSION "231229"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -426,7 +426,7 @@ void readcurrent3()  // C5 - NenKhi  - I3
 void rtctime() {
   DateTime now = rtc_module.now();
   if (blynk_first_connect == true) {
-    if ((now.day() != day()) || (now.hour() != hour()) || ((now.minute() - minute() > 2) || (minute() - now.minute() > 2))) {
+    if ((now.day() != day()) || (now.month() != month()) || (now.year() != year()) ||(now.hour() != hour()) || ((now.minute() - minute() > 2) || (minute() - now.minute() > 2))) {
       rtc_module.adjust(DateTime(year(), month(), day(), hour(), minute(), second()));
       DateTime now = rtc_module.now();
     }
