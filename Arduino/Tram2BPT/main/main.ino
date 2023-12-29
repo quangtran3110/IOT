@@ -193,9 +193,9 @@ void up() {
                        + "&V14=" + pre
                        + "&V15=" + smoothDistance
                        + "&V16=" + volume
-                       + "&V19=" + temp_vdf
-                       + "&V21=" + temp[0]
-                       + "&V22=" + temp[1];
+                       + "&V19=" + temp_vdf;
+                       //+ "&V21=" + temp[0]
+                       //+ "&V22=" + temp[1];
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -925,11 +925,11 @@ void setup() {
       readcurrent3();
       read_modbus();
       up();
-      temperature();
+      //temperature();
       timer.restartTimer(timer_I);
     });
     timer.setInterval(230L, MeasureCmForSmoothing);
-    timer.setInterval(5005L, []() {
+    timer.setInterval(15005L, []() {
       rtctime();
       timer.restartTimer(timer_I);
     });
