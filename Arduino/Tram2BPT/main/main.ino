@@ -25,7 +25,7 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "231229"
+#define BLYNK_FIRMWARE_VERSION "231228"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -195,7 +195,6 @@ void up() {
                        + "&V16=" + volume
                        + "&V19=" + temp_vdf;
                        //+ "&V21=" + temp[0]
-                       //+ "&V22=" + temp[1];
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -427,7 +426,7 @@ void readcurrent3()  // C5 - NenKhi  - I3
 void rtctime() {
   DateTime now = rtc_module.now();
   if (blynk_first_connect == true) {
-    if ((now.day() != day()) || (now.month() != month()) || (now.year() != year()) ||(now.hour() != hour()) || ((now.minute() - minute() > 2) || (minute() - now.minute() > 2))) {
+    if ((now.day() != day()) || (now.hour() != hour()) || ((now.minute() - minute() > 2) || (minute() - now.minute() > 2))) {
       rtc_module.adjust(DateTime(year(), month(), day(), hour(), minute(), second()));
       DateTime now = rtc_module.now();
     }
@@ -674,7 +673,25 @@ BLYNK_WRITE(V12)  // String
     terminal.clear();
     Blynk.virtualWrite(V12, "ESP UPDATE...");
     update_fw();
-  } else {
+  } else if (dataS == "stop") {
+    terminal.clear();
+    mb.writeHreg(1, 49999, 1084, cbWrite);
+    while (mb.slave()) {  // Check if transaction is active
+      mb.task();
+      yield();
+      delay(10);
+    }
+    Blynk.virtualWrite(V12, "Đã dừng biến tần\n");
+  } else if (dataS == "run") {
+    terminal.clear();
+    mb.writeHreg(1, 49999, 1148, cbWrite);
+    while (mb.slave()) {  // Check if transaction is active
+      mb.task();
+      yield();
+      delay(10);
+    }
+    Blynk.virtualWrite(V12, "Chạy biến tần\n");
+  }else {
     Blynk.virtualWrite(V12, "Mật mã sai.\nVui lòng nhập lại!\n");
   }
 }
@@ -888,7 +905,7 @@ void setup() {
   //-----------------------
   delay(10000);
   Wire.begin();
-  sensors.begin();
+  //sensors.begin();
   S.begin(9600, SWSERIAL_8N1);
   mb.begin(&S);
   mb.master();
