@@ -236,13 +236,13 @@ void off_b1() {
 }
 void on_b2() {  //NO
   data.status_b2 = HIGH;
-  pcf8575_1.digitalWrite(pin_B2, !data.status_b2);
+  pcf8575_1.digitalWrite(pin_B2, data.status_b2);
   Blynk.virtualWrite(V2, data.status_b2);
   savedata();
 }
 void off_b2() {
   data.status_b2 = LOW;
-  pcf8575_1.digitalWrite(pin_B2, !data.status_b2);
+  pcf8575_1.digitalWrite(pin_B2, data.status_b2);
   Blynk.virtualWrite(V2, data.status_b2);
   savedata();
 }
@@ -655,6 +655,7 @@ BLYNK_WRITE(V12)  // String
     trip3 = false;
     on_cap1();
     on_b1();
+    on_b2();
     on_nenkhi();
     mb.writeHreg(1, 49999, 1212, cbWrite);
     while (mb.slave()) {  // Check if transaction is active
