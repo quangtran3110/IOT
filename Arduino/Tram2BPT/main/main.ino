@@ -25,7 +25,7 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "231228"
+#define BLYNK_FIRMWARE_VERSION "231229"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -717,13 +717,11 @@ void read_modbus() {
   if (key_read) {
     {  //Nhiệt độ biến tần
       uint16_t nhietdo_bientan[1];
-      if (!mb.slave()) {
-        mb.readHreg(1, 16339, nhietdo_bientan, 1, cbWrite);
-        while (mb.slave()) {
-          mb.task();
-          yield();
-          delay(10);
-        }
+      mb.readHreg(1, 16339, nhietdo_bientan, 1);
+      while (mb.slave()) {
+        mb.task();
+        //yield();
+        delay(10);
       }
       temp_vdf = (nhietdo_bientan[0]);
     }
@@ -741,124 +739,109 @@ void read_modbus() {
       //-------------
       {  //Tần số
         uint16_t tanso[1];
-        if (!mb.slave()) {
-          mb.readHreg(1, 16129, tanso, 1, cbWrite);
-          while (mb.slave()) {
-            mb.task();
-            yield();
-            delay(10);
-          }
+        mb.readHreg(1, 16129, tanso, 1);
+        while (mb.slave()) {
+          mb.task();
+          //yield();
+          delay(10);
           hz = tanso[0] / 10;
         }
       }
       //-------------
       {  //Dòng điện
         uint16_t dongdien[2];
-        if (!mb.slave()) {
-          mb.readHreg(1, 16139, dongdien, 2, cbWrite);
-          while (mb.slave()) {  // Check if transaction is active
-            mb.task();
-            yield();
-            delay(10);
-          }
+        mb.readHreg(1, 16139, dongdien, 2);
+        while (mb.slave()) {  // Check if transaction is active
+          mb.task();
+          //yield();
+          delay(10);
           I_vdf = float(int32_2int16(dongdien[1], dongdien[0])) / 100;
         }
       }
       //-------------
       {  //Áp lực
         uint16_t apluc[2];
-        if (!mb.slave()) {
-          mb.readHreg(1, 16519, apluc, 2, cbWrite);
-          while (mb.slave()) {  // Check if transaction is active
-            mb.task();
-            yield();
-            delay(10);
-          }
+        mb.readHreg(1, 16519, apluc, 2);
+        while (mb.slave()) {  // Check if transaction is active
+          mb.task();
+          //yield();
+          delay(10);
           pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
         }
       }
-      //-------------
-      {  //Áp lực set
-        uint16_t ref_percent_[1];
-        if (!mb.slave()) {
-          mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
+    }
+    //-------------
+    {  //Áp lực set
+      uint16_t ref_percent_[1];
+      mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
+      while (mb.slave()) {  // Check if transaction is active
+        mb.task();
+        //yield();
+        delay(10);
+        ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
+      }
+      float ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
+
+      if (ref_bar != data.pre_set) {
+        if (ref_bar == 0) {
+          int send_ref = int((data.pre_set * 10) / 100 * 16384);
+          mb.writeHreg(1, 50009, send_ref, cbWrite);
           while (mb.slave()) {  // Check if transaction is active
             mb.task();
-            yield();
+            //yield();
             delay(10);
+            Blynk.virtualWrite(V18, data.pre_set);
           }
-        }
-        ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
-        float ref_bar = ref_percent / 10;                                           //Áp lực tham chiếu tổng dạng bar
-
-        if (ref_bar != data.pre_set) {
-          if (ref_bar == 0) {
-            int send_ref = int((data.pre_set * 10) / 100 * 16384);
-            if (!mb.slave()) {
-              mb.writeHreg(1, 50009, send_ref, cbWrite);
+        } else {
+          uint16_t ref_blynk_[1];
+          mb.readHreg(1, 50009, ref_blynk_, 1, cbWrite);
+          while (mb.slave()) {
+            mb.task();
+            //yield();
+            delay(10);
+            ref_blynk = ref_blynk_[0];  //Áp lực tham chiếu nhập từ Blynk (0-16384)
+          }
+          float ref_blynk_percent = ref_blynk / 16384 * 100;  //Áp lực tham chiếu nhập từ Blynk dạng %
+          int ref_bientro_percent = ref_percent - ref_blynk_percent;
+          if (ref_bientro_percent != 0) {
+            //Serial.println(ref_bientro_percent);
+            if (ref_blynk != 0) {
+              mb.writeHreg(1, 50009, 0, cbWrite);
               while (mb.slave()) {  // Check if transaction is active
                 mb.task();
-                yield();
+                //yield();
                 delay(10);
               }
             }
+            data.pre_set = ref_bar;
             Blynk.virtualWrite(V18, data.pre_set);
           } else {
-            uint16_t ref_blynk_[1];
-            if (!mb.slave()) {
-              mb.readHreg(1, 50009, ref_blynk_, 1, cbWrite);
-              while (mb.slave()) {
-                mb.task();
-                yield();
-                delay(10);
-              }
+            int send_ref = int((data.pre_set * 10) / 100 * 16384);
+            mb.writeHreg(1, 50009, send_ref, cbWrite);
+            while (mb.slave()) {  // Check if transaction is active
+              mb.task();
+              //yield();
+              delay(10);
             }
-            ref_blynk = ref_blynk_[0];                          //Áp lực tham chiếu nhập từ Blynk (0-16384)
-            float ref_blynk_percent = ref_blynk / 16384 * 100;  //Áp lực tham chiếu nhập từ Blynk dạng %
-            int ref_bientro_percent = ref_percent - ref_blynk_percent;
-            if (ref_bientro_percent != 0) {
-              //Serial.println(ref_bientro_percent);
-              if (ref_blynk != 0) {
-                if (!mb.slave()) {
-                  mb.writeHreg(1, 50009, 0, cbWrite);
-                  while (mb.slave()) {  // Check if transaction is active
-                    mb.task();
-                    yield();
-                    delay(10);
-                  }
-                }
-              }
-              data.pre_set = ref_bar;
-              Blynk.virtualWrite(V18, data.pre_set);
-            } else {
-              int send_ref = int((data.pre_set * 10) / 100 * 16384);
-              if (!mb.slave()) {
-                mb.writeHreg(1, 50009, send_ref, cbWrite);
-                while (mb.slave()) {  // Check if transaction is active
-                  mb.task();
-                  yield();
-                  delay(10);
-                }
-              }
-              Blynk.virtualWrite(V18, data.pre_set);
-            }
+            Blynk.virtualWrite(V18, data.pre_set);
           }
         }
       }
-      //-------------
-    } else {
-      key_read = false;
-      time_delay = time_delay + 10000;
-      if (time_delay == 10000) {
-        //Blynk.logEvent("info", String("RS485 lỗi!"));
-      }
-      timer1.setTimeout(time_delay, []() {
-        key_read = true;
-      });
-      hz = I_vdf = pre = temp_vdf = 0;
     }
+    //-------------
+  } else {
+    key_read = false;
+    time_delay = time_delay + 5000;
+    if (time_delay == 5000) {
+      //Blynk.logEvent("info", String("RS485 lỗi!"));
+    }
+    timer1.setTimeout(time_delay, []() {
+      key_read = true;
+    });
+    hz = I_vdf = pre = temp_vdf = 0;
   }
 }
+
 //-------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
