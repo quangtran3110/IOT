@@ -730,10 +730,10 @@ void read_modbus() {
       time_delay = 0;
       //-------------
       {  //Fan
-        if ((temp_vdf < 55) && (status_fan == HIGH)) {
+        if ((temp_vdf < 35) && (status_fan == HIGH)) {
           off_fan();
         }
-        if ((temp_vdf > 60) && (status_fan == LOW)) {
+        if ((temp_vdf > 40) && (status_fan == LOW)) {
           on_fan();
         }
       }
