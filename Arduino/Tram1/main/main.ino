@@ -190,27 +190,45 @@ void savedata() {
   }
 }
 void on_cap1() {
-  data.status_g1 = HIGH;
+  if (data.status_g1 == LOW) {
+    data.status_g1 = HIGH;
+    savedata();
+  }
   mcp.digitalWrite(pincap1, data.status_g1);
 }
 void off_cap1() {
-  data.status_g1 = LOW;
+  if (data.status_g1 == HIGH) {
+    data.status_g1 = LOW;
+    savedata();
+  }
   mcp.digitalWrite(pincap1, data.status_g1);
 }
 void on_bom() {
-  data.status_b1 = HIGH;
+  if (data.status_b1 == LOW) {
+    data.status_b1 = HIGH;
+    savedata();
+  }
   mcp.digitalWrite(pinbom, data.status_b1);
 }
 void off_bom() {
-  data.status_b1 = LOW;
+  if (data.status_b1 == HIGH) {
+    data.status_b1 = LOW;
+    savedata();
+  }
   mcp.digitalWrite(pinbom, data.status_b1);
 }
 void on_nenkhi() {
-  data.status_nk1 = HIGH;
+  if (data.status_nk1 == LOW) {
+    data.status_nk1 = HIGH;
+    savedata();
+  }
   mcp.digitalWrite(pinnenkhi, data.status_nk1);
 }
 void off_nenkhi() {
-  data.status_nk1 = LOW;
+  if (data.status_nk1 == HIGH) {
+    data.status_nk1 = LOW;
+    savedata();
+  }
   mcp.digitalWrite(pinnenkhi, data.status_nk1);
 }
 void hidden() {
@@ -912,18 +930,18 @@ void setup() {
     trip_mcp = true;
   }
 
-  mcp.pinMode(6, INPUT);
-  mcp.pinMode(7, INPUT);
-  mcp.pinMode(pincap1, OUTPUT);
-  mcp.digitalWrite(pincap1, HIGH);  // Bom 1
-  mcp.pinMode(pinbom, OUTPUT);
-  mcp.digitalWrite(pinbom, HIGH);  // Bom 2
-  mcp.pinMode(pinnenkhi, OUTPUT);
-  mcp.digitalWrite(pinnenkhi, HIGH);
-
   rtc_module.begin();
   eeprom.initialize();
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
+
+  mcp.pinMode(6, INPUT);
+  mcp.pinMode(7, INPUT);
+  mcp.pinMode(pincap1, OUTPUT);
+  mcp.digitalWrite(pincap1, data.status_g1);  // Bom 1
+  mcp.pinMode(pinbom, OUTPUT);
+  mcp.digitalWrite(pinbom, data.status_b1);  // Bom 2
+  mcp.pinMode(pinnenkhi, OUTPUT);
+  mcp.digitalWrite(pinnenkhi, data.status_nk1);
   //------------------------------------
   timer.setTimeout(5000L, []() {
     timer.setInterval(201L, []() {
