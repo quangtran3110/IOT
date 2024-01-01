@@ -118,7 +118,7 @@ int digitalSmooth(int rawIn, int* sensSmoothArray) {
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram2/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram1/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 //-----------------------------
 const int S0pin = 14;
 const int S1pin = 12;
