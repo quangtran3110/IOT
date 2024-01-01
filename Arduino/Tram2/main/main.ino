@@ -1638,8 +1638,8 @@ void setup() {
 
   eeprom.initialize();
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
-
-  setSyncInterval(10 * 60);
+  terminal.clear();
+  
   timer.setTimeout(5000L, []() {
     timer_I = timer.setInterval(1589, []() {
       readcurrent();
