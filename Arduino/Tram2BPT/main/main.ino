@@ -768,7 +768,7 @@ void read_modbus() {
           mb.task();
           //yield();
           delay(10);
-          if ((float(int32_2int16(apluc[1], apluc[0])) / 1000) >= 10) {
+          if ((float(int32_2int16(apluc[1], apluc[0])) / 1000) < 10) {
             pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
           }
         }
