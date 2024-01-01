@@ -6,8 +6,8 @@
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
-const char* ssid = "Tram Bom So 1";
-const char* password = "0943950555";
+const char* ssid = "Phong Tai Vu";
+const char* password = "0974040699";
 //const char* ssid = "tram bom so 45";
 //const char* password = "0943950555";
 
@@ -28,8 +28,12 @@ const char* password = "0943950555";
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "NkRHGVvq7kogEc7VhRgbcJXDJbFA-dMa";
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram1/volume/build/esp8266.esp8266.nodemcuv2/volume.ino.bin"
+String Main = "lvmyPh1nGcSjs3n1CTJrX4DyuWLlS0i0";
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram3/volume/build/esp8266.esp8266.nodemcuv2/volume.ino.bin"
+
+String LL24h = "&V30=";
+String LL1m3 = "&V29=";
+String status_volume = "&V28=";
 
 bool blynk_first_connect = false, key_i2c = false;
 int var_10m3;
@@ -73,7 +77,7 @@ void savedata() {
 }
 void send_LL_24h() {
   String server_path = server_name + "batch/update?token=" + Main
-                       + "&V61=" + data.pulse;
+                       + LL24h + data.pulse;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   if (httpResponseCode > 0) {
@@ -82,8 +86,8 @@ void send_LL_24h() {
 }
 void send_LL_1m3() {
   String server_path = server_name + "batch/update?token=" + Main
-                       + "&V63=1"
-                       + "&V62=" + data.pulse;
+                       + status_volume + "1"
+                       + LL1m3 + data.pulse;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   if (httpResponseCode > 0) {

@@ -15,60 +15,39 @@
  *V13 - timeinput
  *V14 - bao ve
  *V15 - thong bao
- *V16 - hidden/visible
+ *V16 - Rửa lọc
  *V17 - info
  *V18 - Btn Nen Khi
  *V19 - I2 - Nen Khi
  *V20 - date/time
  *V21 - status pre
-*V22 - Do sau
-*V23 - Dung tich
-*V24 -
-*V25 -
+ *V22 - Do sau
+ *V23 - Dung tich
+ *V24 - String Clo
+ *V25 - Clo input
+ *V26 - Clo
+ *V27 - check clo
+ *V28 - Status Volume
+ *V29 - LLG1_1m3
+ *V30 - LLG1_24h
+ *V31 - LLG1_RL
 */
 
+#define APP_DEBUG
+#define BLYNK_PRINT Serial
 #define BLYNK_TEMPLATE_ID "TMPLnbfxczCv"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 3"
 #define BLYNK_AUTH_TOKEN "lvmyPh1nGcSjs3n1CTJrX4DyuWLlS0i0"
-#define BLYNK_FIRMWARE_VERSION "23.9.1"
-#define APP_DEBUG
-const char* ssid = "TTTV Xay Dung";
-const char* password = "0723841249";
+#define BLYNK_FIRMWARE_VERSION "240101"
 //------------------
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
+const char* ssid = "TTTV Xay Dung";
+const char* password = "0723841249";
 //------------------
 #include <Adafruit_MCP23X17.h>
 Adafruit_MCP23X17 mcp;
-//------------------
-#include "EmonLib.h"
-EnergyMonitor emon0, emon1, emon2;
-//------------------
-#include <WidgetRTC.h>
-#include "RTClib.h"
-#include <TimeLib.h>
-rtc_moduleDS3231 rtc_module;
-//------------------
-#include <Eeprom24C32_64.h>
-#define EEPROM_ADDRESS 0x57
-static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
-//------------------
-#include <ESP8266httpUpdate.h>
-#include <WiFiClientSecure.h>
-#include <ESP8266HTTPClient.h>
-WiFiClient client;
-HTTPClient http;
-String server_main = "http://sgp1.blynk.cloud/external/api/";
-String Main = "lvmyPh1nGcSjs3n1CTJrX4DyuWLlS0i0";
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/tram3/main/main.ino.bin"
-//------------------
-#define filterSamples 121
-
-const int S0pin = 0;
-const int S1pin = 2;
-const int S2pin = 14;
-const int S3pin = 12;
-const word address = 0;
+bool trip_mcp = false;
 const int relay2 = 8;
 const int relay1 = 10;
 const int pincap1 = 11;
@@ -76,24 +55,50 @@ const int pinbom = 9;
 const int btncap1 = 14;
 const int btncap2 = 13;
 const int pinnenkhi = 100;
-long t;
+//------------------
+#include "EmonLib.h"
+EnergyMonitor emon0, emon1, emon2;
+float Irms0, Irms1, Irms2;
+bool trip0 = false, trip1 = false, trip2 = false;
+int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0;
+//------------------
+#include <WidgetRTC.h>
+#include "RTClib.h"
+RTC_DS3231 rtc_module;
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 char tz[] = "Asia/Ho_Chi_Minh";
-bool key = false, keySet = false, keyp = true, keynoti = true, keytank = true;
-bool trip0 = false, trip1 = false, trip2 = false, trip_mcp = false;
-bool key_memory = true, timer_I_status;
+//------------------
+#include <Eeprom24C32_64.h>
+#define EEPROM_ADDRESS 0x57
+static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
+const word address = 0;
+//------------------
+#include <ESP8266httpUpdate.h>
+#include <WiFiClientSecure.h>
+#include <ESP8266HTTPClient.h>
+WiFiClient client;
+HTTPClient http;
+String server_main = "http://sgp1.blynk.cloud/external/api/";
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram3/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
+//------------------
+const int S0pin = 0;
+const int S1pin = 2;
+const int S2pin = 14;
+const int S3pin = 12;
+
+
+bool key = false, keyp = true, keytank = true;
 bool status_pre = false, time_off_c1 = true;
 bool noti_cap1 = true, maxtank = false, blynk_first_connect = false;
 int c, b, i = 0;
-int RelayState, RelayState1, RelayState2;
-int timer_1, timer_2, timer_3, timer_4, timer_5, timer_6, timer_7;
-int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0;
-int status_cap1 = HIGH, status_bom, status_nenkhi;
-int btnState = HIGH, btnState1 = HIGH;
-float Irms0, Irms1, Irms2, value, Result1, conlai;
+int timer_I;
+int LLG1_1m3, reboot_num = 0;;
+float conlai, clo_cache = 0;
 unsigned long int xIrms0 = 0, xIrms1 = 0, xIrms2 = 0;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0;
 unsigned long rest_time = 0, dem_bom = 0;
+long t;
+uint32_t timestamp;
 
 struct Data {
   byte SetAmpemax, SetAmpemin;
@@ -103,20 +108,31 @@ struct Data {
   int bom_chanle_start, bom_chanle_stop;
   int bom_moingay_start, bom_moingay_stop;
   int save_num;
+  byte status_g1, status_b1, status_nk1;
+  byte key_noti, rualoc;
+  float clo;
+  int time_clo, LLG1_RL;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
-WidgetRTC rtc;
+WidgetRTC rtc_widget;
 WidgetTerminal terminal(V11);
+WidgetTerminal terminal_clo(V24);
 BlynkTimer timer, timer1;
 BLYNK_CONNECTED() {
-  rtc.begin();
+  rtc_widget.begin();
   blynk_first_connect = true;
-  Blynk.virtualWrite(V0, status_cap1);
-  Blynk.virtualWrite(V1, status_bom);
-  Blynk.virtualWrite(V7, data.mode_cap2);
 }
 //-------------------------------------------------------------------
+void up() {
+  String server_path = server_main + "batch/update?token=" + BLYNK_AUTH_TOKEN
+                       + "&V2=" + Irms0
+                       + "&V3=" + Irms1
+                       + "&V19=" + Irms2;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+}
 void savedata() {
   if (memcmp(&data, &dataCheck, sizeof(dataDefault)) == 0) {
     // Serial.println("structures same no need to write to EEPROM");
@@ -124,57 +140,62 @@ void savedata() {
     // Serial.println("\nWrite bytes to EEPROM memory...");
     data.save_num = data.save_num + 1;
     eeprom.writeBytes(address, sizeof(dataDefault), (byte*)&data);
+    Blynk.setProperty(V11, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
 void on_cap1() {
-  status_cap1 = HIGH;
-  mcp.digitalWrite(pincap1, status_cap1);
-  Blynk.virtualWrite(V0,status_cap1 );
+  if (data.status_g1 == LOW) {
+    data.status_g1 = HIGH;
+    savedata();
+    Blynk.virtualWrite(V0, data.status_g1);
+  }
+  mcp.digitalWrite(pincap1, data.status_g1);
 }
 void off_cap1() {
-  status_cap1 = LOW;
-  mcp.digitalWrite(pincap1, status_cap1);
-  Blynk.virtualWrite(V0,status_cap1 );
+  if (data.status_g1 == HIGH) {
+    data.status_g1 = LOW;
+    savedata();
+    Blynk.virtualWrite(V0, data.status_g1);
+  }
+  mcp.digitalWrite(pincap1, data.status_g1);
 }
 void on_bom() {
-  status_bom = HIGH;
-  mcp.digitalWrite(pinbom, !status_bom);
-  Blynk.virtualWrite(V1, status_bom);
+  if (data.status_b1 == LOW) {
+    data.status_b1 = HIGH;
+    savedata();
+    Blynk.virtualWrite(V1, data.status_b1);
+  }
+  mcp.digitalWrite(pinbom, !data.status_b1);
 }
 void off_bom() {
-  status_bom = LOW;
-  mcp.digitalWrite(pinbom, !status_bom);
-  Blynk.virtualWrite(V1, status_bom);
+  if (data.status_b1 == HIGH) {
+    data.status_b1 = LOW;
+    savedata();
+    Blynk.virtualWrite(V1, !data.status_b1);
+  }
+  mcp.digitalWrite(pinbom, !data.status_b1);
 }
 void on_nenkhi() {
-  status_nenkhi = HIGH;
-  //mcp.digitalWrite(pinnenkhi, !status_nenkhi);
+  if (data.status_nk1 == LOW) {
+    data.status_nk1 = HIGH;
+    savedata();
+    Blynk.virtualWrite(V18, data.status_nk1);
+  }
   on_cap1();
 }
 void off_nenkhi() {
-  status_nenkhi = LOW;
-  //mcp.digitalWrite(pinnenkhi, !status_nenkhi);
+  if (data.status_nk1 == HIGH) {
+    data.status_nk1 = LOW;
+    savedata();
+    Blynk.virtualWrite(V18, data.status_nk1);
+  }
   off_cap1();
 }
 void hidden() {
-  //Blynk.setProperty(V7, "isHidden", true);
-  Blynk.setProperty(V12, "isHidden", true);
-  Blynk.setProperty(V13, "isHidden", true);
-  Blynk.setProperty(V15, "isHidden", true);
-  Blynk.setProperty(V14, "isHidden", true);
-  Blynk.setProperty(V10, "isHidden", true);
-  Blynk.setProperty(V9, "isHidden", true);
-  Blynk.setProperty(V8, "isHidden", true);
+  Blynk.setProperty(V12, V13, V15, V14, V10, V9, V8, "isHidden", true);
 }
 void visible() {
-  //Blynk.setProperty(V7, "isHidden", false);
-  Blynk.setProperty(V12, "isHidden", false);
-  Blynk.setProperty(V13, "isHidden", false);
-  Blynk.setProperty(V15, "isHidden", false);
-  Blynk.setProperty(V14, "isHidden", false);
-  Blynk.setProperty(V10, "isHidden", false);
-  Blynk.setProperty(V9, "isHidden", false);
-  Blynk.setProperty(V8, "isHidden", false);
+  Blynk.setProperty(V12, V13, V15, V14, V10, V9, V8, "isHidden", false);
 }
 void off_time() {
   time_off_c1 = true;
@@ -200,7 +221,6 @@ void off_time_cap1() {
 //-------------------------------------------------------------------
 void readPower()  // C2 - Cấp 1  - I0
 {
-  //Blynk.run();
   digitalWrite(S0pin, LOW);
   digitalWrite(S1pin, HIGH);
   digitalWrite(S2pin, LOW);
@@ -210,7 +230,7 @@ void readPower()  // C2 - Cấp 1  - I0
     Irms0 = 0;
     yIrms0 = 0;
     if ((noti_cap1) && (status_pre) && (conlai <= 80) && (!time_off_c1)) {
-      if (keynoti) {
+      if (data.key_noti) {
         noti_cap1 = false;
         Blynk.logEvent("info", String("Bơm Giếng không chạy. Xin kiểm tra."));
       }
@@ -225,7 +245,7 @@ void readPower()  // C2 - Cấp 1  - I0
           off_cap1();
           xSetAmpe = 0;
           trip0 = true;
-          if (keynoti) {
+          if (data.key_noti) {
             Blynk.logEvent("error", String("Cấp 1 lỗi: ") + Irms0 + String(" A"));
           }
         }
@@ -257,7 +277,7 @@ void readPower1()  // C3 - Bơm    - I1
           off_bom();
           xSetAmpe1 = 0;
           trip1 = true;
-          if (keynoti) {
+          if (data.key_noti) {
             Blynk.logEvent("error", String("Cấp 2 lỗi: ") + Irms1 + String(" A"));
           }
         }
@@ -289,7 +309,7 @@ void readPower2()  //C4 - Nen khi- I2
         xSetAmpe2 = 0;
         trip2 = true;
         trip1 = true;
-        if (keynoti) {
+        if (data.key_noti) {
           Blynk.logEvent("error", String("Máy nén khí lỗi: ") + Irms2 + String(" A"));
         }
       }
@@ -309,6 +329,7 @@ void rtctime() {
     }
   }
   Blynk.virtualWrite(V20, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
+  timestamp = now.unixtime();
 
   int nowtime = (now.hour() * 3600 + now.minute() * 60);
 
@@ -387,26 +408,24 @@ void rtctime() {
 BLYNK_WRITE(V0)  // Gieng
 {
   if ((key) && (!trip0)) {
-    RelayState = param.asInt();
-    if (RelayState == LOW) {
+    if (param.asInt() == LOW) {
       off_cap1();
     } else {
       on_cap1();
     }
   }
-  Blynk.virtualWrite(V0, status_cap1);
+  Blynk.virtualWrite(V0, data.status_g1);
 }
 BLYNK_WRITE(V1)  // Bơm 2
 {
   if ((key) && (!trip1)) {
-    RelayState1 = param.asInt();
-    if (RelayState1 == LOW) {
+    if (param.asInt() == LOW) {
       off_bom();
     } else {
       on_bom();
     }
   }
-  Blynk.virtualWrite(V1, status_bom);
+  Blynk.virtualWrite(V1, data.status_b1);
 }
 BLYNK_WRITE(V5)  // Con lai
 {
@@ -414,7 +433,7 @@ BLYNK_WRITE(V5)  // Con lai
   if ((conlai > 220) && (status_pre)) {
     maxtank = true;
     if (keytank) {
-      Blynk.logEvent("info", String("Nước trong bể cao vượt mức ") + (conlai - 220) + String(" cm"));
+      if (data.key_noti) Blynk.logEvent("info", String("Nước trong bể cao vượt mức ") + (conlai - 220) + String(" cm"));
       keytank = false;
       timer1.setTimeout(600000L, []() {
         keytank = true;
@@ -476,7 +495,7 @@ BLYNK_WRITE(V8)  // Chon máy cài đặt bảo vệ
 }
 BLYNK_WRITE(V9)  // min
 {
-  if (keySet) {
+  if (key) {
     if (c == 1) {
       data.SetAmpemin = param.asInt();
     } else if (c == 2) {
@@ -490,7 +509,7 @@ BLYNK_WRITE(V9)  // min
 }
 BLYNK_WRITE(V10)  // max
 {
-  if (keySet) {
+  if (key) {
     if (c == 1) {
       data.SetAmpemax = param.asInt();
     } else if (c == 2) {
@@ -516,12 +535,12 @@ BLYNK_WRITE(V11)  // String
   } else if (dataS == "active") {
     terminal.clear();
     key = true;
-    keySet = true;
+    visible();
     Blynk.virtualWrite(V11, "KHÔNG sử dụng phần mềm cho đến khi thông báo này mất.\n");
   } else if (dataS == "deactive") {
     terminal.clear();
     key = false;
-    keySet = false;
+    hidden();
     Blynk.virtualWrite(V11, "Ok!\nNhập mã để điều khiển!\n");
   } else if (dataS == "save") {
     terminal.clear();
@@ -576,7 +595,7 @@ BLYNK_WRITE(V12)  // Chọn thời gian chạy Bơm
 }
 BLYNK_WRITE(V13)  // Time input
 {
-  if (keySet) {
+  if (key) {
     TimeInputParam t(param);
     if (t.hasStartTime()) {
       if ((data.mode_run == 0) || (data.mode_run == 1)) {
@@ -599,7 +618,7 @@ BLYNK_WRITE(V13)  // Time input
 }
 BLYNK_WRITE(V14)  // Bảo vệ
 {
-  if (keySet) {
+  if (key) {
     int data13 = param.asInt();
     if (data13 == LOW) {
       keyp = false;
@@ -611,22 +630,44 @@ BLYNK_WRITE(V14)  // Bảo vệ
 }
 BLYNK_WRITE(V15)  // Thông báo
 {
-  if (keySet) {
-    int data16 = param.asInt();
-    if (data16 == LOW) {
-      keynoti = false;
+  if (key) {
+    if (param.asInt() == LOW) {
+      data.key_noti = false;
+      savedata();
     } else {
-      keynoti = true;
+      data.key_noti = true;
+      savedata();
     }
   } else
-    Blynk.virtualWrite(V15, keynoti);
+    Blynk.virtualWrite(V15, data.key_noti);
 }
-BLYNK_WRITE(V16)  // Hidden/Visible
+BLYNK_WRITE(V16)  // Rửa lọc
 {
-  if (param.asInt() == 0) {
-    hidden();
-  } else
-    visible();
+  if (key) {
+    switch (param.asInt()) {
+      case 0:
+        {  //Tắt
+          data.rualoc = 0;
+          if (data.LLG1_RL != 0) {
+            Blynk.virtualWrite(V26, LLG1_1m3 - data.LLG1_RL);
+            data.LLG1_RL = 0;
+            savedata();
+          }
+          break;
+        }
+      case 1:
+        {  //RL 1
+          data.rualoc = 1;
+          if (data.LLG1_RL == 0) {
+            data.LLG1_RL = LLG1_1m3;
+          }
+          break;
+        }
+    }
+    savedata();
+  } else {
+    Blynk.virtualWrite(V16, data.rualoc);
+  }
 }
 BLYNK_WRITE(V17)  // Info
 {
@@ -660,24 +701,82 @@ BLYNK_WRITE(V17)  // Info
   } else {
     terminal.clear();
   }
-  timer.restartTimer(timer_1);
-  timer.restartTimer(timer_2);
 }
 BLYNK_WRITE(V18)  // Nen Khi
 {
   if ((key) && (!trip2)) {
-    RelayState2 = param.asInt();
-    if (RelayState2 == LOW) {
+    if (param.asInt() == LOW) {
       off_nenkhi();
     } else on_nenkhi();
   }
-  Blynk.virtualWrite(V18, status_nenkhi);
+  Blynk.virtualWrite(V18, data.status_nk1);
 }
 BLYNK_WRITE(V21)  //Status_pre
 {
   status_pre = param.asInt();
 }
+//-------------------------
+BLYNK_WRITE(V24)  //String Clo
+{
+  String dataS = param.asStr();
+  if ((dataS == "ok") || (dataS == "Ok") || (dataS == "OK") || (dataS == "oK")) {
+    if (clo_cache > 0) {
+      data.clo = clo_cache;
+      clo_cache = 0;
+      data.time_clo = timestamp;
+      Blynk.virtualWrite(V26, data.clo);
+      savedata();
+      terminal_clo.clear();
+      Blynk.virtualWrite(V24, "Đã lưu - CLO:", data.clo, "kg");
+    }
+  }
+}
+BLYNK_WRITE(V25)  //Clo input
+{
+  if (param.asFloat() > 0) {
+    terminal_clo.clear();
+    clo_cache = param.asFloat();
+    Blynk.virtualWrite(V24, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
+  }
+}
+BLYNK_WRITE(V27)  //Check Clo
+{
+  if (param.asInt() == 1) {
+    DateTime dt(data.time_clo);
+    terminal_clo.clear();
+    Blynk.virtualWrite(V24, "Châm CLO:", data.clo, "kg vào lúc", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
+  }
+}
+BLYNK_WRITE(V29)  // Lưu lượng G1_1m3
+{
+  LLG1_1m3 = param.asInt();
+}
 //-------------------------------------------------------------------
+void connectionstatus() {
+  if ((WiFi.status() != WL_CONNECTED)) {
+    Serial.println("Khong ket noi WIFI");
+    WiFi.begin(ssid, password);
+  }
+  if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
+      delay(1000);
+      WiFi.begin(ssid, password);
+    }
+    if (reboot_num % 5 == 0) {
+      WiFi.disconnect();
+      delay(1000);
+      WiFi.begin(ssid, password);
+    }
+  }
+  if (Blynk.connected()) {
+    if (reboot_num != 0) {
+      reboot_num = 0;
+    }
+  }
+}
 void update_started() {
   Serial.println("CALLBACK:  HTTP update process started");
 }
@@ -690,7 +789,6 @@ void update_progress(int cur, int total) {
 void update_error(int err) {
   Serial.printf("CALLBACK:  HTTP update fatal error code %d\n", err);
 }
-//-------------------------
 void update_fw() {
   WiFiClientSecure client_;
   client_.setInsecure();
@@ -705,22 +803,6 @@ void update_fw() {
     case HTTP_UPDATE_NO_UPDATES: Serial.println("HTTP_UPDATE_NO_UPDATES"); break;
     case HTTP_UPDATE_OK: Serial.println("HTTP_UPDATE_OK"); break;
   }
-}
-//-------------------------
-void updata() {
-  String server_path = server_main + "batch/update?token=" + Main
-                       //+ "&V0=" + byte(status_cap1)
-                       //+ "&V1=" + byte(status_bom)
-                       + "&V2=" + Irms0
-                       + "&V3=" + Irms1
-                       //+ "&V7=" + byte(data.mode_cap2)
-                       //+ "&V14=" + byte(keyp)
-                       //+ "&V15=" + byte(keynoti)
-                       //+ "&V18=" + byte(status_nenkhi)
-                       + "&V19=" + Irms2;
-  http.begin(client, server_path.c_str());
-  int httpResponseCode = http.GET();
-  http.end();
 }
 //-------------------------------------------------------------------
 void setup() {
@@ -743,34 +825,34 @@ void setup() {
     trip_mcp = true;
   }
 
-  mcp.pinMode(6, INPUT);
-  mcp.pinMode(7, INPUT);
-  mcp.pinMode(pincap1, OUTPUT);
-  mcp.digitalWrite(pincap1, HIGH);  // gieng
-  mcp.pinMode(pinbom, OUTPUT);
-  mcp.digitalWrite(pinbom, HIGH);  // Bom
-  //mcp.pinMode(pinnenkhi, OUTPUT); mcp.digitalWrite(pinnenkhi, HIGH);
-
   rtc_module.begin();
-  //rtc.adjust(DateTime(2021, 12, 22, 9, 59, 0));
   eeprom.initialize();
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
 
-  terminal.clear();
+  mcp.pinMode(6, INPUT);
+  mcp.pinMode(7, INPUT);
+  mcp.pinMode(pincap1, OUTPUT);
+  mcp.digitalWrite(pincap1, data.status_g1);  // gieng
+  mcp.pinMode(pinbom, OUTPUT);
+  mcp.digitalWrite(pinbom, data.status_b1);  // Bom
   //------------------------------------
-  setSyncInterval(10 * 60);
   timer.setTimeout(5000L, []() {
-    timer_1 = timer1.setInterval(1083L, []() {
+    timer_I = timer1.setInterval(1083L, []() {
       readPower();
       readPower1();
       readPower2();
-      updata();
-      timer1.restartTimer(timer_1);
+      up();
+      timer1.restartTimer(timer_I);
     });
-    timer_2 = timer1.setInterval(15006L, []() {
+    timer1.setInterval(15006L, []() {
       rtctime();
-      timer1.restartTimer(timer_1);
+      timer1.restartTimer(timer_I);
     });
+    timer.setInterval(900005L, []() {
+      connectionstatus();
+      timer.restartTimer(timer_I);
+    });
+    terminal.clear();
   });
 }
 

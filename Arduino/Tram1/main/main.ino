@@ -38,7 +38,7 @@
 #define BLYNK_TEMPLATE_NAME "Trạm Số 1"
 #define BLYNK_AUTH_TOKEN "NkRHGVvq7kogEc7VhRgbcJXDJbFA-dMa"
 #define BLYNK_FIRMWARE_VERSION "240101"
-
+//------------------
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
 #include <Wire.h>
@@ -70,7 +70,7 @@ const word address = 0;
 int dai = 566;
 int rong = 297;
 int dosau = 130;
-long distance, distance1, t;
+long distance, distance1;
 float volume, volume1, percent, percent1, dungtich, smoothDistance;
 int sensSmoothArray1[filterSamples];
 int digitalSmooth(int rawIn, int* sensSmoothArray) {
@@ -131,6 +131,7 @@ bool trip0 = false, trip1 = false, trip2 = false, trip_mcp = false;
 bool key_memory = true, timer_I_status;
 bool key_bom = true, key_gieng = true;
 bool blynk_first_connect = false;
+long t;
 int LLG1_1m3;
 int reboot_num = 0;
 int c, b, i = 0;
@@ -193,6 +194,7 @@ void on_cap1() {
   if (data.status_g1 == LOW) {
     data.status_g1 = HIGH;
     savedata();
+    Blynk.virtualWrite(V0, data.status_g1);
   }
   mcp.digitalWrite(pincap1, data.status_g1);
 }
@@ -200,6 +202,7 @@ void off_cap1() {
   if (data.status_g1 == HIGH) {
     data.status_g1 = LOW;
     savedata();
+    Blynk.virtualWrite(V0, data.status_g1);
   }
   mcp.digitalWrite(pincap1, data.status_g1);
 }
@@ -207,6 +210,7 @@ void on_bom() {
   if (data.status_b1 == LOW) {
     data.status_b1 = HIGH;
     savedata();
+    Blynk.virtualWrite(V1, data.status_b1);
   }
   mcp.digitalWrite(pinbom, data.status_b1);
 }
@@ -214,6 +218,7 @@ void off_bom() {
   if (data.status_b1 == HIGH) {
     data.status_b1 = LOW;
     savedata();
+    Blynk.virtualWrite(V1, data.status_b1);
   }
   mcp.digitalWrite(pinbom, data.status_b1);
 }
@@ -221,6 +226,7 @@ void on_nenkhi() {
   if (data.status_nk1 == LOW) {
     data.status_nk1 = HIGH;
     savedata();
+    Blynk.virtualWrite(V18, data.status_nk1);
   }
   mcp.digitalWrite(pinnenkhi, data.status_nk1);
 }
@@ -228,6 +234,7 @@ void off_nenkhi() {
   if (data.status_nk1 == HIGH) {
     data.status_nk1 = LOW;
     savedata();
+    Blynk.virtualWrite(V18, data.status_nk1);
   }
   mcp.digitalWrite(pinnenkhi, data.status_nk1);
 }
@@ -654,6 +661,7 @@ BLYNK_WRITE(V11)  // String
     trip2 = false;
     trip1 = false;
     trip0 = false;
+    on_cap1();
     Blynk.virtualWrite(V11, "Đã RESET! \nNhập mã để điều khiển!\n");
   } else if (dataS == "update") {
     terminal.clear();
