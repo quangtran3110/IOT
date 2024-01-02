@@ -29,7 +29,7 @@ WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "OwqkFUOpl8p9-AP235SQquza0fmhwImP";
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram3/volume/build/esp8266.esp8266.nodemcuv2/volume.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/CaiCat/volumeG1/build/esp8266.esp8266.nodemcuv2/volumeG1.ino.bin"
 
 String LL1m3 = "&V51=";
 String LL24h = "&V52=";
