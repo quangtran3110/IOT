@@ -2,12 +2,12 @@
 #define BLYNK_TEMPLATE_ID "TMPL0DBjAEt-"
 #define BLYNK_TEMPLATE_NAME "VOLUME"
 #define BLYNK_AUTH_TOKEN "XBbjtsi_sGTyvvs_zF4yN2s_4OoRvMjA"
-#define BLYNK_FIRMWARE_VERSION "240101.T1.VL.G1"
+#define BLYNK_FIRMWARE_VERSION "240203.CC.VL.G1"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
-const char* ssid = "Phong Tai Vu";
-const char* password = "0974040699";
+const char* ssid = "NHA MAY NUOC CAI CAT";
+const char* password = "12345678";
 //const char* ssid = "tram bom so 45";
 //const char* password = "0943950555";
 
@@ -28,12 +28,12 @@ const char* password = "0974040699";
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "lvmyPh1nGcSjs3n1CTJrX4DyuWLlS0i0";
+String Main = "OwqkFUOpl8p9-AP235SQquza0fmhwImP";
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram3/volume/build/esp8266.esp8266.nodemcuv2/volume.ino.bin"
 
-String LL24h = "&V30=";
-String LL1m3 = "&V29=";
-String status_volume = "&V28=";
+String LL1m3 = "&V51=";
+String LL24h = "&V52=";
+String status_volume = "&V45=";
 
 bool blynk_first_connect = false, key_i2c = false;
 int var_10m3;

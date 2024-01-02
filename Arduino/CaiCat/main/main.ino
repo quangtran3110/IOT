@@ -22,7 +22,7 @@
    V21-off G3
    V22-status RuaLoc
    V23-Rualoc
-   V24-
+   V24-Clo
    V25-The tich
    V26-Con lai
    V27-Dung tich
@@ -129,14 +129,13 @@ const word address = 0;
 //-------------
 #include <ESP8266httpUpdate.h>
 #include <WiFiClientSecure.h>
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/caicat/main/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/CaiCat/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 //-------------
 #include <ESP8266HTTPClient.h>
 HTTPClient http;
 String server_rualoc = "http://blynkkwaco.ddns.net:8080/";
 String rualoc = "p1Aq8WlkeB78YRnL9JBfZmrTdaOruolY";
 String server_Main = "http://sgp1.blynk.cloud/external/api/";
-String Main = "OwqkFUOpl8p9-AP235SQquza0fmhwImP";
 //-------------
 const int S0 = 14;
 const int S1 = 12;
@@ -196,7 +195,7 @@ BLYNK_CONNECTED() {
 }
 //---------------------------------------------------------------------------
 void up() {
-  String server_path = server_Main + "batch/update?token=" + Main
+  String server_path = server_Main + "batch/update?token=" + BLYNK_AUTH_TOKEN
                        + "&V29=" + Result1
                        + "&V30=" + Irms0
                        + "&V31=" + Irms1
@@ -1173,7 +1172,7 @@ BLYNK_WRITE(V48)  // String Clo
       data.clo = clo_cache;
       clo_cache = 0;
       data.time_clo = timestamp;
-      Blynk.virtualWrite(V56, data.clo);
+      Blynk.virtualWrite(V24, data.clo);
       savedata();
       terminal_clo.clear();
       Blynk.virtualWrite(V48, "Đã lưu - CLO:", data.clo, "kg");
