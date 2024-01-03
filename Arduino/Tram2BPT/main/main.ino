@@ -774,7 +774,6 @@ void read_modbus() {
         }
       }
       //-------------
-      /*
       {  //Áp lực set
         uint16_t ref_percent_[1];
         mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
@@ -832,7 +831,6 @@ void read_modbus() {
           }
         }
       }
-      */
       //-------------
     } else {
       key_read = false;
