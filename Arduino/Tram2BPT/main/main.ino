@@ -843,7 +843,7 @@ void read_modbus() {
       timer1.setTimeout(time_delay, []() {
         key_read = true;
       });
-      hz = I_vdf = pre = temp_vdf = 0;
+      //hz = I_vdf = pre = temp_vdf = 0;
     }
   }
 }
