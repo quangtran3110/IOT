@@ -153,6 +153,7 @@ void on_cap1() {
 }
 void off_cap1() {
   if (data.status_g1 == HIGH) {
+     Serial.println(data.status_g1);
     data.status_g1 = LOW;
     savedata();
     Blynk.virtualWrite(V0, data.status_g1);
@@ -412,9 +413,9 @@ BLYNK_WRITE(V0)  // Gieng
       off_cap1();
     } else {
       on_cap1();
+      Serial.println("222");
     }
   }
-  Blynk.virtualWrite(V11, key, !trip0);
   Blynk.virtualWrite(V0, data.status_g1);
 }
 BLYNK_WRITE(V1)  // Bơm 2
@@ -552,6 +553,9 @@ BLYNK_WRITE(V11)  // String
     trip2 = false;
     trip1 = false;
     trip0 = false;
+    data.status_g1 = HIGH;
+    data.status_b1 = LOW;
+    savedata();
     on_cap1();
     Blynk.virtualWrite(V11, "Đã RESET! \nNhập mã để điều khiển!\n");
   } else if (dataS == "rst") {
