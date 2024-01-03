@@ -414,6 +414,7 @@ BLYNK_WRITE(V0)  // Gieng
       on_cap1();
     }
   }
+  Blynk.virtualWrite(V11, key, !trip0);
   Blynk.virtualWrite(V0, data.status_g1);
 }
 BLYNK_WRITE(V1)  // Bơm 2
