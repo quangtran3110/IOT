@@ -25,7 +25,7 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "240102"
+#define BLYNK_FIRMWARE_VERSION "240104"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -107,7 +107,7 @@ char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
 int timer_I;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
-float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
+float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz, ref_bar;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
 bool key = false, blynk_first_connect = false, status_fan = HIGH;
 ;
@@ -193,6 +193,7 @@ void up() {
                        + "&V14=" + pre
                        + "&V15=" + smoothDistance
                        + "&V16=" + volume
+                       + "&V18=" + ref_bar
                        + "&V19=" + temp_vdf;
   //+ "&V21=" + temp[0]
   http.begin(client, server_path.c_str());
@@ -774,7 +775,7 @@ void read_modbus() {
         }
       }
       //-------------
-      /*
+
       {  //Áp lực set
         uint16_t ref_percent_[1];
         mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
@@ -784,8 +785,8 @@ void read_modbus() {
           delay(10);
           ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
         }
-        float ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
-
+        ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
+        /*
         if (ref_bar != data.pre_set) {
           if (ref_bar == 0) {
             int send_ref = int((data.pre_set * 10) / 100 * 16384);
@@ -831,8 +832,9 @@ void read_modbus() {
             }
           }
         }
+        */
       }
-      */
+
       //-------------
     } else {
       key_read = false;
