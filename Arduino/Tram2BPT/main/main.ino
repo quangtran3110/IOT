@@ -25,7 +25,7 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "240104"
+#define BLYNK_FIRMWARE_VERSION "240102"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -47,15 +47,13 @@ RTC_DS3231 rtc_module;
 //-----------------------------
 #include <Wire.h>
 #include <Eeprom24C32_64.h>
+#define EEPROM_ADDRESS 0x57
+static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
+const word address = 0;
 //-----------------------------
 #include <ESP8266httpUpdate.h>
 #include <WiFiClientSecure.h>
 #include <ESP8266HTTPClient.h>
-//-----------------------------
-#define filterSamples 121
-#define EEPROM_ADDRESS 0x57
-static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
-const word address = 0;
 //-----------------------------
 #include <OneWire.h>
 #include <DallasTemperature.h>
@@ -107,13 +105,14 @@ char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
 int timer_I;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
-float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz, ref_bar;
+float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
 bool key = false, blynk_first_connect = false, status_fan = HIGH;
 ;
 byte c;
 int temp_vdf;
 //-----------------------------
+#define filterSamples 121
 int dai = 510;
 int rong = 510;
 int dosau = 260;
@@ -193,7 +192,6 @@ void up() {
                        + "&V14=" + pre
                        + "&V15=" + smoothDistance
                        + "&V16=" + volume
-                       + "&V18=" + ref_bar
                        + "&V19=" + temp_vdf;
   //+ "&V21=" + temp[0]
   http.begin(client, server_path.c_str());
@@ -706,6 +704,7 @@ BLYNK_WRITE(V17)  // Bảo vệ
   } else
     Blynk.virtualWrite(V17, data.keyp);
 }
+
 BLYNK_WRITE(V18)  // Cai ap luc bien tan
 {
   if (key) {
@@ -775,7 +774,6 @@ void read_modbus() {
         }
       }
       //-------------
-
       {  //Áp lực set
         uint16_t ref_percent_[1];
         mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
@@ -785,8 +783,8 @@ void read_modbus() {
           delay(10);
           ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
         }
-        ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
-        /*
+        float ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
+
         if (ref_bar != data.pre_set) {
           if (ref_bar == 0) {
             int send_ref = int((data.pre_set * 10) / 100 * 16384);
@@ -832,9 +830,7 @@ void read_modbus() {
             }
           }
         }
-        */
       }
-
       //-------------
     } else {
       key_read = false;
@@ -949,9 +945,12 @@ void setup() {
       //readcurrent1();
       //readcurrent2();
       readcurrent3();
+      //temperature();
+      timer.restartTimer(timer_I);
+    });
+    timer.setInterval(5033L, []() {
       read_modbus();
       up();
-      //temperature();
       timer.restartTimer(timer_I);
     });
     timer.setInterval(230L, MeasureCmForSmoothing);

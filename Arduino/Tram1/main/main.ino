@@ -191,7 +191,7 @@ void savedata() {
   }
 }
 void on_cap1() {
-  if (data.status_g1 == LOW) {
+  if (data.status_g1 != HIGH) {
     data.status_g1 = HIGH;
     savedata();
     Blynk.virtualWrite(V0, data.status_g1);
@@ -199,7 +199,7 @@ void on_cap1() {
   mcp.digitalWrite(pincap1, data.status_g1);
 }
 void off_cap1() {
-  if (data.status_g1 == HIGH) {
+  if (data.status_g1 != LOW) {
     data.status_g1 = LOW;
     savedata();
     Blynk.virtualWrite(V0, data.status_g1);
@@ -207,7 +207,7 @@ void off_cap1() {
   mcp.digitalWrite(pincap1, data.status_g1);
 }
 void on_bom() {
-  if (data.status_b1 == LOW) {
+  if (data.status_b1 != HIGH) {
     data.status_b1 = HIGH;
     savedata();
     Blynk.virtualWrite(V1, data.status_b1);
@@ -215,7 +215,7 @@ void on_bom() {
   mcp.digitalWrite(pinbom, data.status_b1);
 }
 void off_bom() {
-  if (data.status_b1 == HIGH) {
+  if (data.status_b1 != LOW) {
     data.status_b1 = LOW;
     savedata();
     Blynk.virtualWrite(V1, data.status_b1);
@@ -223,7 +223,7 @@ void off_bom() {
   mcp.digitalWrite(pinbom, data.status_b1);
 }
 void on_nenkhi() {
-  if (data.status_nk1 == LOW) {
+  if (data.status_nk1 != HIGH) {
     data.status_nk1 = HIGH;
     savedata();
     Blynk.virtualWrite(V18, data.status_nk1);
@@ -231,7 +231,7 @@ void on_nenkhi() {
   mcp.digitalWrite(pinnenkhi, data.status_nk1);
 }
 void off_nenkhi() {
-  if (data.status_nk1 == HIGH) {
+  if (data.status_nk1 != LOW) {
     data.status_nk1 = LOW;
     savedata();
     Blynk.virtualWrite(V18, data.status_nk1);
