@@ -23,7 +23,7 @@ char tz[] = "Asia/Ho_Chi_Minh";
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram2BPT/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Main/Main.ino/build/esp8266.esp8266.nodemcuv2/Main.ino.ino.bin"
 String main_sever = "http://sgp1.blynk.cloud/external/api/";
 String salve_sever = "http://fra1.blynk.cloud/external/api/";
 
