@@ -1,13 +1,13 @@
-#define BLYNK_TEMPLATE_ID "TMPL4a966Uh4g"
-#define BLYNK_TEMPLATE_NAME "Do Thi"
-#define BLYNK_AUTH_TOKEN "T_t2Zf5BO_bfdr4CrPaY5sbQ-BsImZ0w"
+#define BLYNK_TEMPLATE_ID "TMPL6VP9MY4gS"
+#define BLYNK_TEMPLATE_NAME "Cau Cua Dong"
+#define BLYNK_AUTH_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 #define BLYNK_FIRMWARE_VERSION "240106"
 
 #define Main_TOKEN Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ
-//const char* ssid = "net";
-//const char* password = "Abcd@1234";
-const char* ssid = "wifi";
-const char* password = "Password";
+const char* ssid = "net";
+const char* password = "Abcd@1234";
+//const char* ssid = "tram bom so 4";
+//const char* password = "0943950555";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -54,8 +54,8 @@ const word address = 0;
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram2BPT/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
-String server_name = "http://fra1.blynk.cloud/external/api/";
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/Caucuadong/Caucuadong.ino"
+String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 int timer_I;
 bool key = false, blynk_first_connect = false;
@@ -90,6 +90,7 @@ void savedata() {
   }
 }
 void on_rl1() {
+  Serial.println("1111");
   sta_rl1 = HIGH;
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
@@ -135,9 +136,11 @@ void rtctime() {
       DateTime now = rtc_module.now();
     }
   }
-  Blynk.virtualWrite(V3, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
-
+  terminal.clear();
+  //Blynk.virtualWrite(V0, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
+  Blynk.virtualWrite(V0, "run:", data.rl1_r, ", stop:", data.rl1_s);
   float nowtime = (now.hour() * 3600 + now.minute() * 60);
+
   if (data.mode == 1) {  // Auto
     if (data.rl1_r > data.rl1_s) {
       if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
@@ -174,12 +177,10 @@ BLYNK_WRITE(V0) {
 BLYNK_WRITE(V1) {
   TimeInputParam t(param);
   if (t.hasStartTime()) {
-    if (num_rl == 1)
-      data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
+    data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
   }
   if (t.hasStopTime()) {
-    if (num_rl == 1)
-      data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
+    data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
   }
   savedata();
 }

@@ -3,7 +3,7 @@
 #define BLYNK_AUTH_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
 #define BLYNK_FIRMWARE_VERSION "240106"
 
-#define caucuadong_TOKEN "T_t2Zf5BO_bfdr4CrPaY5sbQ-BsImZ0w"
+#define caucuadong_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -23,9 +23,8 @@ char tz[] = "Asia/Ho_Chi_Minh";
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Main/Main.ino/build/esp8266.esp8266.nodemcuv2/Main.ino.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Main/build/esp8266.esp8266.nodemcuv2/Main.ino.bin"
 String main_sever = "http://sgp1.blynk.cloud/external/api/";
-String salve_sever = "http://fra1.blynk.cloud/external/api/";
 
 int khu_vuc = 0, dia_diem = 0, van = 0;
 uint32_t start_, stop_;
@@ -191,11 +190,12 @@ BLYNK_WRITE(V4) {  //Time input
   }
 }
 BLYNK_WRITE(V5) {  //Save time input
+Serial.println("we11");
   if (param.asInt() == 1) {
     if (khu_vuc == 2) {
       if (dia_diem == 1) {
         if (van == 1) {
-          String server_path = salve_sever + "external/api/update/?token=" + caucuadong_TOKEN
+          String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
                                + "&V1=" + start_
                                + "&V1=" + stop_
                                + "&V1=" + tz;
