@@ -860,8 +860,11 @@ void read_modbus() {
   }
 }
 void read() {
-
   mb.readHreg(1, 16519, apluc, 2, cbWrite);
+  while (mb.slave()) {  // Check if transaction is active
+    mb.task();
+    delay(10);
+  }
 }
 //-------------------------
 void connectionstatus() {
