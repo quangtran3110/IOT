@@ -750,6 +750,7 @@ void read_modbus() {
       }
       */
       //-------------
+      /*
       {  //Dòng điện
         uint16_t dongdien[2];
         mb.readHreg(1, 16139, dongdien, 2);
@@ -762,6 +763,7 @@ void read_modbus() {
           }
         }
       }
+      */
       //-------------
       {  //Áp lực
         uint16_t apluc[2];
@@ -777,6 +779,7 @@ void read_modbus() {
       }
       //-------------
       {  //Áp lực set
+      /*
         uint16_t ref_percent_[1];
         mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
         while (mb.slave()) {  // Check if transaction is active
@@ -786,7 +789,7 @@ void read_modbus() {
           ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
         }
         float ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
-
+                                           /*
         if (ref_bar != data.pre_set) {
           if (ref_bar == 0) {
             int send_ref = int((data.pre_set * 10) / 100 * 16384);
@@ -832,6 +835,7 @@ void read_modbus() {
             }
           }
         }
+        */
       }
       //-------------
     } else {
