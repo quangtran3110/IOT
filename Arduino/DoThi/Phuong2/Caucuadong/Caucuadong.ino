@@ -59,7 +59,7 @@ String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 int timer_I;
 bool key = false, blynk_first_connect = false;
-bool sta_rl1 = LOW;
+byte sta_rl1 = 0;
 byte num_van;
 //-----------------------------
 struct Data {
@@ -101,12 +101,12 @@ void savedata() {
   }
 }
 void on_van1() {
-  sta_rl1 = HIGH;
-  pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
+  sta_rl1 = 1;
+  pcf8575_1.digitalWrite(pin_RL1, LOW);
 }
 void off_van1() {
-  sta_rl1 = LOW;
-  pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
+  sta_rl1 = 0;
+  pcf8575_1.digitalWrite(pin_RL1, HIGH);
 }
 void readcurrent()  // C2 - Cấp 1   - I0
 {
