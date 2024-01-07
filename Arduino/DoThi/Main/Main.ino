@@ -31,7 +31,7 @@ uint32_t start_, stop_;
 byte reboot_num;
 bool blynk_first_connect = false, key_set = false, key = false;
 
-byte sta_cau_cua_dong = 1;
+byte sta_cau_cua_dong;
 
 
 WidgetRTC rtc_widget;
@@ -225,6 +225,7 @@ BLYNK_WRITE(V5) {  //Save time input
 }
 //------------------- Cầu Cửa Đông
 bool sta_ccd_v1, ccd_mode;
+int sta_time_ccd = 0;
 void hidden_ccd() {
   Blynk.setProperty(V8, V7, "isDisabled", "true");
 }
@@ -232,10 +233,13 @@ void visible_ccd() {
   Blynk.setProperty(V8, V7, "isDisabled", "false");
 }
 BLYNK_WRITE(V6) {  //Status Cầu cửa đông
+  if (param.asInt() == 1) {
+    sta_time_ccd = millis();
+  }
   if (sta_cau_cua_dong != param.asInt()) {
     sta_cau_cua_dong = param.asInt();
-    if (sta_cau_cua_dong == 0) hidden_ccd();
-    else visible_ccd();
+    if (sta_cau_cua_dong == 1) visible_ccd();
+    else hidden_ccd();
   }
 }
 BLYNK_WRITE(V7) {  //Btn Van 1
@@ -306,6 +310,11 @@ BLYNK_WRITE(V9) {  //data
   }
 }
 //-------------------------
+void check_sta() {
+  if (((millis() - sta_time_ccd) > 30000) && ((millis() - sta_time_ccd) < 60000)) {
+    Blynk.virtualWrite(V6, 0);
+  }
+}
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
     Serial.println("Khong ket noi WIFI");
@@ -371,7 +380,7 @@ void setup() {
     connectionstatus();
   });
   timer.setInterval(30019L, []() {
-    Blynk.syncVirtual(V6);
+    check_sta();
   });
 }
 void loop() {
