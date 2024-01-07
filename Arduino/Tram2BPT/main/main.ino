@@ -74,7 +74,14 @@ SoftwareSerial S(0, 2);
 ModbusRTU mb;
 bool key_read = true;
 int time_delay;
+uint16_t apluc[2];
+float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
 bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+    if ((float(int32_2int16(apluc[1], apluc[0])) / 1000) < 10) {
+      pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
+    }
+  }
   return true;
 }
 int32_t int32_2int16(int int1, int int2) {
@@ -87,6 +94,7 @@ int32_t int32_2int16(int int1, int int2) {
   f_number.i[1] = int2;
   return f_number.f;
 }
+
 //-----------------------------
 const int S0 = 14;
 const int S1 = 12;
@@ -105,7 +113,7 @@ char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
 int timer_I;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
-float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
+
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
 bool key = false, blynk_first_connect = false, status_fan = HIGH;
 ;
@@ -779,7 +787,7 @@ void read_modbus() {
       }
       //-------------
       {  //Áp lực set
-      /*
+        /*
         uint16_t ref_percent_[1];
         mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
         while (mb.slave()) {  // Check if transaction is active
@@ -850,6 +858,10 @@ void read_modbus() {
       //hz = I_vdf = pre = temp_vdf = 0;
     }
   }
+}
+void read() {
+
+  mb.readHreg(1, 16519, apluc, 2, cbWrite);
 }
 //-------------------------
 void connectionstatus() {
@@ -955,7 +967,8 @@ void setup() {
       timer.restartTimer(timer_I);
     });
     timer.setInterval(5033L, []() {
-      read_modbus();
+      //read_modbus();
+      read();
       up();
       timer.restartTimer(timer_I);
     });
