@@ -25,7 +25,7 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "240102"
+#define BLYNK_FIRMWARE_VERSION "240107"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -721,7 +721,7 @@ void read_modbus() {
       while (mb.slave()) {
         mb.task();
         //yield();
-        delay(10);
+        delay(50);
         temp_vdf = (nhietdo_bientan[0]);
       }
     }
@@ -737,16 +737,18 @@ void read_modbus() {
         }
       }
       //-------------
+      /*
       {  //Tần số
         uint16_t tanso[1];
         mb.readHreg(1, 16129, tanso, 1);
         while (mb.slave()) {
           mb.task();
           //yield();
-          delay(10);
+          delay(50);
           hz = tanso[0] / 10;
         }
       }
+      */
       //-------------
       {  //Dòng điện
         uint16_t dongdien[2];
@@ -754,7 +756,7 @@ void read_modbus() {
         while (mb.slave()) {  // Check if transaction is active
           mb.task();
           //yield();
-          delay(10);
+          delay(50);
           if ((float(int32_2int16(dongdien[1], dongdien[0])) / 100) < 100) {
             I_vdf = float(int32_2int16(dongdien[1], dongdien[0])) / 100;
           }
@@ -767,7 +769,7 @@ void read_modbus() {
         while (mb.slave()) {  // Check if transaction is active
           mb.task();
           //yield();
-          delay(10);
+          delay(50);
           if ((float(int32_2int16(apluc[1], apluc[0])) / 1000) < 10) {
             pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
           }
@@ -780,7 +782,7 @@ void read_modbus() {
         while (mb.slave()) {  // Check if transaction is active
           mb.task();
           //yield();
-          delay(10);
+          delay(50);
           ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
         }
         float ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
@@ -792,7 +794,7 @@ void read_modbus() {
             while (mb.slave()) {  // Check if transaction is active
               mb.task();
               //yield();
-              delay(10);
+              delay(50);
               Blynk.virtualWrite(V18, data.pre_set);
             }
           } else {
@@ -801,7 +803,7 @@ void read_modbus() {
             while (mb.slave()) {
               mb.task();
               //yield();
-              delay(10);
+              delay(50);
               ref_blynk = ref_blynk_[0];  //Áp lực tham chiếu nhập từ Blynk (0-16384)
             }
             float ref_blynk_percent = ref_blynk / 16384 * 100;  //Áp lực tham chiếu nhập từ Blynk dạng %
@@ -813,7 +815,7 @@ void read_modbus() {
                 while (mb.slave()) {  // Check if transaction is active
                   mb.task();
                   //yield();
-                  delay(10);
+                  delay(50);
                 }
               }
               data.pre_set = ref_bar;
@@ -824,7 +826,7 @@ void read_modbus() {
               while (mb.slave()) {  // Check if transaction is active
                 mb.task();
                 //yield();
-                delay(10);
+                delay(50);
               }
               Blynk.virtualWrite(V18, data.pre_set);
             }
