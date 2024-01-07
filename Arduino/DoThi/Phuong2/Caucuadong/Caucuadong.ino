@@ -185,6 +185,7 @@ BLYNK_WRITE(V0) {
     int httpResponseCode = http.GET();
     http.end();
   } else if (dataS == "van1") {  //mode?
+    num_van = 1;
     String server_path = server_name + "batch/update?token=" + Main_TOKEN
                          + "&V4=" + data.rl1_r
                          + "&V4=" + data.rl1_s
