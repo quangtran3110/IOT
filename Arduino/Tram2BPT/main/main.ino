@@ -74,16 +74,6 @@ SoftwareSerial S(0, 2);
 ModbusRTU mb;
 bool key_read = true;
 int time_delay;
-uint16_t apluc[2];
-float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
-bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
-  if (event == Modbus::EX_SUCCESS) {
-    if ((float(int32_2int16(apluc[1], apluc[0])) / 1000) < 10) {
-      pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
-    }
-  }
-  return true;
-}
 int32_t int32_2int16(int int1, int int2) {
   union i32_2i16 {
     int32_t f;
@@ -94,7 +84,11 @@ int32_t int32_2int16(int int1, int int2) {
   f_number.i[1] = int2;
   return f_number.f;
 }
-
+bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+  }
+  return true;
+}
 //-----------------------------
 const int S0 = 14;
 const int S1 = 12;
@@ -113,10 +107,9 @@ char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
 int timer_I;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
-
+float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
 bool key = false, blynk_first_connect = false, status_fan = HIGH;
-;
 byte c;
 int temp_vdf;
 //-----------------------------
@@ -721,149 +714,136 @@ BLYNK_WRITE(V18)  // Cai ap luc bien tan
   } else Blynk.virtualWrite(V18, data.pre_set);
 }
 //-------------------------------------------------------------------
+uint16_t nhietdo_bientan[1];
+bool cbWrite_nhietdo(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+    temp_vdf = (nhietdo_bientan[0]);
+  }
+  return true;
+}
+uint16_t tanso[1];
+bool cbWrite_tanso(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+    hz = tanso[0] / 10;
+  }
+  return true;
+}
+uint16_t dongdien[2];
+bool cbWrite_dongdien(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+    I_vdf = float(int32_2int16(dongdien[1], dongdien[0])) / 100;
+  }
+  return true;
+}
+uint16_t apluc[2];
+bool cbWrite_apluc(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+    pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
+  }
+  return true;
+}
+uint16_t ref_percent_[1];
+bool cbWrite_aplucset(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+    ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
+  }
+  return true;
+}
+uint16_t ref_blynk_[1];
+bool cbWrite_ref_blynk_(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+    ref_blynk = ref_blynk_[0];  //Áp lực tham chiếu nhập từ Blynk (0-16384)
+  }
+  return true;
+}
+//-------------
 void read_modbus() {
-  if (key_read) {
-    {  //Nhiệt độ biến tần
-      uint16_t nhietdo_bientan[1];
-      mb.readHreg(1, 16339, nhietdo_bientan, 1);
-      while (mb.slave()) {
-        mb.task();
-        //yield();
-        delay(50);
-        temp_vdf = (nhietdo_bientan[0]);
-      }
-    }
-    if ((temp_vdf > 20) && (temp_vdf < 90)) {
-      time_delay = 0;
-      //-------------
-      {  //Fan
-        if ((temp_vdf < 35) && (status_fan == HIGH)) {
-          off_fan();
-        }
-        if ((temp_vdf > 40) && (status_fan == LOW)) {
-          on_fan();
-        }
-      }
-      //-------------
-      /*
-      {  //Tần số
-        uint16_t tanso[1];
-        mb.readHreg(1, 16129, tanso, 1);
-        while (mb.slave()) {
-          mb.task();
-          //yield();
-          delay(50);
-          hz = tanso[0] / 10;
-        }
-      }
-      */
-      //-------------
-      /*
-      {  //Dòng điện
-        uint16_t dongdien[2];
-        mb.readHreg(1, 16139, dongdien, 2);
-        while (mb.slave()) {  // Check if transaction is active
-          mb.task();
-          //yield();
-          delay(50);
-          if ((float(int32_2int16(dongdien[1], dongdien[0])) / 100) < 100) {
-            I_vdf = float(int32_2int16(dongdien[1], dongdien[0])) / 100;
-          }
-        }
-      }
-      */
-      //-------------
-      {  //Áp lực
-        uint16_t apluc[2];
-        mb.readHreg(1, 16519, apluc, 2);
-        while (mb.slave()) {  // Check if transaction is active
-          mb.task();
-          //yield();
-          delay(50);
-          if ((float(int32_2int16(apluc[1], apluc[0])) / 1000) < 10) {
-            pre = float(int32_2int16(apluc[1], apluc[0])) / 1000;
-          }
-        }
-      }
-      //-------------
-      {  //Áp lực set
-        /*
-        uint16_t ref_percent_[1];
-        mb.readHreg(1, 16009, ref_percent_, 2, cbWrite);
-        while (mb.slave()) {  // Check if transaction is active
-          mb.task();
-          //yield();
-          delay(50);
-          ref_percent = float(int32_2int16(ref_percent_[1], ref_percent_[0])) / 100;  //Áp lực tham chiếu tổng dạng %
-        }
-        float ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
-                                           /*
-        if (ref_bar != data.pre_set) {
-          if (ref_bar == 0) {
-            int send_ref = int((data.pre_set * 10) / 100 * 16384);
-            mb.writeHreg(1, 50009, send_ref, cbWrite);
-            while (mb.slave()) {  // Check if transaction is active
-              mb.task();
-              //yield();
-              delay(50);
-              Blynk.virtualWrite(V18, data.pre_set);
-            }
-          } else {
-            uint16_t ref_blynk_[1];
-            mb.readHreg(1, 50009, ref_blynk_, 1, cbWrite);
-            while (mb.slave()) {
-              mb.task();
-              //yield();
-              delay(50);
-              ref_blynk = ref_blynk_[0];  //Áp lực tham chiếu nhập từ Blynk (0-16384)
-            }
-            float ref_blynk_percent = ref_blynk / 16384 * 100;  //Áp lực tham chiếu nhập từ Blynk dạng %
-            int ref_bientro_percent = ref_percent - ref_blynk_percent;
-            if (ref_bientro_percent != 0) {
-              //Serial.println(ref_bientro_percent);
-              if (ref_blynk != 0) {
-                mb.writeHreg(1, 50009, 0, cbWrite);
-                while (mb.slave()) {  // Check if transaction is active
-                  mb.task();
-                  //yield();
-                  delay(50);
-                }
-              }
-              data.pre_set = ref_bar;
-              Blynk.virtualWrite(V18, data.pre_set);
-            } else {
-              int send_ref = int((data.pre_set * 10) / 100 * 16384);
-              mb.writeHreg(1, 50009, send_ref, cbWrite);
-              while (mb.slave()) {  // Check if transaction is active
-                mb.task();
-                //yield();
-                delay(50);
-              }
-              Blynk.virtualWrite(V18, data.pre_set);
-            }
-          }
-        }
-        */
-      }
-      //-------------
-    } else {
-      key_read = false;
-      time_delay = time_delay + 5000;
-      if (time_delay == 5000) {
-        //Blynk.logEvent("info", String("RS485 lỗi!"));
-      }
-      timer1.setTimeout(time_delay, []() {
-        key_read = true;
-      });
-      //hz = I_vdf = pre = temp_vdf = 0;
+  {  //Nhiệt độ biến tần
+    mb.readHreg(1, 16339, nhietdo_bientan, 1, cbWrite_nhietdo);
+    while (mb.slave()) {
+      mb.task();
+      delay(20);
     }
   }
-}
-void read() {
-  mb.readHreg(1, 16519, apluc, 2, cbWrite);
-  while (mb.slave()) {  // Check if transaction is active
-    mb.task();
-    delay(10);
+  //Fan
+  {
+    if ((temp_vdf < 35) && (status_fan == HIGH)) {
+      off_fan();
+    }
+    if ((temp_vdf > 40) && (status_fan == LOW)) {
+      on_fan();
+    }
+  }
+  //Tần số
+  {
+    mb.readHreg(1, 16129, tanso, 1, cbWrite_tanso);
+    while (mb.slave()) {
+      mb.task();
+      delay(20);
+    }
+  }
+  //Dòng điện
+  {
+    mb.readHreg(1, 16139, dongdien, 2, cbWrite_dongdien);
+    while (mb.slave()) {  // Check if transaction is active
+      mb.task();
+      delay(20);
+    }
+  }
+  //Áp lực
+  {
+    mb.readHreg(1, 16519, apluc, 2, cbWrite_apluc);
+    while (mb.slave()) {  // Check if transaction is active
+      mb.task();
+      delay(20);
+    }
+  }
+  //Áp lực set
+  {
+    mb.readHreg(1, 16009, ref_percent_, 2, cbWrite_aplucset);
+    while (mb.slave()) {  // Check if transaction is active
+      mb.task();
+      delay(20);
+    }
+    float ref_bar = ref_percent / 10;  //Áp lực tham chiếu tổng dạng bar
+    if (ref_bar != data.pre_set) {
+      if (ref_bar == 0) {
+        int send_ref = int((data.pre_set * 10) / 100 * 16384);
+        mb.writeHreg(1, 50009, send_ref, cbWrite);
+        while (mb.slave()) {  // Check if transaction is active
+          mb.task();
+          delay(20);
+        }
+        Blynk.virtualWrite(V18, data.pre_set);
+      } else {
+        mb.readHreg(1, 50009, ref_blynk_, 1, cbWrite_ref_blynk_);
+        while (mb.slave()) {
+          mb.task();
+          delay(20);
+        }
+        float ref_blynk_percent = ref_blynk / 16384 * 100;  //Áp lực tham chiếu nhập từ Blynk dạng %
+        int ref_bientro_percent = ref_percent - ref_blynk_percent;
+        if (ref_bientro_percent != 0) {
+          if (ref_blynk != 0) {
+            mb.writeHreg(1, 50009, 0, cbWrite);
+            while (mb.slave()) {  // Check if transaction is active
+              mb.task();
+              delay(20);
+            }
+          }
+          data.pre_set = ref_bar;
+          Blynk.virtualWrite(V18, data.pre_set);
+        } else {
+          int send_ref = int((data.pre_set * 10) / 100 * 16384);
+          mb.writeHreg(1, 50009, send_ref, cbWrite);
+          while (mb.slave()) {  // Check if transaction is active
+            mb.task();
+            delay(20);
+          }
+          Blynk.virtualWrite(V18, data.pre_set);
+        }
+      }
+    }
   }
 }
 //-------------------------
@@ -970,8 +950,7 @@ void setup() {
       timer.restartTimer(timer_I);
     });
     timer.setInterval(5033L, []() {
-      //read_modbus();
-      read();
+      read_modbus();
       up();
       timer.restartTimer(timer_I);
     });
