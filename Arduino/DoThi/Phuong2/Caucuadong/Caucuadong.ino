@@ -1,7 +1,7 @@
 #define BLYNK_TEMPLATE_ID "TMPL6VP9MY4gS"
 #define BLYNK_TEMPLATE_NAME "Cau Cua Dong"
 #define BLYNK_AUTH_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
-#define BLYNK_FIRMWARE_VERSION "240107"
+#define BLYNK_FIRMWARE_VERSION "240108"
 
 #define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
 const char* ssid = "net";
@@ -59,7 +59,7 @@ String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 int timer_I;
 bool key = false, blynk_first_connect = false;
-byte sta_rl1 = 0;
+bool sta_rl1 = LOW;
 byte num_van;
 //-----------------------------
 struct Data {
@@ -97,16 +97,16 @@ void savedata() {
     // Serial.println("\nWrite bytes to EEPROM memory...");
     data.save_num = data.save_num + 1;
     eeprom.writeBytes(address, sizeof(dataDefault), (byte*)&data);
-    Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
+    //Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
 void on_van1() {
-  sta_rl1 = 1;
-  pcf8575_1.digitalWrite(pin_RL1, LOW);
+  sta_rl1 = HIGH;
+  pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
 void off_van1() {
-  sta_rl1 = 0;
-  pcf8575_1.digitalWrite(pin_RL1, HIGH);
+  sta_rl1 = LOW;
+  pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
 void readcurrent()  // C2 - Cấp 1   - I0
 {

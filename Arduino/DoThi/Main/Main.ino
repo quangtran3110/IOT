@@ -76,9 +76,16 @@ BLYNK_WRITE(V0) {  //String
     key_set = false;
     key = false;
     Blynk.virtualWrite(V0, "Hủy kích hoạt!");
-  } else if (dataS == "update") {  //man
+  } else if (dataS == "update") {  //Update main
     terminal.clear();
     update_fw();
+  } else if (dataS == "update_p2_ccd") {  //update Cầu cửa đông
+    terminal.clear();
+    String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                         + "&V0=" + "update";
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
   }
 }
 BLYNK_WRITE(V1) {  //Khu vực
@@ -227,16 +234,23 @@ BLYNK_WRITE(V5) {  //Save time input
 bool sta_ccd_v1, ccd_mode;
 int timer_sta_ccd;
 byte sta_cau_cua_dong;
-
+bool hidden_ccd_key = false;
 void hidden_ccd() {
   Blynk.setProperty(V8, V7, "isDisabled", "true");
+  hidden_ccd_key = true;
 }
 void visible_ccd() {
   Blynk.setProperty(V8, V7, "isDisabled", "false");
+  hidden_ccd_key = false;
+  timer_sta_ccd = timer.setTimeout(30000, hidden_ccd);
 }
 BLYNK_WRITE(V6) {  //Status Cầu cửa đông
-  if (param.asInt() == 1) {
-    sta_cau_cua_dong == 1
+  sta_cau_cua_dong = param.asInt();
+  if (sta_cau_cua_dong == 1) {
+    if (hidden_ccd_key) {
+      visible_ccd();
+    }
+    timer.restartTimer(timer_sta_ccd);
   }
 }
 BLYNK_WRITE(V7) {  //Btn Van 1
