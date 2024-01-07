@@ -9,10 +9,10 @@
 #define APP_DEBUG
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
-//const char* ssid = "wifi";
-//const char* password = "Password";
-const char* ssid = "tram bom so 4";
-const char* password = "0943950555";
+const char* ssid = "Wifi";
+const char* password = "Password";
+//const char* ssid = "tram bom so 4";
+//const char* password = "0943950555";
 
 #include <WidgetRTC.h>
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
@@ -29,7 +29,10 @@ String main_sever = "http://sgp1.blynk.cloud/external/api/";
 int khu_vuc = 0, dia_diem = 0, van = 0;
 uint32_t start_, stop_;
 byte reboot_num;
-bool blynk_first_connect = false, key_set = false;
+bool blynk_first_connect = false, key_set = false, key = false;
+
+byte sta_cau_cua_dong = 1;
+
 
 WidgetRTC rtc_widget;
 WidgetTerminal terminal(V0);
@@ -39,6 +42,7 @@ BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
 }
+
 /*
 void up() {
   String server_path = main_sever + "batch/update?token=" + BLYNK_AUTH_TOKEN
@@ -60,17 +64,21 @@ void up() {
   http.end();
 }
 */
-
 BLYNK_WRITE(V0) {  //String
   String dataS = param.asStr();
   if (dataS == "active") {  //auto
     terminal.clear();
     key_set = true;
+    key = true;
     Blynk.virtualWrite(V0, "Đã kích hoạt!");
   } else if (dataS == "deactive") {  //man
     terminal.clear();
     key_set = false;
+    key = false;
     Blynk.virtualWrite(V0, "Hủy kích hoạt!");
+  } else if (dataS == "update") {  //man
+    terminal.clear();
+    update_fw();
   }
 }
 BLYNK_WRITE(V1) {  //Khu vực
@@ -154,6 +162,15 @@ BLYNK_WRITE(V3) {  //Chọn van
     case 0:
       {
         van = 1;
+        if (khu_vuc == 2) {
+          if (dia_diem == 1) {
+            String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                                 + "&V0=" + "van1";
+            http.begin(client, server_path.c_str());
+            int httpResponseCode = http.GET();
+            http.end();
+          }
+        }
         break;
       }
     case 1:
@@ -190,7 +207,6 @@ BLYNK_WRITE(V4) {  //Time input
   }
 }
 BLYNK_WRITE(V5) {  //Save time input
-Serial.println("we11");
   if (param.asInt() == 1) {
     if (khu_vuc == 2) {
       if (dia_diem == 1) {
@@ -204,6 +220,88 @@ Serial.println("we11");
           http.end();
         }
       }
+    }
+  }
+}
+//------------------- Cầu Cửa Đông
+bool sta_ccd_v1, ccd_mode;
+void hidden_ccd() {
+  Blynk.setProperty(V8, V7, "isDisabled", "true");
+}
+void visible_ccd() {
+  Blynk.setProperty(V8, V7, "isDisabled", "false");
+}
+BLYNK_WRITE(V6) {  //Status Cầu cửa đông
+  if (sta_cau_cua_dong != param.asInt()) {
+    sta_cau_cua_dong = param.asInt();
+    if (sta_cau_cua_dong == 0) hidden_ccd();
+    else visible_ccd();
+  }
+}
+BLYNK_WRITE(V7) {  //Btn Van 1
+  if (key) {
+    String data7;
+    if (param.asInt() == HIGH) {
+      data7 = "van1_on";
+    } else data7 = "van1_off";
+    String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                         + "&V0=" + data7;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
+  } else Blynk.virtualWrite(V7, sta_ccd_v1);
+}
+BLYNK_WRITE(V8) {  //mode
+  String data8;
+  if ((key) && (sta_cau_cua_dong == 1)) {
+    switch (param.asInt()) {
+      case 0:
+        {  // Man
+          data8 = "m";
+          ccd_mode = 0;
+          break;
+        }
+      case 1:
+        {  // Auto
+          data8 = "a";
+          ccd_mode = 1;
+          break;
+        }
+        String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                             + "&V0=" + data8;
+        http.begin(client, server_path.c_str());
+        int httpResponseCode = http.GET();
+        http.end();
+    }
+  } else {
+    if (sta_cau_cua_dong == 1) {
+      data8 = "mode";
+      String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                           + "&V0=" + data8;
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+    }
+  }
+}
+BLYNK_WRITE(V9) {  //data
+  byte G = param.asInt();
+  for (byte i = 0; i < 2; i++) {
+    byte bit = G % 2;
+    G /= 2;
+    switch (i) {
+      case 0:
+        if (ccd_mode != bit) {
+          ccd_mode = bit;
+          Blynk.virtualWrite(V8, ccd_mode);
+        }
+        break;
+      case 1:
+        if (sta_ccd_v1 != bit) {
+          sta_ccd_v1 = bit;
+          Blynk.virtualWrite(V7, sta_ccd_v1);
+        }
+        break;
     }
   }
 }
@@ -262,7 +360,7 @@ void update_fw() {
 }
 //-------------------------------------------------------------------
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
@@ -271,6 +369,9 @@ void setup() {
 
   timer.setInterval(900005L, []() {
     connectionstatus();
+  });
+  timer.setInterval(30019L, []() {
+    Blynk.syncVirtual(V6);
   });
 }
 void loop() {

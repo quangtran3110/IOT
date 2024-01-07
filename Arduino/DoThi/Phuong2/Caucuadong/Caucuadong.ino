@@ -1,9 +1,9 @@
 #define BLYNK_TEMPLATE_ID "TMPL6VP9MY4gS"
 #define BLYNK_TEMPLATE_NAME "Cau Cua Dong"
 #define BLYNK_AUTH_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
-#define BLYNK_FIRMWARE_VERSION "240106"
+#define BLYNK_FIRMWARE_VERSION "240107"
 
-#define Main_TOKEN Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ
+#define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
 const char* ssid = "net";
 const char* password = "Abcd@1234";
 //const char* ssid = "tram bom so 4";
@@ -54,13 +54,13 @@ const word address = 0;
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/Caucuadong/Caucuadong.ino"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/Caucuadong/build/esp8266.esp8266.nodemcuv2/Caucuadong.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 int timer_I;
 bool key = false, blynk_first_connect = false;
-byte sta_rl1 = LOW;
-byte num_rl = 0;
+bool sta_rl1 = LOW;
+byte num_van;
 //-----------------------------
 struct Data {
   byte mode;
@@ -79,6 +79,17 @@ BLYNK_CONNECTED() {
   blynk_first_connect = true;
 }
 //-------------------------------------------------------------------
+void up() {
+  byte g;
+  bitWrite(g, 0, data.mode);
+  bitWrite(g, 1, sta_rl1);
+  String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                       + "&V6=" + 1
+                       + "&V9=" + g;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+}
 void savedata() {
   if (memcmp(&data, &dataCheck, sizeof(dataDefault)) == 0) {
     // Serial.println("structures same no need to write to EEPROM");
@@ -89,16 +100,14 @@ void savedata() {
     Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
-void on_rl1() {
-  Serial.println("1111");
+void on_van1() {
   sta_rl1 = HIGH;
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
-void off_rl1() {
+void off_van1() {
   sta_rl1 = LOW;
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
-
 void readcurrent()  // C2 - Cấp 1   - I0
 {
   digitalWrite(S0, LOW);
@@ -116,7 +125,7 @@ void readcurrent()  // C2 - Cấp 1   - I0
       if ((Irms0 >= SetAmpemax) || (Irms0 <= SetAmpemin)) {
         xSetAmpe = xSetAmpe + 1;
         if (xSetAmpe > 3) {
-          off_rl1();
+          off_van1();
           xSetAmpe = 0;
           trip0 = true;
           Blynk.logEvent("error", String("Van 1 lỗi: ") + Irms0 + String(" A"));
@@ -127,7 +136,6 @@ void readcurrent()  // C2 - Cấp 1   - I0
     }
   }
 }
-
 void rtctime() {
   DateTime now = rtc_module.now();
   if (blynk_first_connect == true) {
@@ -138,51 +146,72 @@ void rtctime() {
   }
   terminal.clear();
   //Blynk.virtualWrite(V0, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
-  Blynk.virtualWrite(V0, "run:", data.rl1_r, ", stop:", data.rl1_s);
+  //Blynk.virtualWrite(V0, "run:", data.rl1_r, ", stop:", data.rl1_s);
   float nowtime = (now.hour() * 3600 + now.minute() * 60);
 
   if (data.mode == 1) {  // Auto
     if (data.rl1_r > data.rl1_s) {
       if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
-        off_rl1();
+        off_van1();
       }
       if ((nowtime < data.rl1_s) || (nowtime > data.rl1_r)) {
-        on_rl1();
+        on_van1();
       }
     }
     if (data.rl1_r < data.rl1_s) {
       if ((nowtime > data.rl1_s) || (nowtime < data.rl1_r)) {
-        off_rl1();
+        off_van1();
       }
       if ((nowtime < data.rl1_s) && (nowtime > data.rl1_r)) {
-        on_rl1();
+        on_van1();
       }
     }
   }
 }
-
 BLYNK_WRITE(V0) {
   String dataS = param.asStr();
-  if (dataS == "a") {  //auto
-    data.mode = 1;
-    savedata();
+  if (dataS == "update") {
+    update_fw();
   } else if (dataS == "m") {  //man
     data.mode = 0;
     savedata();
-  } else if (dataS == "1") {  //RL1
-    num_rl = 1;
+  } else if (dataS == "a") {  //auto
+    data.mode = 1;
+    savedata();
+  } else if (dataS == "mode") {  //mode?
+    String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                         + "&V8=" + data.mode;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
+  } else if (dataS == "van1") {  //mode?
+    String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                         + "&V4=" + data.rl1_r
+                         + "&V4=" + data.rl1_s
+                         + "&V4=" + tz;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
+  } else if (dataS == "van1_on") {  //RL1 on
+    on_van1();
+  } else if (dataS == "van1_off") {  //RL1 off
+    off_van1();
   }
 }
-
 BLYNK_WRITE(V1) {
   TimeInputParam t(param);
-  if (t.hasStartTime()) {
-    data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
-  }
-  if (t.hasStopTime()) {
-    data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
+  if (num_van == 1) {
+    if (t.hasStartTime()) {
+      data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
+    }
+    if (t.hasStopTime()) {
+      data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
+    }
   }
   savedata();
+}
+BLYNK_WRITE(V2) {
+  num_van = param.asInt();
 }
 //-------------------------
 void connectionstatus() {
@@ -275,11 +304,12 @@ void setup() {
   pcf8575_1.digitalWrite(pin_RL7, HIGH);
 
   timer.setTimeout(5000L, []() {
-    timer_I = timer.setInterval(1589, []() {
+    timer_I = timer.setInterval(5089, []() {
       readcurrent();
       //readcurrent1();
       //readcurrent2();
       //readcurrent3();
+      up();
       timer.restartTimer(timer_I);
     });
     timer.setInterval(15005L, []() {
