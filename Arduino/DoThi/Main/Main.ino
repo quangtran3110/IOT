@@ -236,20 +236,21 @@ int timer_sta_ccd;
 byte sta_cau_cua_dong;
 bool hidden_ccd_key = false;
 void hidden_ccd() {
-  Blynk.setProperty(V8, V7, "isDisabled", "true");
-  hidden_ccd_key = true;
+  if (hidden_ccd_key == false) {
+    Blynk.setProperty(V8, V7, "isDisabled", "true");
+    hidden_ccd_key = true;
+  }
 }
 void visible_ccd() {
-  Blynk.setProperty(V8, V7, "isDisabled", "false");
-  hidden_ccd_key = false;
-  timer_sta_ccd = timer.setTimeout(30000, hidden_ccd);
+  if (hidden_ccd_key == true) {
+    Blynk.setProperty(V8, V7, "isDisabled", "false");
+    hidden_ccd_key = false;
+  }
 }
 BLYNK_WRITE(V6) {  //Status Cầu cửa đông
   sta_cau_cua_dong = param.asInt();
   if (sta_cau_cua_dong == 1) {
-    if (hidden_ccd_key) {
-      visible_ccd();
-    }
+    visible_ccd();
     timer.restartTimer(timer_sta_ccd);
   }
 }
@@ -385,6 +386,7 @@ void setup() {
   timer.setInterval(900005L, []() {
     connectionstatus();
   });
+  timer_sta_ccd = timer.setInterval(30018, hidden_ccd);
 }
 void loop() {
   Blynk.run();

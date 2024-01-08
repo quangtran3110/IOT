@@ -306,7 +306,7 @@ void setup() {
 
   timer.setTimeout(5000L, []() {
     timer_I = timer.setInterval(5089, []() {
-      readcurrent();
+      //readcurrent();
       //readcurrent1();
       //readcurrent2();
       //readcurrent3();
