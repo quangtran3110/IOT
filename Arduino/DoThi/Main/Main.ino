@@ -238,6 +238,7 @@ bool hidden_ccd_key = false;
 void hidden_ccd() {
   if (hidden_ccd_key == false) {
     Blynk.setProperty(V8, V7, "isDisabled", "true");
+    Blynk.virtualWrite(V6, LOW);
     hidden_ccd_key = true;
   }
 }

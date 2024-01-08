@@ -194,9 +194,9 @@ BLYNK_WRITE(V0) {
     int httpResponseCode = http.GET();
     http.end();
   } else if (dataS == "van1_on") {  //RL1 on
-    on_van1();
+    if (data.mode == 0) on_van1();
   } else if (dataS == "van1_off") {  //RL1 off
-    off_van1();
+    if (data.mode == 0) off_van1();
   }
 }
 BLYNK_WRITE(V1) {
@@ -272,7 +272,6 @@ void setup() {
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
   //-----------------------
-  delay(10000);
   //-----------------------
   rtc_module.begin();
   eeprom.initialize();
@@ -285,6 +284,8 @@ void setup() {
   //-----------------------
   Wire.begin();
   pcf8575_1.begin();
+  delay(10000);
+
   pcf8575_1.pinMode(S0, OUTPUT);
   pcf8575_1.pinMode(S1, OUTPUT);
   pcf8575_1.pinMode(S2, OUTPUT);
