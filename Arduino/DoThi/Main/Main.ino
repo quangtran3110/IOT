@@ -76,6 +76,14 @@ BLYNK_WRITE(V0) {  //String
     key_set = false;
     key = false;
     Blynk.virtualWrite(V0, "Hủy kích hoạt!");
+  } else if (dataS == "dothi") {  //man
+    terminal.clear();
+    key = true;
+    Blynk.virtualWrite(V0, "OK!\nKích hoạt trong 15s");
+    timer.setTimeout(15000, []() {
+      key = false;
+      terminal.clear();
+    });
   } else if (dataS == "update") {  //Update main
     terminal.clear();
     update_fw();
@@ -238,7 +246,6 @@ bool hidden_ccd_key = false;
 void hidden_ccd() {
   if (hidden_ccd_key == false) {
     Blynk.setProperty(V8, V7, "isDisabled", "true");
-    Blynk.virtualWrite(V6, LOW);
     hidden_ccd_key = true;
   }
 }
@@ -284,12 +291,12 @@ BLYNK_WRITE(V8) {  //mode
           ccd_mode = 1;
           break;
         }
-        String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
-                             + "&V0=" + data8;
-        http.begin(client, server_path.c_str());
-        int httpResponseCode = http.GET();
-        http.end();
     }
+    String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                         + "&V0=" + data8;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
   } else {
     if (sta_cau_cua_dong == 1) {
       data8 = "mode";
