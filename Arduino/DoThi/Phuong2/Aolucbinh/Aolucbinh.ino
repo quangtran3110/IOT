@@ -36,6 +36,7 @@ unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
 float Irms0, Irms1, Irms2, Irms3;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
 float SetAmpemax = 0, SetAmpemin = 0;
+float SetAmpe1max = 0, SetAmpe1min = 0;
 //-----------------------------
 #include <WidgetRTC.h>
 #include "RTClib.h"
@@ -54,12 +55,12 @@ const word address = 0;
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/UBND_P2/build/esp8266.esp8266.nodemcuv2/UBND_P2.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/Aolucbinh/build/esp8266.esp8266.nodemcuv2/Aolucbinh.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 int timer_I;
 bool key = false, blynk_first_connect = false;
-bool sta_rl1 = LOW;
+bool sta_rl1 = LOW, sta_rl2 = LOW;
 byte num_van;
 //-----------------------------
 struct Data {
@@ -67,8 +68,9 @@ struct Data {
   byte reboot_num;
   byte save_num;
   uint32_t rl1_r, rl1_s;
+  uint32_t rl2_r, rl2_s;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V0);
 WidgetRTC rtc_widget;
@@ -83,9 +85,10 @@ void up() {
   byte g;
   bitWrite(g, 0, data.mode);
   bitWrite(g, 1, sta_rl1);
+  bitWrite(g, 2, sta_rl2);
   String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                       + "&V10=" + 1
-                       + "&V11=" + g;
+                       + "&V14=" + 1
+                       + "&V15=" + g;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -108,7 +111,16 @@ void off_van1() {
   sta_rl1 = LOW;
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
-void readcurrent()  // C2 - Cấp 1   - I0
+void on_van2() {
+  sta_rl2 = HIGH;
+  pcf8575_1.digitalWrite(pin_RL2, !sta_rl2);
+}
+void off_van2() {
+  sta_rl2 = LOW;
+  pcf8575_1.digitalWrite(pin_RL2, !sta_rl2);
+}
+
+void readcurrent()  // C2
 {
   digitalWrite(S0, LOW);
   digitalWrite(S1, HIGH);
@@ -136,6 +148,34 @@ void readcurrent()  // C2 - Cấp 1   - I0
     }
   }
 }
+void readcurrent1()  // C3
+{
+  digitalWrite(S0, HIGH);
+  digitalWrite(S1, HIGH);
+  digitalWrite(S2, LOW);
+  digitalWrite(S3, LOW);
+  float rms1 = emon1.calcIrms(1480);
+  if (rms1 < 2) {
+    Irms0 = 0;
+    yIrms0 = 0;
+  } else if (rms1 >= 2) {
+    yIrms1 = yIrms1 + 1;
+    Irms1 = rms1;
+    if (yIrms1 > 3) {
+      if ((Irms1 >= SetAmpe1max) || (Irms0 <= SetAmpe1min)) {
+        xSetAmpe1 = xSetAmpe1 + 1;
+        if (xSetAmpe1 > 3) {
+          off_van2();
+          xSetAmpe1 = 0;
+          trip1 = true;
+          Blynk.logEvent("error", String("Van 2 lỗi: ") + Irms1 + String(" A"));
+        }
+      } else {
+        xSetAmpe1 = 0;
+      }
+    }
+  }
+}
 void rtctime() {
   DateTime now = rtc_module.now();
   if (blynk_first_connect == true) {
@@ -150,6 +190,7 @@ void rtctime() {
   float nowtime = (now.hour() * 3600 + now.minute() * 60);
 
   if (data.mode == 1) {  // Auto
+    //Van 1
     if (data.rl1_r > data.rl1_s) {
       if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
         off_van1();
@@ -157,13 +198,28 @@ void rtctime() {
       if ((nowtime < data.rl1_s) || (nowtime > data.rl1_r)) {
         on_van1();
       }
-    }
-    if (data.rl1_r < data.rl1_s) {
+    } else if (data.rl1_r < data.rl1_s) {
       if ((nowtime > data.rl1_s) || (nowtime < data.rl1_r)) {
         off_van1();
       }
       if ((nowtime < data.rl1_s) && (nowtime > data.rl1_r)) {
         on_van1();
+      }
+    }
+    // Van 2
+    if (data.rl2_r > data.rl2_s) {
+      if ((nowtime > data.rl2_s) && (nowtime < data.rl2_r)) {
+        off_van2();
+      }
+      if ((nowtime < data.rl2_s) || (nowtime > data.rl2_r)) {
+        on_van2();
+      }
+    } else if (data.rl2_r < data.rl2_s) {
+      if ((nowtime > data.rl2_s) || (nowtime < data.rl2_r)) {
+        off_van2();
+      }
+      if ((nowtime < data.rl2_s) && (nowtime > data.rl2_r)) {
+        on_van2();
       }
     }
   }
@@ -180,11 +236,11 @@ BLYNK_WRITE(V0) {
     savedata();
   } else if (dataS == "mode") {  //mode?
     String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                         + "&V12=" + data.mode;
+                         + "&V16=" + data.mode;
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();
-  } else if (dataS == "van1") {  //mode?
+  } else if (dataS == "van1") {  //Time Van 1
     num_van = 1;
     String server_path = server_name + "batch/update?token=" + Main_TOKEN
                          + "&V4=" + data.rl1_r
@@ -197,6 +253,19 @@ BLYNK_WRITE(V0) {
     if (data.mode == 0) on_van1();
   } else if (dataS == "van1_off") {  //RL1 off
     if (data.mode == 0) off_van1();
+  } else if (dataS == "van2") {  //Time Van 2
+    num_van = 2;
+    String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                         + "&V4=" + data.rl2_r
+                         + "&V4=" + data.rl2_s
+                         + "&V4=" + tz;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
+  } else if (dataS == "van2_on") {  //RL2 on
+    if (data.mode == 0) on_van2();
+  } else if (dataS == "van2_off") {  //RL2 off
+    if (data.mode == 0) off_van2();
   }
 }
 BLYNK_WRITE(V1) {
@@ -278,7 +347,7 @@ void setup() {
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
   //-----------------------
   emon0.current(A0, 110);
-  //emon1.current(A0, 110);
+  emon1.current(A0, 110);
   //emon2.current(A0, 110);
   //emon3.current(A0, 110);
   //-----------------------
