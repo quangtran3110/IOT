@@ -1,3 +1,22 @@
+/*
+V0 - String
+V1 - Khu vực
+V2 - Địa điểm
+V3 - Chọn van
+V4 - Time input
+V5 - Save time
+/////////// Cầu cửa đông
+V6 - Sta caucuadong
+v7 - Btn van 1
+V8 - Mode
+V9 - G
+/////////// UBND P2
+V10 - Sta ubnd p2
+V11 - G
+V12 - mode
+V13 - Btn van 1
+*/
+
 #define BLYNK_TEMPLATE_ID "TMPL6LdmF6nY7"
 #define BLYNK_TEMPLATE_NAME "Đô Thị"
 #define BLYNK_AUTH_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
