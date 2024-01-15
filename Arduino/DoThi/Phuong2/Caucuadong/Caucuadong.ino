@@ -114,11 +114,11 @@ void off_van1() {
 }
 void weekday_() {
   memset(B, '\0', sizeof(B));
-  for (int i = 1; i <= 7; i++) {
+  for (int i = 0; i < 7; i++) {
     // Nếu ngày i được chọn
     if (A[i] == 1) {
       // Thêm giá trị i vào mảng A
-      strcat(B, String(i).c_str());
+      strcat(B, String(i + 1).c_str());
       strcat(B, ",");
     }
   }
