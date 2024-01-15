@@ -58,6 +58,7 @@ HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 int timer_I;
+int dayadjustment = -1;
 bool key = false, blynk_first_connect = false;
 bool sta_rl1 = LOW;
 byte num_van;
@@ -67,8 +68,9 @@ struct Data {
   byte reboot_num;
   byte save_num;
   uint32_t rl1_r, rl1_s;
+  byte MonWeekDay, TuesWeekDay, WedWeekDay, ThuWeekDay, FriWeekDay, SatWeekend, SunWeekend;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V0);
 WidgetRTC rtc_widget;
@@ -209,6 +211,28 @@ BLYNK_WRITE(V1) {
       data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
     }
   }
+  if (weekday() == 1) {
+    dayadjustment = 6;  // needed for Sunday, Time library is day 1 and Blynk is day 7
+  }
+  data_.MonWeekDay = t.isWeekdaySelected(1);
+  data_.TuesWeekDay = t.isWeekdaySelected(2);
+  data_.WedWeekDay = t.isWeekdaySelected(3);
+  data_.ThuWeekDay = t.isWeekdaySelected(4);
+  data_.FriWeekDay = t.isWeekdaySelected(5);
+  data_.SatWeekend = t.isWeekdaySelected(6);
+  data_.SunWeekend = t.isWeekdaySelected(7);
+  if (memcmp(&data_, &dataCheck_, sizeof(dataDefault_)) != 0) {
+    Blynk.syncVirtual(V8);
+    dataCheck_.MonWeekDay = data_.MonWeekDay;
+    dataCheck_.TuesWeekDay = data_.TuesWeekDay;
+    dataCheck_.WedWeekDay = data_.WedWeekDay;
+    dataCheck_.ThuWeekDay = data_.ThuWeekDay;
+    dataCheck_.FriWeekDay = data_.FriWeekDay;
+    dataCheck_.SatWeekend = data_.SatWeekend;
+    dataCheck_.SunWeekend = data_.SunWeekend;
+    Serial.println(dataCheck_.SunWeekend);
+  }
+
   savedata();
 }
 BLYNK_WRITE(V2) {

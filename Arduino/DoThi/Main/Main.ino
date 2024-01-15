@@ -27,7 +27,7 @@ V18 - Btn van 2
 #define BLYNK_TEMPLATE_ID "TMPL6LdmF6nY7"
 #define BLYNK_TEMPLATE_NAME "Đô Thị"
 #define BLYNK_AUTH_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
-#define BLYNK_FIRMWARE_VERSION "240106"
+#define BLYNK_FIRMWARE_VERSION "240115"
 
 #define caucuadong_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 #define ubndp2_TOKEN "gvfnRXv14oMohtqMWTPQXbduFKww1zfu"
@@ -206,7 +206,7 @@ BLYNK_WRITE(V2) {  //Địa điểm
         }
         break;
       }
-    case 3:
+    case 2:
       {
         dia_diem = 3;
         if (khu_vuc == 1) {  // ...

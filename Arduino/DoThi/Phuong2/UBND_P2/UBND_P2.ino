@@ -4,10 +4,10 @@
 #define BLYNK_FIRMWARE_VERSION "240115"
 
 #define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
-const char* ssid = "net";
-const char* password = "Abcd@1234";
-//const char* ssid = "tram bom so 4";
-//const char* password = "0943950555";
+//const char* ssid = "net";
+//const char* password = "Abcd@1234";
+const char* ssid = "tram bom so 4";
+const char* password = "0943950555";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -135,6 +135,7 @@ void readcurrent()  // C2 - Cấp 1   - I0
       }
     }
   }
+  Serial.println(Irms0);
 }
 void rtctime() {
   DateTime now = rtc_module.now();
@@ -307,7 +308,7 @@ void setup() {
 
   timer.setTimeout(5000L, []() {
     timer_I = timer.setInterval(5089, []() {
-      //readcurrent();
+      readcurrent();
       //readcurrent1();
       //readcurrent2();
       //readcurrent3();
