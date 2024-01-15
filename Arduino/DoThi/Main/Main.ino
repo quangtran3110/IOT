@@ -673,7 +673,7 @@ void setup() {
   });
   timer_sta_ccd = timer.setInterval(30018, hidden_ccd);
   timer_sta_ubndp2 = timer.setInterval(30021, hidden_ubndp2);
-  timer_sta_alb = timer.setInterval(30013, hidden_ubndp2);
+  timer_sta_alb = timer.setInterval(30013, hidden_alb);
 }
 void loop() {
   Blynk.run();
