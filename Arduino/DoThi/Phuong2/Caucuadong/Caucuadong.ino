@@ -1,7 +1,7 @@
 #define BLYNK_TEMPLATE_ID "TMPL6VP9MY4gS"
 #define BLYNK_TEMPLATE_NAME "Cau Cua Dong"
 #define BLYNK_AUTH_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
-#define BLYNK_FIRMWARE_VERSION "240108"
+#define BLYNK_FIRMWARE_VERSION "240109"
 
 #define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
 const char* ssid = "net";
@@ -151,6 +151,23 @@ void rtctime() {
   //Blynk.virtualWrite(V0, "run:", data.rl1_r, ", stop:", data.rl1_s);
   float nowtime = (now.hour() * 3600 + now.minute() * 60);
 
+  int dayadjustment = -1;
+  if (weekday() == 1) {
+    dayadjustment = 6;  // needed for Sunday, Time library is day 1 and Blynk is day 7
+  }
+  if ((((weekday() + dayadjustment) == 1) && (data.MonWeekDay))
+      || (((weekday() + dayadjustment) == 2) && (data.TuesWeekDay))
+      || (((weekday() + dayadjustment) == 3) && (data.WedWeekDay))
+      || (((weekday() + dayadjustment) == 4) && (data.ThuWeekDay))
+      || (((weekday() + dayadjustment) == 5) && (data.FriWeekDay))
+      || (((weekday() + dayadjustment) == 6) && (data.SatWeekend))
+      || (((weekday() + dayadjustment) == 7) && (data.SunWeekend))) {
+    String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                         + "&V0=" + "ok";
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
+  }
   if (data.mode == 1) {  // Auto
     if (data.rl1_r > data.rl1_s) {
       if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
@@ -211,28 +228,22 @@ BLYNK_WRITE(V1) {
       data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
     }
   }
-  if (weekday() == 1) {
-    dayadjustment = 6;  // needed for Sunday, Time library is day 1 and Blynk is day 7
+  data.MonWeekDay = t.isWeekdaySelected(1);
+  data.TuesWeekDay = t.isWeekdaySelected(2);
+  data.WedWeekDay = t.isWeekdaySelected(3);
+  data.ThuWeekDay = t.isWeekdaySelected(4);
+  data.FriWeekDay = t.isWeekdaySelected(5);
+  data.SatWeekend = t.isWeekdaySelected(6);
+  data.SunWeekend = t.isWeekdaySelected(7);
+  if (memcmp(&data, &dataCheck, sizeof(dataDefault)) != 0) {
+    dataCheck.MonWeekDay = data.MonWeekDay;
+    dataCheck.TuesWeekDay = data.TuesWeekDay;
+    dataCheck.WedWeekDay = data.WedWeekDay;
+    dataCheck.ThuWeekDay = data.ThuWeekDay;
+    dataCheck.FriWeekDay = data.FriWeekDay;
+    dataCheck.SatWeekend = data.SatWeekend;
+    dataCheck.SunWeekend = data.SunWeekend;
   }
-  data_.MonWeekDay = t.isWeekdaySelected(1);
-  data_.TuesWeekDay = t.isWeekdaySelected(2);
-  data_.WedWeekDay = t.isWeekdaySelected(3);
-  data_.ThuWeekDay = t.isWeekdaySelected(4);
-  data_.FriWeekDay = t.isWeekdaySelected(5);
-  data_.SatWeekend = t.isWeekdaySelected(6);
-  data_.SunWeekend = t.isWeekdaySelected(7);
-  if (memcmp(&data_, &dataCheck_, sizeof(dataDefault_)) != 0) {
-    Blynk.syncVirtual(V8);
-    dataCheck_.MonWeekDay = data_.MonWeekDay;
-    dataCheck_.TuesWeekDay = data_.TuesWeekDay;
-    dataCheck_.WedWeekDay = data_.WedWeekDay;
-    dataCheck_.ThuWeekDay = data_.ThuWeekDay;
-    dataCheck_.FriWeekDay = data_.FriWeekDay;
-    dataCheck_.SatWeekend = data_.SatWeekend;
-    dataCheck_.SunWeekend = data_.SunWeekend;
-    Serial.println(dataCheck_.SunWeekend);
-  }
-
   savedata();
 }
 BLYNK_WRITE(V2) {

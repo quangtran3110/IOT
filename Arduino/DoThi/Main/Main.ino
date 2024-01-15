@@ -27,7 +27,7 @@ V18 - Btn van 2
 #define BLYNK_TEMPLATE_ID "TMPL6LdmF6nY7"
 #define BLYNK_TEMPLATE_NAME "Đô Thị"
 #define BLYNK_AUTH_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
-#define BLYNK_FIRMWARE_VERSION "240115"
+#define BLYNK_FIRMWARE_VERSION "240116"
 
 #define caucuadong_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 #define ubndp2_TOKEN "gvfnRXv14oMohtqMWTPQXbduFKww1zfu"
@@ -57,6 +57,8 @@ String main_sever = "http://sgp1.blynk.cloud/external/api/";
 
 int khu_vuc = 0, dia_diem = 0, van = 0;
 uint32_t start_, stop_;
+byte t2, t3, t4, t5, t6, t7, cn;
+char A[50] = "";
 byte reboot_num;
 bool blynk_first_connect = false, key_set = false, key = false;
 
@@ -171,13 +173,17 @@ BLYNK_WRITE(V2) {  //Địa điểm
       {
         dia_diem = 1;
         if (khu_vuc == 1) {  // ...
-          menu.add("Van 4");
+          menu.add("Van 1");
+          menu.add("Van 2");
+          menu.add("Van 3");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 2) {  // Cầu cửa đông
           menu.add("Van 1");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 3) {  // ...
-          menu.add("Van 4");
+          menu.add("Van 1");
+          menu.add("Van 2");
+          menu.add("Van 3");
           Blynk.setProperty(V3, "labels", menu);
         }
         break;
@@ -186,29 +192,37 @@ BLYNK_WRITE(V2) {  //Địa điểm
       {
         dia_diem = 2;
         if (khu_vuc == 1) {  // ...
-          menu.add("Van 4");
+          menu.add("Van 1");
+          menu.add("Van 2");
+          menu.add("Van 3");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 2) {  //Ao lục bình
           menu.add("Van 1");
           menu.add("Van 2");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 3) {  // ...
-          menu.add("Van 4");
+          menu.add("Van 1");
+          menu.add("Van 2");
+          menu.add("Van 3");
           Blynk.setProperty(V3, "labels", menu);
         }
         break;
       }
-    case 2:
+    case 3:
       {
         dia_diem = 3;
         if (khu_vuc == 1) {  // ...
-          menu.add("Van 4");
+          menu.add("Van 1");
+          menu.add("Van 2");
+          menu.add("Van 3");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 2) {  //UBND P2
           menu.add("Van 1");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 3) {  // ...
-          menu.add("Van 4");
+          menu.add("Van 1");
+          menu.add("Van 2");
+          menu.add("Van 3");
           Blynk.setProperty(V3, "labels", menu);
         }
         break;
@@ -265,7 +279,7 @@ BLYNK_WRITE(V3) {  //Chọn van
       }
   }
 }
-BLYNK_WRITE(V4) {  //Time inputdata8
+BLYNK_WRITE(V4) {  //Time input
   if (key_set) {
     TimeInputParam t(param);
     if (t.hasStartTime()) {
@@ -274,6 +288,17 @@ BLYNK_WRITE(V4) {  //Time inputdata8
     if (t.hasStopTime()) {
       stop_ = t.getStopHour() * 3600 + t.getStopMinute() * 60;
     }
+    memset(A, '\0', sizeof(A));
+    for (int i = 1; i <= 7; i++) {
+      // Nếu ngày i được chọn
+      if (t.isWeekdaySelected(i) == 1) {
+        // Thêm giá trị i vào mảng A
+        strcat(A, String(i).c_str());
+        strcat(A, ",");
+      }
+    }
+    // Xóa ký tự cuối cùng là dấu phẩy
+    A[strlen(A) - 1] = '\0';
   }
 }
 BLYNK_WRITE(V5) {  //Save time input
@@ -284,7 +309,8 @@ BLYNK_WRITE(V5) {  //Save time input
           String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
                                + "&V1=" + start_
                                + "&V1=" + stop_
-                               + "&V1=" + tz;
+                               + "&V1=" + tz
+                               + "&V1=" + A;
           http.begin(client, server_path.c_str());
           int httpResponseCode = http.GET();
           http.end();
@@ -672,8 +698,8 @@ void setup() {
     connectionstatus();
   });
   timer_sta_ccd = timer.setInterval(30018, hidden_ccd);
-  timer_sta_ubndp2 = timer.setInterval(30021, hidden_ubndp2);
-  timer_sta_alb = timer.setInterval(30013, hidden_alb);
+  timer_sta_alb = timer.setInterval(30115, hidden_alb);
+  timer_sta_ubndp2 = timer.setInterval(30045, hidden_ubndp2);
 }
 void loop() {
   Blynk.run();

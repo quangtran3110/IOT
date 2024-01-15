@@ -35,7 +35,7 @@ int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
 float Irms0, Irms1, Irms2, Irms3;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
-float SetAmpemax = 0, SetAmpemin = 0;
+float SetAmpemax = 100, SetAmpemin = 0;
 //-----------------------------
 #include <WidgetRTC.h>
 #include "RTClib.h"
@@ -110,15 +110,16 @@ void off_van1() {
 }
 void readcurrent()  // C2 - Cấp 1   - I0
 {
-  digitalWrite(S0, LOW);
-  digitalWrite(S1, HIGH);
-  digitalWrite(S2, LOW);
-  digitalWrite(S3, LOW);
+  pcf8575_1.digitalWrite(S0, LOW);
+  pcf8575_1.digitalWrite(S1, HIGH);
+  pcf8575_1.digitalWrite(S2, LOW);
+  pcf8575_1.digitalWrite(S3, LOW);
   float rms0 = emon0.calcIrms(1480);
-  if (rms0 < 2) {
+  Serial.println(rms0);
+  if (rms0 < 1) {
     Irms0 = 0;
     yIrms0 = 0;
-  } else if (rms0 >= 2) {
+  } else if (rms0 >= 1) {
     yIrms0 = yIrms0 + 1;
     Irms0 = rms0;
     if (yIrms0 > 3) {
@@ -135,7 +136,6 @@ void readcurrent()  // C2 - Cấp 1   - I0
       }
     }
   }
-  Serial.println(Irms0);
 }
 void rtctime() {
   DateTime now = rtc_module.now();
@@ -278,7 +278,7 @@ void setup() {
   eeprom.initialize();
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
   //-----------------------
-  emon0.current(A0, 110);
+  emon0.current(A0, 200);
   //emon1.current(A0, 110);
   //emon2.current(A0, 110);
   //emon3.current(A0, 110);
@@ -307,7 +307,7 @@ void setup() {
   pcf8575_1.digitalWrite(pin_RL7, HIGH);
 
   timer.setTimeout(5000L, []() {
-    timer_I = timer.setInterval(5089, []() {
+    timer_I = timer.setInterval(1589, []() {
       readcurrent();
       //readcurrent1();
       //readcurrent2();
