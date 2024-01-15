@@ -71,7 +71,7 @@ int dayadjustment = -1;
 bool key = false, blynk_first_connect = false, dayOfTheWeek_ = false;
 bool sta_rl1 = LOW;
 String num_van;
-int A[] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
+int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
 char B[50] = "";
 
 WidgetTerminal terminal(V0);
@@ -120,16 +120,15 @@ void weekday_() {
       // Thêm giá trị i vào mảng A
       strcat(B, String(i + 1).c_str());
       strcat(B, ",");
+      String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                           + "&V0=" + A[i];
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
     }
   }
   // Xóa ký tự cuối cùng là dấu phẩy
   B[strlen(B) - 1] = '\0';
-  String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                       + "&V0=" + String(B)
-                       + "&V0=" + "B";
-  http.begin(client, server_path.c_str());
-  int httpResponseCode = http.GET();
-  http.end();
 }
 void readcurrent()  // C2 - Cấp 1   - I0
 {
