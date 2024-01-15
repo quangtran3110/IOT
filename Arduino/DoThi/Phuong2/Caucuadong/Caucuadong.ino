@@ -71,7 +71,6 @@ int dayadjustment = -1;
 bool key = false, blynk_first_connect = false, dayOfTheWeek_ = false;
 bool sta_rl1 = LOW;
 String num_van;
-int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
 char B[50] = "";
 
 WidgetTerminal terminal(V0);
@@ -113,6 +112,7 @@ void off_van1() {
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
 void weekday_() {
+  int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
   memset(B, '\0', sizeof(B));
   for (int i = 0; i < 7; i++) {
     // Nếu ngày i được chọn
