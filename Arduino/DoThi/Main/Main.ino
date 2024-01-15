@@ -198,7 +198,6 @@ BLYNK_WRITE(V2) {  //Địa điểm
         }
         break;
       }
-      /*
     case 2:
       {
         dia_diem = 3;
@@ -214,7 +213,6 @@ BLYNK_WRITE(V2) {  //Địa điểm
         }
         break;
       }
-      */
   }
 }
 BLYNK_WRITE(V3) {  //Chọn van
