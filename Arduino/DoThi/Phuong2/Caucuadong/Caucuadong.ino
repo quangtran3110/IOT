@@ -57,12 +57,6 @@ HTTPClient http;
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/Caucuadong/build/esp8266.esp8266.nodemcuv2/Caucuadong.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
-int timer_I;
-int dayadjustment = -1;
-bool key = false, blynk_first_connect = false;
-bool sta_rl1 = LOW;
-byte num_van;
-//-----------------------------
 struct Data {
   byte mode;
   byte reboot_num;
@@ -71,6 +65,14 @@ struct Data {
   byte MonWeekDay, TuesWeekDay, WedWeekDay, ThuWeekDay, FriWeekDay, SatWeekend, SunWeekend;
 } data, dataCheck;
 const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+//-----------------------------
+int timer_I;
+int dayadjustment = -1;
+bool key = false, blynk_first_connect = false, dayOfTheWeek_ = false;
+bool sta_rl1 = LOW;
+String num_van;
+int A[] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
+char B[50] = "";
 
 WidgetTerminal terminal(V0);
 WidgetRTC rtc_widget;
@@ -109,6 +111,19 @@ void on_van1() {
 void off_van1() {
   sta_rl1 = LOW;
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
+}
+void weekday_() {
+  memset(B, '\0', sizeof(B));
+  for (int i = 1; i <= 7; i++) {
+    // Nếu ngày i được chọn
+    if (A[i] == 1) {
+      // Thêm giá trị i vào mảng A
+      strcat(B, String(i).c_str());
+      strcat(B, ",");
+    }
+  }
+  // Xóa ký tự cuối cùng là dấu phẩy
+  B[strlen(B) - 1] = '\0';
 }
 void readcurrent()  // C2 - Cấp 1   - I0
 {
@@ -162,31 +177,32 @@ void rtctime() {
       || (((weekday() + dayadjustment) == 5) && (data.FriWeekDay))
       || (((weekday() + dayadjustment) == 6) && (data.SatWeekend))
       || (((weekday() + dayadjustment) == 7) && (data.SunWeekend))) {
-    String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                         + "&V0=" + (weekday() + dayadjustment);
-    http.begin(client, server_path.c_str());
-    int httpResponseCode = http.GET();
-    http.end();
-  }
+    dayOfTheWeek_ = true;
+  } else dayOfTheWeek_ = false;
   if (data.mode == 1) {  // Auto
-    if (data.rl1_r > data.rl1_s) {
-      if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
-        off_van1();
+    if (dayOfTheWeek_) {
+      if (data.rl1_r > data.rl1_s) {
+        if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
+          off_van1();
+        }
+        if ((nowtime < data.rl1_s) || (nowtime > data.rl1_r)) {
+          on_van1();
+        }
       }
-      if ((nowtime < data.rl1_s) || (nowtime > data.rl1_r)) {
-        on_van1();
+      if (data.rl1_r < data.rl1_s) {
+        if ((nowtime > data.rl1_s) || (nowtime < data.rl1_r)) {
+          off_van1();
+        }
+        if ((nowtime < data.rl1_s) && (nowtime > data.rl1_r)) {
+          on_van1();
+        }
       }
-    }
-    if (data.rl1_r < data.rl1_s) {
-      if ((nowtime > data.rl1_s) || (nowtime < data.rl1_r)) {
-        off_van1();
-      }
-      if ((nowtime < data.rl1_s) && (nowtime > data.rl1_r)) {
-        on_van1();
-      }
+    } else {
+      if (sta_rl1 == HIGH) off_van1();
     }
   }
 }
+
 BLYNK_WRITE(V0) {
   String dataS = param.asStr();
   if (dataS == "update") {
@@ -203,12 +219,14 @@ BLYNK_WRITE(V0) {
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();
-  } else if (dataS == "van1") {  //mode?
-    num_van = 1;
+  } else if (dataS == "van1") {  //Chọn van 1
+    num_van = "van1";
+    weekday_();
     String server_path = server_name + "batch/update?token=" + Main_TOKEN
                          + "&V4=" + data.rl1_r
                          + "&V4=" + data.rl1_s
-                         + "&V4=" + tz;
+                         + "&V4=" + tz
+                         + "&V4=" + String(B);
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();
@@ -220,7 +238,7 @@ BLYNK_WRITE(V0) {
 }
 BLYNK_WRITE(V1) {
   TimeInputParam t(param);
-  if (num_van == 1) {
+  if (num_van == "van1") {
     if (t.hasStartTime()) {
       data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
     }
@@ -245,9 +263,6 @@ BLYNK_WRITE(V1) {
     dataCheck.SunWeekend = data.SunWeekend;
   }
   savedata();
-}
-BLYNK_WRITE(V2) {
-  num_van = param.asInt();
 }
 //-------------------------
 void connectionstatus() {

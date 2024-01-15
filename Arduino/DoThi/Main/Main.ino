@@ -260,11 +260,53 @@ BLYNK_WRITE(V3) {  //Chọn van
     case 1:
       {
         van = 2;
+        if (khu_vuc == 2) {
+          if (dia_diem == 1) {
+            String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                                 + "&V0=" + "van2";
+            http.begin(client, server_path.c_str());
+            int httpResponseCode = http.GET();
+            http.end();
+          } else if (dia_diem == 2) {
+            String server_path = main_sever + "batch/update?token=" + alb_TOKEN
+                                 + "&V0=" + "van2";
+            http.begin(client, server_path.c_str());
+            int httpResponseCode = http.GET();
+            http.end();
+          } else if (dia_diem == 3) {
+            String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
+                                 + "&V0=" + "van2";
+            http.begin(client, server_path.c_str());
+            int httpResponseCode = http.GET();
+            http.end();
+          }
+        }
         break;
       }
     case 2:
       {
         van = 3;
+        if (khu_vuc == 2) {
+          if (dia_diem == 1) {
+            String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                                 + "&V3=" + "van3";
+            http.begin(client, server_path.c_str());
+            int httpResponseCode = http.GET();
+            http.end();
+          } else if (dia_diem == 2) {
+            String server_path = main_sever + "batch/update?token=" + alb_TOKEN
+                                 + "&V3=" + "van3";
+            http.begin(client, server_path.c_str());
+            int httpResponseCode = http.GET();
+            http.end();
+          } else if (dia_diem == 3) {
+            String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
+                                 + "&V3=" + "van3";
+            http.begin(client, server_path.c_str());
+            int httpResponseCode = http.GET();
+            http.end();
+          }
+        }
         break;
       }
     case 3:
@@ -305,36 +347,34 @@ BLYNK_WRITE(V5) {  //Save time input
   if (param.asInt() == 1) {
     if (khu_vuc == 2) {
       if (dia_diem == 1) {  //Cầu cửa đông
-        if (van == 1) {
-          String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
-                               + "&V1=" + start_
-                               + "&V1=" + stop_
-                               + "&V1=" + tz
-                               + "&V1=" + String(A);
-          http.begin(client, server_path.c_str());
-          int httpResponseCode = http.GET();
-          http.end();
-        }
+        String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                             + "&V1=" + start_
+                             + "&V1=" + stop_
+                             + "&V1=" + tz
+                             + "&V1=" + String(A);
+        http.begin(client, server_path.c_str());
+        int httpResponseCode = http.GET();
+        http.end();
+
       } else if (dia_diem == 2) {  //Ao lục bình
-        if (van == 1) {
-          String server_path = main_sever + "batch/update?token=" + alb_TOKEN
-                               + "&V1=" + start_
-                               + "&V1=" + stop_
-                               + "&V1=" + tz;
-          http.begin(client, server_path.c_str());
-          int httpResponseCode = http.GET();
-          http.end();
-        }
+        String server_path = main_sever + "batch/update?token=" + alb_TOKEN
+                             + "&V1=" + start_
+                             + "&V1=" + stop_
+                             + "&V1=" + tz
+                             + "&V1=" + String(A);
+        http.begin(client, server_path.c_str());
+        int httpResponseCode = http.GET();
+        http.end();
+
       } else if (dia_diem == 3) {  //UBND P2
-        if (van == 1) {
-          String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
-                               + "&V1=" + start_
-                               + "&V1=" + stop_
-                               + "&V1=" + tz;
-          http.begin(client, server_path.c_str());
-          int httpResponseCode = http.GET();
-          http.end();
-        }
+        String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
+                             + "&V1=" + start_
+                             + "&V1=" + stop_
+                             + "&V1=" + tz
+                             + "&V1=" + String(A);
+        http.begin(client, server_path.c_str());
+        int httpResponseCode = http.GET();
+        http.end();
       }
     }
   }
