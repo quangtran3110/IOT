@@ -671,11 +671,9 @@ void setup() {
   timer.setInterval(900005L, []() {
     connectionstatus();
   });
-  timer_sta_ccd = timer.setInterval(30018, []() {
-    hidden_ccd();
-    hidden_ubndp2();
-    hidden_alb();
-  });
+  timer_sta_ccd = timer.setInterval(30018, hidden_ccd);
+  timer_sta_ubndp2 = timer.setInterval(30021, hidden_ubndp2);
+  timer_sta_alb = timer.setInterval(30013, hidden_ubndp2);
 }
 void loop() {
   Blynk.run();
