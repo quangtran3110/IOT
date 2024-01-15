@@ -163,7 +163,7 @@ void rtctime() {
       || (((weekday() + dayadjustment) == 6) && (data.SatWeekend))
       || (((weekday() + dayadjustment) == 7) && (data.SunWeekend))) {
     String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                         + "&V0=" + "ok";
+                         + "&V0=" + (weekday() + dayadjustment);
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();

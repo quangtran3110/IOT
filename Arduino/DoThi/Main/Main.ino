@@ -310,7 +310,7 @@ BLYNK_WRITE(V5) {  //Save time input
                                + "&V1=" + start_
                                + "&V1=" + stop_
                                + "&V1=" + tz
-                               + "&V1=" + A;
+                               + "&V1=" + String(A);
           http.begin(client, server_path.c_str());
           int httpResponseCode = http.GET();
           http.end();
