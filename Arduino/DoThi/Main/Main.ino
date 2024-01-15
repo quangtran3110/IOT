@@ -171,17 +171,13 @@ BLYNK_WRITE(V2) {  //Địa điểm
       {
         dia_diem = 1;
         if (khu_vuc == 1) {  // ...
-          menu.add("Van 1");
-          menu.add("Van 2");
-          menu.add("Van 3");
+          menu.add("Van 4");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 2) {  // Cầu cửa đông
           menu.add("Van 1");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 3) {  // ...
-          menu.add("Van 1");
-          menu.add("Van 2");
-          menu.add("Van 3");
+          menu.add("Van 4");
           Blynk.setProperty(V3, "labels", menu);
         }
         break;
@@ -190,41 +186,35 @@ BLYNK_WRITE(V2) {  //Địa điểm
       {
         dia_diem = 2;
         if (khu_vuc == 1) {  // ...
-          menu.add("Van 1");
-          menu.add("Van 2");
-          menu.add("Van 3");
+          menu.add("Van 4");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 2) {  //Ao lục bình
           menu.add("Van 1");
           menu.add("Van 2");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 3) {  // ...
-          menu.add("Van 1");
-          menu.add("Van 2");
-          menu.add("Van 3");
+          menu.add("Van 4");
           Blynk.setProperty(V3, "labels", menu);
         }
         break;
       }
+      /*
     case 2:
       {
         dia_diem = 3;
         if (khu_vuc == 1) {  // ...
-          menu.add("Van 1");
-          menu.add("Van 2");
-          menu.add("Van 3");
+          menu.add("Van 4");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 2) {  //UBND P2
           menu.add("Van 1");
           Blynk.setProperty(V3, "labels", menu);
         } else if (khu_vuc == 3) {  // ...
-          menu.add("Van 1");
-          menu.add("Van 2");
-          menu.add("Van 3");
+          menu.add("Van 4");
           Blynk.setProperty(V3, "labels", menu);
         }
         break;
       }
+      */
   }
 }
 BLYNK_WRITE(V3) {  //Chọn van
