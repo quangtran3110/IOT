@@ -125,8 +125,7 @@ void weekday_() {
   // Xóa ký tự cuối cùng là dấu phẩy
   B[strlen(B) - 1] = '\0';
   String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                       + "&V0=" + "B: "
-                       + "&V0=" + String(B);
+                       + "&V0=" + "B";
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
