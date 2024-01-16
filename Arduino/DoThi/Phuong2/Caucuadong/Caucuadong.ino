@@ -166,7 +166,6 @@ void rtctime() {
   //Blynk.virtualWrite(V0, "run:", data.rl1_r, ", stop:", data.rl1_s);
   float nowtime = (now.hour() * 3600 + now.minute() * 60);
 
-  int dayadjustment = -1;
   if (weekday() == 1) {
     dayadjustment = 6;  // needed for Sunday, Time library is day 1 and Blynk is day 7
   }

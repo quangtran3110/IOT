@@ -29,14 +29,6 @@ const int pin_RL5 = P3;
 const int pin_RL6 = P2;
 const int pin_RL7 = P1;
 //-----------------------------
-#include "EmonLib.h"
-EnergyMonitor emon0, emon1, emon2, emon3;
-int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
-unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
-float Irms0, Irms1, Irms2, Irms3;
-bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
-float SetAmpemax = 100, SetAmpemin = 0;
-//-----------------------------
 #include <WidgetRTC.h>
 #include "RTClib.h"
 RTC_DS3231 rtc_module;
@@ -58,17 +50,20 @@ HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 int timer_I;
-bool key = false, blynk_first_connect = false;
+int dayadjustment = -1;
+bool key = false, blynk_first_connect = false, dayOfTheWeek_ = false;
 bool sta_rl1 = LOW;
-byte num_van;
+String num_van;
+char B[50] = "";
 //-----------------------------
 struct Data {
   byte mode;
   byte reboot_num;
   byte save_num;
   uint32_t rl1_r, rl1_s;
+  byte MonWeekDay, TuesWeekDay, WedWeekDay, ThuWeekDay, FriWeekDay, SatWeekend, SunWeekend;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V0);
 WidgetRTC rtc_widget;
@@ -108,34 +103,19 @@ void off_van1() {
   sta_rl1 = LOW;
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
-void readcurrent()  // C2 - Cấp 1   - I0
-{
-  pcf8575_1.digitalWrite(S0, LOW);
-  pcf8575_1.digitalWrite(S1, HIGH);
-  pcf8575_1.digitalWrite(S2, LOW);
-  pcf8575_1.digitalWrite(S3, LOW);
-  float rms0 = emon0.calcIrms(1480);
-  Serial.println(rms0);
-  if (rms0 < 1) {
-    Irms0 = 0;
-    yIrms0 = 0;
-  } else if (rms0 >= 1) {
-    yIrms0 = yIrms0 + 1;
-    Irms0 = rms0;
-    if (yIrms0 > 3) {
-      if ((Irms0 >= SetAmpemax) || (Irms0 <= SetAmpemin)) {
-        xSetAmpe = xSetAmpe + 1;
-        if (xSetAmpe > 3) {
-          off_van1();
-          xSetAmpe = 0;
-          trip0 = true;
-          Blynk.logEvent("error", String("Van 1 lỗi: ") + Irms0 + String(" A"));
-        }
-      } else {
-        xSetAmpe = 0;
-      }
+void weekday_() {
+  int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
+  memset(B, '\0', sizeof(B));
+  for (int i = 0; i < 7; i++) {
+    // Nếu ngày i được chọn
+    if (A[i] == 1) {
+      // Thêm giá trị i vào mảng A
+      strcat(B, String(i + 1).c_str());
+      strcat(B, ",");
     }
   }
+  // Xóa ký tự cuối cùng là dấu phẩy
+  B[strlen(B) - 1] = '\0';
 }
 void rtctime() {
   DateTime now = rtc_module.now();
@@ -150,22 +130,38 @@ void rtctime() {
   //Blynk.virtualWrite(V0, "run:", data.rl1_r, ", stop:", data.rl1_s);
   float nowtime = (now.hour() * 3600 + now.minute() * 60);
 
+  if (weekday() == 1) {
+    dayadjustment = 6;  // needed for Sunday, Time library is day 1 and Blynk is day 7
+  }
+  if ((((weekday() + dayadjustment) == 1) && (data.MonWeekDay))
+      || (((weekday() + dayadjustment) == 2) && (data.TuesWeekDay))
+      || (((weekday() + dayadjustment) == 3) && (data.WedWeekDay))
+      || (((weekday() + dayadjustment) == 4) && (data.ThuWeekDay))
+      || (((weekday() + dayadjustment) == 5) && (data.FriWeekDay))
+      || (((weekday() + dayadjustment) == 6) && (data.SatWeekend))
+      || (((weekday() + dayadjustment) == 7) && (data.SunWeekend))) {
+    dayOfTheWeek_ = true;
+  } else dayOfTheWeek_ = false;
   if (data.mode == 1) {  // Auto
-    if (data.rl1_r > data.rl1_s) {
-      if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
-        off_van1();
+    if (dayOfTheWeek_) {
+      if (data.rl1_r > data.rl1_s) {
+        if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
+          off_van1();
+        }
+        if ((nowtime < data.rl1_s) || (nowtime > data.rl1_r)) {
+          on_van1();
+        }
       }
-      if ((nowtime < data.rl1_s) || (nowtime > data.rl1_r)) {
-        on_van1();
+      if (data.rl1_r < data.rl1_s) {
+        if ((nowtime > data.rl1_s) || (nowtime < data.rl1_r)) {
+          off_van1();
+        }
+        if ((nowtime < data.rl1_s) && (nowtime > data.rl1_r)) {
+          on_van1();
+        }
       }
-    }
-    if (data.rl1_r < data.rl1_s) {
-      if ((nowtime > data.rl1_s) || (nowtime < data.rl1_r)) {
-        off_van1();
-      }
-      if ((nowtime < data.rl1_s) && (nowtime > data.rl1_r)) {
-        on_van1();
-      }
+    } else {
+      if (sta_rl1 == HIGH) off_van1();
     }
   }
 }
@@ -186,11 +182,12 @@ BLYNK_WRITE(V0) {
     int httpResponseCode = http.GET();
     http.end();
   } else if (dataS == "van1") {  //mode?
-    num_van = 1;
+    num_van = "van1";
     String server_path = server_name + "batch/update?token=" + Main_TOKEN
                          + "&V4=" + data.rl1_r
                          + "&V4=" + data.rl1_s
-                         + "&V4=" + tz;
+                         + "&V4=" + tz
+                         + "&V4=" + String(B);
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();
@@ -202,7 +199,7 @@ BLYNK_WRITE(V0) {
 }
 BLYNK_WRITE(V1) {
   TimeInputParam t(param);
-  if (num_van == 1) {
+  if (num_van == "van1") {
     if (t.hasStartTime()) {
       data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
     }
@@ -210,10 +207,24 @@ BLYNK_WRITE(V1) {
       data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
     }
   }
+  data.MonWeekDay = t.isWeekdaySelected(1);
+  data.TuesWeekDay = t.isWeekdaySelected(2);
+  data.WedWeekDay = t.isWeekdaySelected(3);
+  data.ThuWeekDay = t.isWeekdaySelected(4);
+  data.FriWeekDay = t.isWeekdaySelected(5);
+  data.SatWeekend = t.isWeekdaySelected(6);
+  data.SunWeekend = t.isWeekdaySelected(7);
+  if (memcmp(&data, &dataCheck, sizeof(dataDefault)) != 0) {
+    dataCheck.MonWeekDay = data.MonWeekDay;
+    dataCheck.TuesWeekDay = data.TuesWeekDay;
+    dataCheck.WedWeekDay = data.WedWeekDay;
+    dataCheck.ThuWeekDay = data.ThuWeekDay;
+    dataCheck.FriWeekDay = data.FriWeekDay;
+    dataCheck.SatWeekend = data.SatWeekend;
+    dataCheck.SunWeekend = data.SunWeekend;
+  }
   savedata();
-}
-BLYNK_WRITE(V2) {
-  num_van = param.asInt();
+  weekday_();
 }
 //-------------------------
 void connectionstatus() {
@@ -278,11 +289,6 @@ void setup() {
   eeprom.initialize();
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
   //-----------------------
-  emon0.current(A0, 200);
-  //emon1.current(A0, 110);
-  //emon2.current(A0, 110);
-  //emon3.current(A0, 110);
-  //-----------------------
   Wire.begin();
   pcf8575_1.begin();
   delay(10000);
@@ -307,6 +313,7 @@ void setup() {
   pcf8575_1.digitalWrite(pin_RL7, HIGH);
 
   timer.setTimeout(5000L, []() {
+    weekday_();
     timer_I = timer.setInterval(5089, []() {
       //readcurrent();
       //readcurrent1();
