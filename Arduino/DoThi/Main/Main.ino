@@ -132,6 +132,13 @@ BLYNK_WRITE(V0) {  //String
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();
+  } else if (dataS == "update_p2_ubndp2") {  //update Cầu cửa đông
+    terminal.clear();
+    String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
+                         + "&V0=" + "update";
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
   }
 }
 BLYNK_WRITE(V1) {  //Khu vực
