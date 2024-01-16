@@ -221,7 +221,6 @@ BLYNK_WRITE(V0) {
     http.end();
   } else if (dataS == "van1") {  //Chọn van 1
     num_van = "van1";
-    weekday_();
     String server_path = server_name + "batch/update?token=" + Main_TOKEN
                          + "&V4=" + data.rl1_r
                          + "&V4=" + data.rl1_s
@@ -263,6 +262,7 @@ BLYNK_WRITE(V1) {
     dataCheck.SunWeekend = data.SunWeekend;
   }
   savedata();
+  weekday_();
 }
 //-------------------------
 void connectionstatus() {
@@ -356,6 +356,7 @@ void setup() {
   pcf8575_1.digitalWrite(pin_RL7, HIGH);
 
   timer.setTimeout(5000L, []() {
+    weekday_();
     timer_I = timer.setInterval(5089, []() {
       //readcurrent();
       //readcurrent1();
