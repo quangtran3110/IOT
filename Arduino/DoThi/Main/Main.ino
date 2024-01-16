@@ -215,7 +215,7 @@ BLYNK_WRITE(V2) {  //Địa điểm
         }
         break;
       }
-    case 3:
+    case 2:
       {
         dia_diem = 3;
         if (khu_vuc == 1) {  // ...
@@ -362,7 +362,6 @@ BLYNK_WRITE(V5) {  //Save time input
         http.begin(client, server_path.c_str());
         int httpResponseCode = http.GET();
         http.end();
-
       } else if (dia_diem == 2) {  //Ao lục bình
         String server_path = main_sever + "batch/update?token=" + alb_TOKEN
                              + "&V1=" + start_
@@ -372,7 +371,6 @@ BLYNK_WRITE(V5) {  //Save time input
         http.begin(client, server_path.c_str());
         int httpResponseCode = http.GET();
         http.end();
-
       } else if (dia_diem == 3) {  //UBND P2
         String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
                              + "&V1=" + start_
