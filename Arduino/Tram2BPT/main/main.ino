@@ -25,7 +25,7 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "240107"
+#define BLYNK_FIRMWARE_VERSION "240117"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -899,6 +899,8 @@ void update_fw() {
 }
 //-------------------------------------------------------------------
 void setup() {
+  pinMode(D4, OUTPUT);
+  pinMode(D3, INPUT);
   pinMode(S0, OUTPUT);
   pinMode(S1, OUTPUT);
   pinMode(S2, OUTPUT);
