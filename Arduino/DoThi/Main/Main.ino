@@ -269,11 +269,13 @@ BLYNK_WRITE(V3) {  //Chọn van
         van = 2;
         if (khu_vuc == 2) {
           if (dia_diem == 1) {
-            String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
-                                 + "&V0=" + "van2";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
+            if (sta_ccd == 1) {
+              String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                                   + "&V0=" + "van2";
+              http.begin(client, server_path.c_str());
+              int httpResponseCode = http.GET();
+              http.end();
+            }
           } else if (dia_diem == 2) {
             String server_path = main_sever + "batch/update?token=" + alb_TOKEN
                                  + "&V0=" + "van2";
