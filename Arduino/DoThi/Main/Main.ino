@@ -376,6 +376,7 @@ BLYNK_WRITE(V5) {  //Save time input
 //------------------- Cầu Cửa Đông
 void hidden_ccd() {
   if (hidden_key_ccd == false) {
+    sta_ccd = 0;
     Blynk.setProperty(V8, V7, "isDisabled", "true");
     hidden_key_ccd = true;
   }
@@ -463,6 +464,7 @@ BLYNK_WRITE(V9) {  //data
 //------------------- UBND P2
 void hidden_ubndp2() {
   if (hidden_key_ubndp2 == false) {
+     sta_ubndp2 = 0;
     Blynk.setProperty(V12, V13, "isDisabled", "true");
     hidden_key_ubndp2 = true;
   }
@@ -550,6 +552,7 @@ BLYNK_WRITE(V11) {  //data
 //------------------- Ao lục bình
 void hidden_alb() {
   if (hidden_key_alb == false) {
+    sta_alb = 0;
     Blynk.setProperty(V16, V17, V18, "isDisabled", "true");
     hidden_key_alb = true;
   }
