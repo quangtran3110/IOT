@@ -61,10 +61,23 @@ byte t2, t3, t4, t5, t6, t7, cn;
 char A[50] = "";
 byte reboot_num;
 bool blynk_first_connect = false, key_set = false, key = false;
-
-
-
-
+//------------------- Cầu Cửa Đông
+bool sta_v1_ccd, mode_ccd;
+int timer_sta_ccd;
+bool hidden_key_ccd = false;
+byte sta_ccd;
+//------------------- UBND P2
+bool sta_v1_ubndp2, mode_ubndp2;
+int timer_sta_ubndp2;
+byte sta_ubndp2;
+bool hidden_key_ubndp2 = false;
+//------------------- Ao lục bình
+bool sta_v1_alb, sta_v2_alb;
+bool mode_alb;
+int timer_sta_alb;
+byte sta_alb;
+bool hidden_key_alb = false;
+//-------------------
 WidgetRTC rtc_widget;
 WidgetTerminal terminal(V0);
 
@@ -243,23 +256,29 @@ BLYNK_WRITE(V3) {  //Chọn van
         van = 1;
         if (khu_vuc == 2) {
           if (dia_diem == 1) {
-            String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
-                                 + "&V0=" + "van1";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
+            if (sta_ccd == 1) {
+              String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                                   + "&V0=" + "van1";
+              http.begin(client, server_path.c_str());
+              int httpResponseCode = http.GET();
+              http.end();
+            } else Blynk.virtualWrite(V4, 0);
           } else if (dia_diem == 2) {
-            String server_path = main_sever + "batch/update?token=" + alb_TOKEN
-                                 + "&V0=" + "van1";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
+            if (sta_alb == 1) {
+              String server_path = main_sever + "batch/update?token=" + alb_TOKEN
+                                   + "&V0=" + "van1";
+              http.begin(client, server_path.c_str());
+              int httpResponseCode = http.GET();
+              http.end();
+            } else Blynk.virtualWrite(V4, 0);
           } else if (dia_diem == 3) {
-            String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
-                                 + "&V0=" + "van1";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
+            if (sta_ubndp2 == 1) {
+              String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
+                                   + "&V0=" + "van1";
+              http.begin(client, server_path.c_str());
+              int httpResponseCode = http.GET();
+              http.end();
+            } else Blynk.virtualWrite(V4, 0);
           }
         }
         break;
@@ -275,57 +294,25 @@ BLYNK_WRITE(V3) {  //Chọn van
               http.begin(client, server_path.c_str());
               int httpResponseCode = http.GET();
               http.end();
-            }
+            } else Blynk.virtualWrite(V4, 0);
           } else if (dia_diem == 2) {
-            String server_path = main_sever + "batch/update?token=" + alb_TOKEN
-                                 + "&V0=" + "van2";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
+            if (sta_alb == 1) {
+              String server_path = main_sever + "batch/update?token=" + alb_TOKEN
+                                   + "&V0=" + "van2";
+              http.begin(client, server_path.c_str());
+              int httpResponseCode = http.GET();
+              http.end();
+            } else Blynk.virtualWrite(V4, 0);
           } else if (dia_diem == 3) {
-            String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
-                                 + "&V0=" + "van2";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
+            if (sta_ubndp2 == 1) {
+              String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
+                                   + "&V0=" + "van2";
+              http.begin(client, server_path.c_str());
+              int httpResponseCode = http.GET();
+              http.end();
+            } else Blynk.virtualWrite(V4, 0);
           }
         }
-        break;
-      }
-    case 2:
-      {
-        van = 3;
-        if (khu_vuc == 2) {
-          if (dia_diem == 1) {
-            String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
-                                 + "&V3=" + "van3";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
-          } else if (dia_diem == 2) {
-            String server_path = main_sever + "batch/update?token=" + alb_TOKEN
-                                 + "&V3=" + "van3";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
-          } else if (dia_diem == 3) {
-            String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
-                                 + "&V3=" + "van3";
-            http.begin(client, server_path.c_str());
-            int httpResponseCode = http.GET();
-            http.end();
-          }
-        }
-        break;
-      }
-    case 3:
-      {
-        van = 4;
-        break;
-      }
-    case 4:
-      {
-        van = 5;
         break;
       }
   }
@@ -387,10 +374,6 @@ BLYNK_WRITE(V5) {  //Save time input
   }
 }
 //------------------- Cầu Cửa Đông
-bool sta_v1_ccd, mode_ccd;
-int timer_sta_ccd;
-byte sta_ccd;
-bool hidden_key_ccd = false;
 void hidden_ccd() {
   if (hidden_key_ccd == false) {
     Blynk.setProperty(V8, V7, "isDisabled", "true");
@@ -478,10 +461,6 @@ BLYNK_WRITE(V9) {  //data
   }
 }
 //------------------- UBND P2
-bool sta_v1_ubndp2, mode_ubndp2;
-int timer_sta_ubndp2;
-byte sta_ubndp2;
-bool hidden_key_ubndp2 = false;
 void hidden_ubndp2() {
   if (hidden_key_ubndp2 == false) {
     Blynk.setProperty(V12, V13, "isDisabled", "true");
@@ -569,11 +548,6 @@ BLYNK_WRITE(V11) {  //data
   }
 }
 //------------------- Ao lục bình
-bool sta_v1_alb, sta_v2_alb;
-bool mode_alb;
-int timer_sta_alb;
-byte sta_alb;
-bool hidden_key_alb = false;
 void hidden_alb() {
   if (hidden_key_alb == false) {
     Blynk.setProperty(V16, V17, V18, "isDisabled", "true");
