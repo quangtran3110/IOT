@@ -133,26 +133,35 @@ BLYNK_WRITE(V0) {  //String
     update_fw();
   } else if (dataS == "update_p2_ccd") {  //update Cầu cửa đông
     terminal.clear();
-    String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
-                         + "&V0=" + "update";
-    http.begin(client, server_path.c_str());
-    int httpResponseCode = http.GET();
-    http.end();
+    if (sta_ccd == 1) {
+      String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+                           + "&V0=" + "update";
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+      Blynk.virtualWrite(V0, "CCĐ UPDATE...");
+    } else Blynk.virtualWrite(V0, "CCĐ offline");
   } else if (dataS == "update_p2_alb") {  //update Cầu cửa đông
     terminal.clear();
-    String server_path = main_sever + "batch/update?token=" + alb_TOKEN
-                         + "&V0=" + "update";
-    http.begin(client, server_path.c_str());
-    int httpResponseCode = http.GET();
-    http.end();
+    if (sta_alb == 1) {
+      String server_path = main_sever + "batch/update?token=" + alb_TOKEN
+                           + "&V0=" + "update";
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+      Blynk.virtualWrite(V0, "ALB UPDATE...");
+    } else Blynk.virtualWrite(V0, "ALB offline");
   } else if (dataS == "update_p2_ubndp2") {  //update Cầu cửa đông
     terminal.clear();
-    String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
-                         + "&V0=" + "update";
-    http.begin(client, server_path.c_str());
-    int httpResponseCode = http.GET();
-    http.end();
-  }
+    if (sta_ubndp2 == 1) {
+      String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
+                           + "&V0=" + "update";
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+      Blynk.virtualWrite(V0, "UBNDP2 UPDATE...");
+    } else Blynk.virtualWrite(V0, "UBNDP2 offline");
+  } else Blynk.virtualWrite(V0, "Mật mã sai, hãy nhập lại");
 }
 BLYNK_WRITE(V1) {  //Khu vực
   BlynkParamAllocated menu(128);
@@ -464,7 +473,7 @@ BLYNK_WRITE(V9) {  //data
 //------------------- UBND P2
 void hidden_ubndp2() {
   if (hidden_key_ubndp2 == false) {
-     sta_ubndp2 = 0;
+    sta_ubndp2 = 0;
     Blynk.setProperty(V12, V13, "isDisabled", "true");
     hidden_key_ubndp2 = true;
   }
