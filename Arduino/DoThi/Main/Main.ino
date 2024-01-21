@@ -27,7 +27,7 @@ V18 - Btn van 2
 #define BLYNK_TEMPLATE_ID "TMPL6LdmF6nY7"
 #define BLYNK_TEMPLATE_NAME "Đô Thị"
 #define BLYNK_AUTH_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
-#define BLYNK_FIRMWARE_VERSION "240116"
+#define BLYNK_FIRMWARE_VERSION "240124"
 
 #define caucuadong_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 #define ubndp2_TOKEN "gvfnRXv14oMohtqMWTPQXbduFKww1zfu"
@@ -120,6 +120,21 @@ BLYNK_WRITE(V0) {  //String
     key_set = false;
     key = false;
     Blynk.virtualWrite(V0, "Hủy kích hoạt!");
+  } else if (dataS == "caidat") {  //auto
+    terminal.clear();
+    key_set = true;
+    key = true;
+    timer.setTimeout(301000, []() {
+      key_set = false;
+      key = false;
+      terminal.clear();
+    });
+    Blynk.virtualWrite(V0, "Đã kích hoạt Cài Đặt!");
+  } else if (dataS == "ok") {  //auto
+    terminal.clear();
+    key_set = false;
+    key = false;
+    Blynk.virtualWrite(V0, "Đã lưu!");
   } else if (dataS == "dothi") {  //man
     terminal.clear();
     key = true;
