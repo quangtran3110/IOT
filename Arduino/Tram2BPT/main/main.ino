@@ -70,7 +70,7 @@ String server_name = "http://sgp1.blynk.cloud/external/api/";
 #include <ModbusRTU.h>
 #include <SoftwareSerial.h>
 //connect TX to D4 (GPIO0), RX to D3 (GPIO2)/SoftwareSerial S(TX, RX);
-SoftwareSerial S(0, 2);
+SoftwareSerial S(2, 0);
 ModbusRTU mb;
 bool key_read = true;
 int time_delay;
