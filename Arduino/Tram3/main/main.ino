@@ -38,7 +38,7 @@
 #define BLYNK_TEMPLATE_ID "TMPLnbfxczCv"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 3"
 #define BLYNK_AUTH_TOKEN "lvmyPh1nGcSjs3n1CTJrX4DyuWLlS0i0"
-#define BLYNK_FIRMWARE_VERSION "240103"
+#define BLYNK_FIRMWARE_VERSION "240221"
 //------------------
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -442,7 +442,7 @@ BLYNK_WRITE(V5)  // Con lai
       });
     }
   }
-  if ((conlai < 200) && (status_pre)) {
+  if ((conlai < 170) && (status_pre)) {
     maxtank = false;
   }
 }
