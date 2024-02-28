@@ -55,7 +55,7 @@
 #define BLYNK_TEMPLATE_NAME "Trạm Số 2"
 #define BLYNK_AUTH_TOKEN "ESzia3fpA-29cs8gt85pGnrPq_rICcqf"
 
-#define BLYNK_FIRMWARE_VERSION "231221.T2.MAIN"
+#define BLYNK_FIRMWARE_VERSION "240228.T2.MAIN"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -1363,10 +1363,10 @@ void readcurrent8()  // C8 - NK2
   digitalWrite(S2, LOW);
   digitalWrite(S3, HIGH);
   float rms8 = emon8.calcIrms(740);
-  if (rms8 < 3) {
+  if (rms8 < 1) {
     Irms8 = 0;
     yIrms8 = 0;
-  } else if (rms8 >= 3) {
+  } else if (rms8 >= 1) {
     Irms8 = rms8;
     yIrms8 = yIrms8 + 1;
     if ((yIrms8 > 2) && ((Irms8 >= data.SetAmpe8max) || (Irms8 < data.SetAmpe8min))) {
@@ -1638,7 +1638,6 @@ void setup() {
 
   eeprom.initialize();
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
-  terminal.clear();
   
   timer.setTimeout(5000L, []() {
     timer_I = timer.setInterval(1589, []() {
