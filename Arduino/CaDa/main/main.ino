@@ -17,7 +17,7 @@ V12- dosau
 #define BLYNK_TEMPLATE_ID "TMPLrdcYlz_1"
 #define BLYNK_TEMPLATE_NAME "Trạm Cả Đá"
 #define BLYNK_AUTH_TOKEN "HRuqR5DchX_9Nlk--FAFkQiLEaDtr1VV"
-#define BLYNK_FIRMWARE_VERSION "23.10.1"
+#define BLYNK_FIRMWARE_VERSION "240312"
 #define BLYNK_PRINT Serial
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -28,7 +28,7 @@ V12- dosau
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/cada/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/CaDa/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "HRuqR5DchX_9Nlk--FAFkQiLEaDtr1VV";
 
@@ -238,27 +238,6 @@ void readAnalog() {
   // Ap luc
 }
 //-------------------------------------------------------------
-//---------------------------------------------------------------
-/*
-void MeasureCm()
-{ // A3 => C1
-  digitalWrite(EN, HIGH);
-  digitalWrite(S0pin, HIGH);
-  digitalWrite(S1pin, LOW);
-  digitalWrite(S2pin, LOW);
-  digitalWrite(S3pin, LOW);
-  digitalWrite(EN, LOW);
-  float sensorValue = analogRead(A0);
-  digitalWrite(EN, HIGH);
-  distance = (((sensorValue - 198) * 500) / (1000 - 198)); // 915,74 (R=147.7)
-  if (distance > 0)
-  {
-    volume = (dai * (distance / 100) * rong);
-    Blynk.virtualWrite(V9, distance);
-    Blynk.virtualWrite(V7, volume);
-  }
-}
-
 void MeasureCmForSmoothing()
 {
   digitalWrite(EN, HIGH);
@@ -278,18 +257,13 @@ void MeasureCmForSmoothing()
   }
 }
 
-void UploadMeasureCmForSmoothing()
-{
-  Blynk.virtualWrite(V9, smoothDistance);
-  Blynk.virtualWrite(V7, volume1);
-}
-*/
-
 void updata() {
   String server_path = server_name + "batch/update?token=" + Main
                        + "&V2=" + Result1
                        + "&V0=" + Irms0
-                       + "&V1=" + Irms1;
+                       + "&V1=" + Irms1
+                       + "&V7=" + volume1
+                       + "&V9=" + smoothDistance;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
