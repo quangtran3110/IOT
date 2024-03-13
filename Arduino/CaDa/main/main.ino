@@ -89,13 +89,14 @@ int digitalSmooth(int rawIn, int* sensSmoothArray) {
   return total / k;  // divide by number of samples
 }
 
-float volume, volume1, percent, percent1, dungtich, smoothDistance;
+float volume, volume1, percent, percent1, dungtich, smoothDistance, value_tank, sensorValue1;
 long distance, distance1;
 float timerun, value = 0, Result1;
 bool key = false;
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 int watchdogcount = 0, RelayState = LOW, RelayState1 = LOW;
 int btnState = HIGH, btnState1 = HIGH, AppState, AppState1, x = 1, u = 0;
+int timer_pre, timer_tank;
 
 BlynkTimer timer;
 EnergyMonitor emon0, emon1;
@@ -201,7 +202,7 @@ BLYNK_WRITE(V10)  // String
     terminal.clear();
     Blynk.virtualWrite(V10, "UPDATE FIRMWARE...");
     update_fw();
-  }  else {
+  } else {
     Blynk.virtualWrite(V10, "Mật mã sai.\nVui lòng nhập lại!\n");
   }
 }
@@ -229,7 +230,7 @@ void readAnalog() {
   digitalWrite(S3pin, LOW);
   digitalWrite(EN, LOW);
   Irms1 = emon1.calcIrms(740);
-  Serial.println(Irms1);
+  //Serial.println(Irms1);
   digitalWrite(EN, HIGH);
   if (Irms1 < 3) {
     Irms1 = 0;
@@ -238,8 +239,7 @@ void readAnalog() {
   // Ap luc
 }
 //-------------------------------------------------------------
-void MeasureCmForSmoothing()
-{
+void MeasureCmForSmoothing() {
   digitalWrite(EN, HIGH);
   digitalWrite(S0pin, HIGH);
   digitalWrite(S1pin, LOW);
@@ -248,10 +248,14 @@ void MeasureCmForSmoothing()
   digitalWrite(EN, LOW);
   float sensorValue = analogRead(A0);
   digitalWrite(EN, HIGH);
-  distance1 = (((sensorValue - 198) * 500) / (1000 - 198)); // 915,74 (R=147.7)
-  // Serial.println(distance1);
-  if (distance1 > 0)
-  {
+  if (sensorValue > 0) {
+    value_tank += sensorValue;
+    sensorValue1 = value_tank / 8.0;
+    value_tank -= sensorValue1;
+  }
+  distance1 = (((sensorValue1 - 185) * 500) / (955 - 185));  // 915,74 (R=147.7)
+  //Serial.println(distance1);
+  if (distance1 > 0) {
     smoothDistance = digitalSmooth(distance1, sensSmoothArray1);
     volume1 = (dai * (smoothDistance / 100) * rong);
   }
@@ -330,18 +334,22 @@ void setup() {
 
   timer.setInterval(900005L, []() {
     connectionstatus();
+    timer.restartTimer(timer_pre);
+    timer.restartTimer(timer_tank);
   });
   timer.setInterval(1383L, []() {
     readAnalog();
     updata();
+    timer.restartTimer(timer_pre);
+    timer.restartTimer(timer_tank);
   });
-  timer.setInterval(253, Pressure);
+  timer_pre = timer.setInterval(253, Pressure);
   // timer.setInterval(29090, checkgprs);
   timer.setInterval(3600000L, upinfo);
   // timer.setInterval(3500000L, upinfo1);
   // timer.setInterval(180000L, UploadMeasureCmForSmoothing);
   // timer.setTimer(1000L, MeasureCm, 1);
-  // timer.setInterval(1001L, MeasureCmForSmoothing);
+  timer_tank = timer.setInterval(301L, MeasureCmForSmoothing);
 }
 
 void loop() {
