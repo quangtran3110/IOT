@@ -17,7 +17,7 @@ V12- dosau
 #define BLYNK_TEMPLATE_ID "TMPLrdcYlz_1"
 #define BLYNK_TEMPLATE_NAME "Trạm Cả Đá"
 #define BLYNK_AUTH_TOKEN "HRuqR5DchX_9Nlk--FAFkQiLEaDtr1VV"
-#define BLYNK_FIRMWARE_VERSION "240312"
+#define BLYNK_FIRMWARE_VERSION "240313"
 #define BLYNK_PRINT Serial
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -185,27 +185,17 @@ BLYNK_WRITE(V4) {
     Blynk.virtualWrite(V4, "ESP RESTART.\n");
     delay(3000);
     ESP.restart();
+  } else if (dataS == "update") {
+    terminal.clear();
+    Blynk.virtualWrite(V4, "UPDATE FIRMWARE...");
+    update_fw();
   } else {
     key = false;
     Blynk.virtualWrite(V4, "Mật mã sai.\n");
     Blynk.virtualWrite(V4, "Hãy nhập lại!\n");
   }
 }
-BLYNK_WRITE(V10)  // String
-{
-  String dataS = param.asStr();
-  if (dataS == "rst") {
-    Blynk.virtualWrite(V10, "MODULE KHỞI ĐỘNG LẠI SAU 3S");
-    delay(3000);
-    ESP.restart();
-  } else if (dataS == "update") {
-    terminal.clear();
-    Blynk.virtualWrite(V10, "UPDATE FIRMWARE...");
-    update_fw();
-  } else {
-    Blynk.virtualWrite(V10, "Mật mã sai.\nVui lòng nhập lại!\n");
-  }
-}
+
 //-------------------------------------------------------------
 void readAnalog() {
   // Ampe 1
