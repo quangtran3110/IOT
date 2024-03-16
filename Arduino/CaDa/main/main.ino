@@ -17,7 +17,7 @@ V12- dosau
 #define BLYNK_TEMPLATE_ID "TMPLrdcYlz_1"
 #define BLYNK_TEMPLATE_NAME "Trạm Cả Đá"
 #define BLYNK_AUTH_TOKEN "HRuqR5DchX_9Nlk--FAFkQiLEaDtr1VV"
-#define BLYNK_FIRMWARE_VERSION "240313"
+#define BLYNK_FIRMWARE_VERSION "240316"
 #define BLYNK_PRINT Serial
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -36,6 +36,9 @@ String Main = "HRuqR5DchX_9Nlk--FAFkQiLEaDtr1VV";
 
 const char* ssid = "Yen Nhi";
 const char* password = "12345678";
+
+//const char* ssid = "iPhone 13";
+//const char* password = "12345687";
 
 const int S0pin = 14;
 const int S1pin = 12;
@@ -97,6 +100,7 @@ char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 int watchdogcount = 0, RelayState = LOW, RelayState1 = LOW;
 int btnState = HIGH, btnState1 = HIGH, AppState, AppState1, x = 1, u = 0;
 int timer_pre, timer_tank;
+byte reboot_num = 0;
 
 BlynkTimer timer;
 EnergyMonitor emon0, emon1;
@@ -261,14 +265,34 @@ void updata() {
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
+  Blynk.virtualWrite(V8, WiFi.RSSI());
 }
 
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    // Serial.println("Khong ket noi WIFI");
+    Serial.println("Khong ket noi WIFI");
+    reboot_num = reboot_num + 1;
+    if (reboot_num % 5 == 0) {
+      ESP.restart();
+    }
+    WiFi.begin(ssid, password);
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
-    ESP.restart();
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
+      delay(1000);
+      WiFi.begin(ssid, password);
+    }
+    if (reboot_num % 5 == 0) {
+      ESP.restart();
+    }
+  }
+  if (Blynk.connected()) {
+    if (reboot_num != 0) {
+      reboot_num = 0;
+    }
   }
 }
 //------------------------
@@ -322,24 +346,22 @@ void setup() {
   pinMode(4, OUTPUT);
   digitalWrite(4, HIGH);
 
-  timer.setInterval(900005L, []() {
-    connectionstatus();
-    timer.restartTimer(timer_pre);
-    timer.restartTimer(timer_tank);
+  timer.setTimeout(15000L, []() {
+    timer.setInterval(180005L, []() {
+      connectionstatus();
+      timer.restartTimer(timer_pre);
+      timer.restartTimer(timer_tank);
+    });
+    timer.setInterval(2383L, []() {
+      readAnalog();
+      updata();
+      timer.restartTimer(timer_pre);
+      timer.restartTimer(timer_tank);
+    });
+    timer_pre = timer.setInterval(253, Pressure);
+    timer.setInterval(3600000L, upinfo);
+    timer_tank = timer.setInterval(301L, MeasureCmForSmoothing);
   });
-  timer.setInterval(1383L, []() {
-    readAnalog();
-    updata();
-    timer.restartTimer(timer_pre);
-    timer.restartTimer(timer_tank);
-  });
-  timer_pre = timer.setInterval(253, Pressure);
-  // timer.setInterval(29090, checkgprs);
-  timer.setInterval(3600000L, upinfo);
-  // timer.setInterval(3500000L, upinfo1);
-  // timer.setInterval(180000L, UploadMeasureCmForSmoothing);
-  // timer.setTimer(1000L, MeasureCm, 1);
-  timer_tank = timer.setInterval(301L, MeasureCmForSmoothing);
 }
 
 void loop() {
