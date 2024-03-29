@@ -44,6 +44,9 @@
 #include <ESP8266WiFi.h>
 const char* ssid = "TTTV Xay Dung";
 const char* password = "0723841249";
+//const char* ssid = "iPhone 13";
+//const char* password = "12345687";
+
 //------------------
 #include <Adafruit_MCP23X17.h>
 Adafruit_MCP23X17 mcp;
