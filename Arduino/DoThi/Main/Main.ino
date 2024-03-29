@@ -27,7 +27,7 @@ V18 - Btn van 2
 #define BLYNK_TEMPLATE_ID "TMPL6LdmF6nY7"
 #define BLYNK_TEMPLATE_NAME "Đô Thị"
 #define BLYNK_AUTH_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
-#define BLYNK_FIRMWARE_VERSION "290324"
+#define BLYNK_FIRMWARE_VERSION "280324"
 
 #define caucuadong_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 #define ubndp2_TOKEN "gvfnRXv14oMohtqMWTPQXbduFKww1zfu"
@@ -231,7 +231,6 @@ BLYNK_WRITE(V2) {  //Địa điểm
           Blynk.setProperty(V3, "labels", menu);
         }
         break;
-        Blynk.virtualWrite(V3, 100);
       }
     case 1:
       {
@@ -252,7 +251,6 @@ BLYNK_WRITE(V2) {  //Địa điểm
           Blynk.setProperty(V3, "labels", menu);
         }
         break;
-        Blynk.virtualWrite(V3, 100);
       }
     case 2:
       {
@@ -273,8 +271,8 @@ BLYNK_WRITE(V2) {  //Địa điểm
         }
         break;
       }
-      Blynk.virtualWrite(V3, 100);
   }
+  Blynk.virtualWrite(V3, 100);
 }
 BLYNK_WRITE(V3) {  //Chọn van
   switch (param.asInt()) {
