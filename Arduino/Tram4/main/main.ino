@@ -228,7 +228,7 @@ void up() {
                        + "&V24=" + Irms2
                        + "&V30=" + Irms3
                        + "&V25=" + Irms4
-                       + "&V39=" + float(data.timerun_g1 / 1000 / 60 / 60);
+                       + "&V39=" + float(data.timerun_g1) / 1000 / 60 / 60;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -259,6 +259,8 @@ void time_run_motor() {
     savedata();
     G1_start = millis();
     g1_save = false;
+    terminal.clear();
+    Blynk.virtualWrite(V10, "time_run: ", data.timerun_g1 / 1000);
   }
 }
 void rualoc() {
