@@ -355,7 +355,7 @@ void readPower()  // C2 - Giếng    - I0
     if (yIrms0 > 3) {
       if (G1_start >= 0) {
         if (G1_start == 0) G1_start = millis();
-        else if (millis() - G1_start > 15000) {
+        else if (millis() - G1_start > 60000) {
           g1_save = true;
         } else g1_save = false;
       }
