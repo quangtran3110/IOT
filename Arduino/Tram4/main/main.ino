@@ -63,7 +63,7 @@
 #define BLYNK_TEMPLATE_ID "TMPLJp_sN4GN"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 4"
 #define BLYNK_AUTH_TOKEN "o-H-k28kNBIzgNIAP89f2AElv--eWuVO"
-#define BLYNK_FIRMWARE_VERSION "240330.T4.MAIN"
+#define BLYNK_FIRMWARE_VERSION "240331.T4.MAIN"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
@@ -190,7 +190,7 @@ struct Data {
   byte man, mode_cap2, cap2_chanle;
   int b1_1_start, b1_1_stop, b1_2_start, b1_2_stop, b1_3_start, b1_3_stop, b1_4_start, b1_4_stop;
   int b2_1_start, b2_1_stop, b2_2_start, b2_2_stop, b2_3_start, b2_3_stop, b2_4_start, b2_4_stop;
-  int bom_chanle_start, bom_chanle_stop;
+  //int bom_chanle_start, bom_chanle_stop;
   byte reboot_num;
   int save_num;
   int time_run_nenkhi, time_stop_nenkhi;
@@ -228,7 +228,7 @@ void up() {
                        + "&V24=" + Irms2
                        + "&V30=" + Irms3
                        + "&V25=" + Irms4
-                       + "&V39=" + float(data.timerun_g1/1000/60/60);
+                       + "&V39=" + float(data.timerun_g1 / 1000 / 60 / 60);
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -255,7 +255,7 @@ void time_run_motor() {
     }
   }
   if (g1_save) {
-    data.timerun_g1 = millis() - G1_start;
+    data.timerun_g1 = data.timerun_g1 + (millis() - G1_start);
     savedata();
     G1_start = millis();
     g1_save = false;
@@ -596,7 +596,7 @@ void rtctime() {
       }
       time_run2 = false;
     }
-  } else if (data.mode_cap2 == 1) {  // Chạy bơm 1
+  } /*else if (data.mode_cap2 == 1) {  // Chạy bơm 1
     if (Irms0 != 0) {                // Tắt Bơm 2
       offbom2();
       timer1.setTimeout(3000L, []() {
@@ -654,7 +654,7 @@ void rtctime() {
         }
       }
     }
-  } else if (data.mode_cap2 == 2) {  // Chạy bơm 2
+  }  else if (data.mode_cap2 == 2) {  // Chạy bơm 2
     if (Irms2 != 0) {                // Tắt Bơm 1
       offbom1();
       timer1.setTimeout(3000L, []() {
@@ -712,7 +712,7 @@ void rtctime() {
         }
       }
     }
-  }
+  }*/
 }
 //-------------------------------------------------------------------
 BLYNK_WRITE(V0)  // Bơm 1
@@ -912,7 +912,7 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
             data.cap2_chanle = 0;
             b = 8;
           }
-          Blynk.virtualWrite(V18, data.bom_chanle_start, data.bom_chanle_stop, tz);
+          //Blynk.virtualWrite(V18, data.bom_chanle_start, data.bom_chanle_stop, tz);
           break;
         }
       case 1:
@@ -921,7 +921,7 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
             data.cap2_chanle = 1;
             b = 8;
           }
-          Blynk.virtualWrite(V18, data.bom_chanle_start, data.bom_chanle_stop, tz);
+          //Blynk.virtualWrite(V18, data.bom_chanle_start, data.bom_chanle_stop, tz);
           break;
         }
       case 2:
@@ -1073,8 +1073,9 @@ BLYNK_WRITE(V18)  // Time input
         data.b1_4_start = t.getStartHour() * 3600 + t.getStartMinute() * 60;
       else if (b == 7)
         data.b2_4_start = t.getStartHour() * 3600 + t.getStartMinute() * 60;
-      else if (b == 8)
-        data.bom_chanle_start = t.getStartHour() * 3600 + t.getStartMinute() * 60;
+      else if (b == 8) {
+      }
+      //data.bom_chanle_start = t.getStartHour() * 3600 + t.getStartMinute() * 60;
       else if (b == 9)
         data.time_run_nenkhi = t.getStartHour() * 3600 + t.getStartMinute() * 60;
     }
@@ -1095,8 +1096,9 @@ BLYNK_WRITE(V18)  // Time input
         data.b1_4_stop = t.getStopHour() * 3600 + t.getStopMinute() * 60;
       else if (b == 7)
         data.b2_4_stop = t.getStopHour() * 3600 + t.getStopMinute() * 60;
-      else if (b == 8)
-        data.bom_chanle_stop = t.getStopHour() * 3600 + t.getStopMinute() * 60;
+      else if (b == 8) {
+      }
+      //data.bom_chanle_stop = t.getStopHour() * 3600 + t.getStopMinute() * 60;
       else if (b == 9)
         data.time_stop_nenkhi = t.getStopHour() * 3600 + t.getStopMinute() * 60;
     }
@@ -1109,7 +1111,7 @@ BLYNK_WRITE(V29)  // Info
     terminal.clear();
     if (data.mode_cap2 == 0) {
       Blynk.virtualWrite(V10, "Chế độ bơm: Vận hành THỦ CÔNG");
-    } else if ((data.mode_cap2 == 1) || (data.mode_cap2 == 2)) {
+    } /* else if ((data.mode_cap2 == 1) || (data.mode_cap2 == 2)) {
       int hour_start = data.bom_chanle_start / 3600;
       int minute_start = (data.bom_chanle_start - (hour_start * 3600)) / 60;
       int hour_stop = data.bom_chanle_stop / 3600;
@@ -1125,7 +1127,8 @@ BLYNK_WRITE(V29)  // Info
         else if (data.cap2_chanle == 1)
           Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 2 tự động\nTắt máy vào: NGÀY LẺ\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
       }
-    } else if (data.mode_cap2 == 3) {
+    } */
+    else if (data.mode_cap2 == 3) {
       int hour_start_b1_1 = data.b1_1_start / 3600;
       int minute_start_b1_1 = (data.b1_1_start - (hour_start_b1_1 * 3600)) / 60;
       int hour_stop_b1_1 = data.b1_1_stop / 3600;
@@ -1264,7 +1267,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
-  delay(5000);
+  delay(7000);
   //---------------------------------------------------------------------------------
   emon0.current(A0, 105);  //Giếng
   emon1.current(A0, 105);  //Bơm 1
