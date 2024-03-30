@@ -63,7 +63,7 @@
 #define BLYNK_TEMPLATE_ID "TMPLJp_sN4GN"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 4"
 #define BLYNK_AUTH_TOKEN "o-H-k28kNBIzgNIAP89f2AElv--eWuVO"
-#define BLYNK_FIRMWARE_VERSION "240331.T4.MAIN"
+#define BLYNK_FIRMWARE_VERSION "240331"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
@@ -259,8 +259,6 @@ void time_run_motor() {
     savedata();
     G1_start = millis();
     g1_save = false;
-    terminal.clear();
-    Blynk.virtualWrite(V10, "time_run: ", data.timerun_g1 / 1000);
   }
 }
 void rualoc() {
