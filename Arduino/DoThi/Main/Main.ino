@@ -6,7 +6,7 @@ V3 - Chọn van
 V4 - Time input
 V5 - Save time
 /////////// Cầu cửa đông
-V6 - Sta caucuadong
+V6 - Sta ccd
 v7 - Btn van 1
 V8 - Mode
 V9 - G
@@ -21,7 +21,11 @@ V15 - G
 V16 - mode
 V17 - Btn van 1
 V18 - Btn van 2
-
+/////////// Bờ kè 1
+V19 - Sta boke1
+V20 - G
+V21 - mode
+V22 - Btn van 1
 */
 
 #define BLYNK_TEMPLATE_ID "TMPL6LdmF6nY7"
@@ -29,7 +33,7 @@ V18 - Btn van 2
 #define BLYNK_AUTH_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
 #define BLYNK_FIRMWARE_VERSION "280324"
 
-#define caucuadong_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
+#define ccd_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 #define ubndp2_TOKEN "gvfnRXv14oMohtqMWTPQXbduFKww1zfu"
 #define alb_TOKEN "1v4Fr0n4m4-GaYP26MMZ3bHbTi5k68nP"  //Ao lục bình
 
@@ -108,6 +112,11 @@ void up() {
   http.end();
 }
 */
+BLNK_WRITE(V100) {
+  String dataS = param.asStr();
+  Blynk.logEvent("error", String(dataS));
+}
+
 BLYNK_WRITE(V0) {  //String
   String dataS = param.asStr();
   if (dataS == "active") {  //auto
@@ -149,14 +158,24 @@ BLYNK_WRITE(V0) {  //String
   } else if (dataS == "update_p2_ccd") {  //update Cầu cửa đông
     terminal.clear();
     if (sta_ccd == 1) {
-      String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+      String server_path = main_sever + "batch/update?token=" + ccd_TOKEN
                            + "&V0=" + "update";
       http.begin(client, server_path.c_str());
       int httpResponseCode = http.GET();
       http.end();
       Blynk.virtualWrite(V0, "CCĐ UPDATE...");
     } else Blynk.virtualWrite(V0, "CCĐ offline");
-  } else if (dataS == "update_p2_alb") {  //update Cầu cửa đông
+  } else if (dataS == "rst_p2_ccd") {  //RST Cầu cửa đông
+    terminal.clear();
+    if (sta_ccd == 1) {
+      String server_path = main_sever + "batch/update?token=" + ccd_TOKEN
+                           + "&V0=" + "rst";
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+      Blynk.virtualWrite(V0, "CCĐ RESTART...");
+    } else Blynk.virtualWrite(V0, "CCĐ offline");
+  } else if (dataS == "update_p2_alb") {  //update Ao lục bình
     terminal.clear();
     if (sta_alb == 1) {
       String server_path = main_sever + "batch/update?token=" + alb_TOKEN
@@ -166,7 +185,17 @@ BLYNK_WRITE(V0) {  //String
       http.end();
       Blynk.virtualWrite(V0, "ALB UPDATE...");
     } else Blynk.virtualWrite(V0, "ALB offline");
-  } else if (dataS == "update_p2_ubndp2") {  //update Cầu cửa đông
+  } else if (dataS == "rst_p2_alb") {  //RST Ao lục bình
+    terminal.clear();
+    if (sta_alb == 1) {
+      String server_path = main_sever + "batch/update?token=" + alb_TOKEN
+                           + "&V0=" + "rst";
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+      Blynk.virtualWrite(V0, "ALB RESTART...");
+    } else Blynk.virtualWrite(V0, "ALB offline");
+  } else if (dataS == "update_p2_ubndp2") {  //update UBNDP2
     terminal.clear();
     if (sta_ubndp2 == 1) {
       String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
@@ -176,6 +205,36 @@ BLYNK_WRITE(V0) {  //String
       http.end();
       Blynk.virtualWrite(V0, "UBNDP2 UPDATE...");
     } else Blynk.virtualWrite(V0, "UBNDP2 offline");
+  } else if (dataS == "rst_p2_ubndp2") {  //RST UBNDP2
+    terminal.clear();
+    if (sta_ubndp2 == 1) {
+      String server_path = main_sever + "batch/update?token=" + ubndp2_TOKEN
+                           + "&V0=" + "rst";
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+      Blynk.virtualWrite(V0, "ubndp2 RESTART...");
+    } else Blynk.virtualWrite(V0, "ubndp2 offline");
+  } else if (dataS == "update_p2_boke1") {  //update Bờ kè 1
+    terminal.clear();
+    if (sta_boke1 == 1) {
+      String server_path = main_sever + "batch/update?token=" + boke1_TOKEN
+                           + "&V0=" + "update";
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+      Blynk.virtualWrite(V0, "Bờ kè 1 UPDATE...");
+    } else Blynk.virtualWrite(V0, "Bờ kè 1 offline");
+  } else if (dataS == "rst_p2_boke1") {  //RST Bờ kè 1
+    terminal.clear();
+    if (sta_boke1 == 1) {
+      String server_path = main_sever + "batch/update?token=" + boke1_TOKEN
+                           + "&V0=" + "rst";
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+      Blynk.virtualWrite(V0, "boke1 RESTART...");
+    } else Blynk.virtualWrite(V0, "boke1 offline");
   } else Blynk.virtualWrite(V0, "Mật mã sai, hãy nhập lại");
 }
 BLYNK_WRITE(V1) {  //Khu vực
@@ -282,7 +341,7 @@ BLYNK_WRITE(V3) {  //Chọn van
         if (khu_vuc == 2) {
           if (dia_diem == 1) {
             if (sta_ccd == 1) {
-              String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+              String server_path = main_sever + "batch/update?token=" + ccd_TOKEN
                                    + "&V0=" + "van1";
               http.begin(client, server_path.c_str());
               int httpResponseCode = http.GET();
@@ -314,7 +373,7 @@ BLYNK_WRITE(V3) {  //Chọn van
         if (khu_vuc == 2) {
           if (dia_diem == 1) {
             if (sta_ccd == 1) {
-              String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+              String server_path = main_sever + "batch/update?token=" + ccd_TOKEN
                                    + "&V0=" + "van2";
               http.begin(client, server_path.c_str());
               int httpResponseCode = http.GET();
@@ -368,7 +427,7 @@ BLYNK_WRITE(V5) {  //Save time input
   if (param.asInt() == 1) {
     if (khu_vuc == 2) {
       if (dia_diem == 1) {  //Cầu cửa đông
-        String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+        String server_path = main_sever + "batch/update?token=" + ccd_TOKEN
                              + "&V1=" + start_
                              + "&V1=" + stop_
                              + "&V1=" + tz
@@ -425,7 +484,7 @@ BLYNK_WRITE(V7) {  //Btn Van 1
     if (param.asInt() == HIGH) {
       dataX = "van1_on";
     } else dataX = "van1_off";
-    String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+    String server_path = main_sever + "batch/update?token=" + ccd_TOKEN
                          + "&V0=" + dataX;
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
@@ -449,7 +508,7 @@ BLYNK_WRITE(V8) {  //mode
           break;
         }
     }
-    String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+    String server_path = main_sever + "batch/update?token=" + ccd_TOKEN
                          + "&V0=" + dataX;
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
@@ -457,7 +516,7 @@ BLYNK_WRITE(V8) {  //mode
   } else {
     if (sta_ccd == 1) {
       dataX = "mode";
-      String server_path = main_sever + "batch/update?token=" + caucuadong_TOKEN
+      String server_path = main_sever + "batch/update?token=" + ccd_TOKEN
                            + "&V0=" + dataX;
       http.begin(client, server_path.c_str());
       int httpResponseCode = http.GET();
@@ -680,6 +739,94 @@ BLYNK_WRITE(V18) {  //Btn Van 2
     int httpResponseCode = http.GET();
     http.end();
   } else Blynk.virtualWrite(V18, sta_v2_alb);
+}
+//------------------- Bờ kè 1
+void hidden_boke1() {
+  if (hidden_key_boke1 == false) {
+    sta_boke1 = 0;
+    Blynk.setProperty(V21, V22, "isDisabled", "true");
+    hidden_key_boke1 = true;
+  }
+}
+void visible_boke1() {
+  if (hidden_key_boke1 == true) {
+    Blynk.setProperty(V21, V22, "isDisabled", "false");
+    hidden_key_boke1 = false;
+  }
+}
+BLYNK_WRITE(V19) {  //Status Bờ kè 1
+  sta_boke1 = param.asInt();
+  if (sta_boke1 == 1) {
+    visible_boke1();
+    timer.restartTimer(timer_sta_boke1);
+  }
+}
+BLYNK_WRITE(V20) {  //data
+  byte G = param.asInt();
+  for (byte i = 0; i < 2; i++) {
+    byte bit = G % 2;
+    G /= 2;
+    switch (i) {
+      case 0:
+        if (mode_boke1 != bit) {
+          mode_boke1 = bit;
+          Blynk.virtualWrite(V21, mode_boke1);
+        }
+        break;
+      case 1:
+        if (sta_v1_boke1 != bit) {
+          sta_v1_boke1 = bit;
+          Blynk.virtualWrite(V22, sta_v1_boke1);
+        }
+        break;
+    }
+  }
+}
+BLYNK_WRITE(V21) {  //mode
+  String dataX;
+  if ((key) && (sta_boke1 == 1)) {
+    switch (param.asInt()) {
+      case 0:
+        {  // Man
+          dataX = "m";
+          mode_boke1 = 0;
+          break;
+        }
+      case 1:
+        {  // Auto
+          dataX = "a";
+          mode_boke1 = 1;
+          break;
+        }
+    }
+    String server_path = main_sever + "batch/update?token=" + boke1_TOKEN
+                         + "&V0=" + dataX;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
+  } else {
+    if (sta_boke1 == 1) {
+      dataX = "mode";
+      String server_path = main_sever + "batch/update?token=" + boke1_TOKEN
+                           + "&V0=" + dataX;
+      http.begin(client, server_path.c_str());
+      int httpResponseCode = http.GET();
+      http.end();
+    }
+  }
+}
+BLYNK_WRITE(V22) {  //Btn Van 1
+  if (key) {
+    String dataX;
+    if (param.asInt() == HIGH) {
+      dataX = "van1_on";
+    } else dataX = "van1_off";
+    String server_path = main_sever + "batch/update?token=" + boke1_TOKEN
+                         + "&V0=" + dataX;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
+  } else Blynk.virtualWrite(V22, sta_v1_boke1);
 }
 //-------------------
 void connectionstatus() {

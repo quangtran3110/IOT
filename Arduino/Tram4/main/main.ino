@@ -2,7 +2,7 @@
  *V1 - Button C2-2
  *V2 - Button C1
  *V3 - Switch - chế độ Pump
- *V4 - Chọn người vận hành
+ *V4 - 
  *V5 - MENU motor
  *V6 - min
  *V7 - max
@@ -27,18 +27,20 @@
  *V25 - I4 - Van điện rửa lọc
  *V26 - I1 - Bơm 1
  *V27 - I0 - Giếng
- *V28 - Hide/visible_all
+ *V28 - 
  *V29 - Info
  *V30 - I3 - Nén khí
  *V31 - Terminal Luu luong
  *V32 - input luu luong
  *V33 - check luu luong
- *V34 - menu chọn giếng
+ *V34 - 
  *V35 - Luu Luong G1
  *V36 - Khoi luong Clo
  *V37 - Luu Luong G1 trong ngay
- *V40 -
- *V41 -
+
+ *V39 - thời gian chạy G1
+ *V40 - thời gian chạy G1-24h
+ *V41 - 
  *V42 -
  *V43 -
 
@@ -61,60 +63,65 @@
 #define BLYNK_TEMPLATE_ID "TMPLJp_sN4GN"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 4"
 #define BLYNK_AUTH_TOKEN "o-H-k28kNBIzgNIAP89f2AElv--eWuVO"
-#define BLYNK_FIRMWARE_VERSION "231221.T4.MAIN"
+#define BLYNK_FIRMWARE_VERSION "240330.T4.MAIN"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
+const char* ssid = "tram bom so 4";
+const char* password = "0943950555";
+//-------------------
+#include "PCF8575.h"
+PCF8575 pcf8575_1(0x20);
+const int pin_G1 = P7;
+const int pin_B2 = P6;
+const int pin_B1 = P5;
+const int pin_Vandien = P4;
+const int pin_P3 = P3;
+const int pin_rst = P2;
 
-#include <Adafruit_MCP23X17.h>
-
+const int S0pin = P15;
+const int S1pin = P14;
+const int S2pin = P13;
+const int S3pin = P12;
+//-------------------
 #include "EmonLib.h"
-
+EnergyMonitor emon0, emon1, emon2, emon3, emon4;
+bool trip0 = false, trip1 = false, trip2 = false, trip3 = false, trip4 = false;
+int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0, xSetAmpe4 = 0;
+int btnState = HIGH, btnState1 = HIGH, btnState2 = HIGH, AppState, AppState1, AppState2;
+float Irms0, Irms1, Irms2, Irms3, Irms4;
+unsigned long int xIrms0 = 0, xIrms1 = 0, xIrms2 = 0, xIrms3 = 0, xIrms4 = 0;
+unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0, yIrms4 = 0;
+//-------------------
 #include <WidgetRTC.h>
 #include "RTClib.h"
 RTC_DS3231 rtc_module;
-
+char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
+char tz[] = "Asia/Ho_Chi_Minh";
+//-------------------
 #include <Wire.h>
-#include <Eeprom24C32_64.h>
 #include <DallasTemperature.h>
 #include <OneWire.h>
-
+OneWire oneWire(D5);
+DallasTemperature sensors(&oneWire);
+float temp[3];
+//-------------------
+#include <Eeprom24C32_64.h>
+#define EEPROM_ADDRESS 0x57
+static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
+const word address = 0;
+//-------------------
 #include <ESP8266httpUpdate.h>
 #include <WiFiClientSecure.h>
 #include <ESP8266HTTPClient.h>
-
 WiFiClient client;
 HTTPClient http;
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram4/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
-
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
-
+//-------------------
 #define filterSamples 121
-#define EEPROM_ADDRESS 0x57
-static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
-
-OneWire oneWire(D3);
-DallasTemperature sensors(&oneWire);
-
-Adafruit_MCP23X17 mcp;
-EnergyMonitor emon0, emon1, emon2, emon3, emon4;
-
-const char* ssid = "tram bom so 4";
-const char* password = "0943950555";
-
-const int S0pin = 14;
-const int S1pin = 12;
-const int S2pin = 13;
-const int S3pin = 15;
-const word address = 0;
-
-const int pincap1 = 14;
-const int pinbom1 = 13;
-const int pinbom2 = 9;
-const int pinvandien = 11;
-
 int dai = 800;
 int rong = 800;
 int dosau = 330;
@@ -158,33 +165,22 @@ int digitalSmooth(int rawIn, int* sensSmoothArray) {
   return total / k;  // divide by number of samples
 }
 long distance, distance1, t;
-long m = 60 * 1000;
+//-------------------
 
-char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
-char tz[] = "Asia/Ho_Chi_Minh";
-bool key = false, keySet = false, keyp = true, keynoti = true, keytank = true;
-bool trip0 = false, trip1 = false, trip2 = false, trip3 = false, trip4 = false;
-bool timer_updata_status, timer_I_status, key_memory = true;
+long m = 60 * 1000;
+bool key = false, keyp = true, keytank = true;
+bool timer_updata_status, timer_I_status;
 bool time_run1 = false, time_run2 = false;
 bool noti_1 = true, noti_2 = true, noti_3 = true, noti_4 = true, noti_5 = true, noti_6 = true;
 bool blynk_first_connect = false;
-
-byte menu_gieng_luuluong;
-unsigned long ll_g_cache = 0;
-float clo_cache = 0;
+float clo_cache = 0, value, Result1;
 uint32_t timestamp;
-
-int a, c, b, f = 0, check_connect = 0;
+int a, c, b, f = 0;
 int timer_2, timer_1, timer_3, timer_4, timer_5;
-int RelayState = LOW, RelayState2 = HIGH, RelayState1 = LOW;
-int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0, xSetAmpe4 = 0;
-int btnState = HIGH, btnState1 = HIGH, btnState2 = HIGH, AppState, AppState1, AppState2;
-int var_LLG;
-float Irms0, Irms1, Irms2, Irms3, Irms4, value, Result1, temp[3];
-unsigned long int xIrms0 = 0, xIrms1 = 0, xIrms2 = 0, xIrms3 = 0, xIrms4 = 0;
-unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0, yIrms4 = 0;
-unsigned long int d = 0;
-String s;
+int LLG1_1m3, reboot_num;
+int G1_start;
+bool g1_save = false;
+//-------------------
 struct Data {
   byte SetAmpemax, SetAmpemin;
   byte SetAmpe1max, SetAmpe1min;
@@ -199,37 +195,40 @@ struct Data {
   int save_num;
   int time_run_nenkhi, time_stop_nenkhi;
   float clo;
-  int time_clo, LL_RL;
+  int time_clo, LLG1_RL;
   byte statusRualoc;
+  byte status_b1, status_b2, status_g1, key_noti;
+  byte reset_day;
+  int timerun_g1;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V10);
-WidgetTerminal terminal_luuluong(V31);
+WidgetTerminal terminal_clo(V31);
 WidgetRTC rtc_widget;
 
 BlynkTimer timer, timer1;
 BLYNK_CONNECTED() {
   rtc_widget.begin();
   blynk_first_connect = true;
-  Blynk.setProperty(V10, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 //-------------------------------------------------------------------
 void up() {
   String server_path = server_name + "batch/update?token=" + Main
-                       //+ "&V0=" + byte(RelayState)
-                       //+ "&V1=" + byte(RelayState1)
-                       //+ "&V2=" + byte(RelayState2)
+                       //+ "&V0=" + byte(data.status_b1)
+                       //+ "&V1=" + byte(data.status_b2)
+                       //+ "&V2=" + byte(data.status_g1)
                        + "&V14=" + float(Result1)
-                       //+ "&V15=" + temp[1]
+                       + "&V15=" + temp[1]
                        + "&V19=" + volume1
                        + "&V20=" + smoothDistance
-                       //+ "&V23=" + temp[0]
+                       + "&V23=" + temp[0]
                        + "&V27=" + Irms0
                        + "&V26=" + Irms1
                        + "&V24=" + Irms2
                        + "&V30=" + Irms3
-                       + "&V25=" + Irms4;
+                       + "&V25=" + Irms4
+                       + "&V39=" + float(data.timerun_g1/1000/60/60);
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -244,118 +243,142 @@ void savedata() {
     Blynk.setProperty(V10, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
+void time_run_motor() {
+  if (blynk_first_connect) {
+    if (data.reset_day != day()) {
+      if (Blynk.connected()) {
+        Blynk.virtualWrite(V40, data.timerun_g1);
+        data.timerun_g1 = 0;
+        data.reset_day = day();
+        savedata();
+      }
+    }
+  }
+  if (g1_save) {
+    data.timerun_g1 = millis() - G1_start;
+    savedata();
+    G1_start = millis();
+    g1_save = false;
+  }
+}
 void rualoc() {
   if (data.statusRualoc == HIGH) {
-    mcp.digitalWrite(pinvandien, !data.statusRualoc);
+    pcf8575_1.digitalWrite(pin_Vandien, !data.statusRualoc);
     timer1.setTimeout(long(data.time_run_nenkhi * 1000), []() {
-      mcp.digitalWrite(pinvandien, HIGH);
+      pcf8575_1.digitalWrite(pin_Vandien, HIGH);
     });
   }
 }
 void oncap1() {
-  RelayState2 = HIGH;
-  mcp.digitalWrite(pincap1, RelayState2);
-  Blynk.virtualWrite(V2, RelayState2);
+  if (data.status_g1 != HIGH) {
+    data.status_g1 = HIGH;
+    Blynk.virtualWrite(V2, data.status_g1);
+    savedata();
+  }
+  pcf8575_1.digitalWrite(pin_G1, data.status_g1);
 }
 void offcap1() {
-  RelayState2 = LOW;
-  mcp.digitalWrite(pincap1, RelayState2);
-  Blynk.virtualWrite(V2, RelayState2);
+  if (data.status_g1 != LOW) {
+    data.status_g1 = LOW;
+    Blynk.virtualWrite(V2, data.status_g1);
+    savedata();
+  }
+  pcf8575_1.digitalWrite(pin_G1, data.status_g1);
 }
 void onbom1() {
-  RelayState = HIGH;
-  mcp.digitalWrite(pinbom1, !RelayState);
-  Blynk.virtualWrite(V0, RelayState);
+  if (data.status_b1 != HIGH) {
+    data.status_b1 = HIGH;
+    Blynk.virtualWrite(V0, data.status_b1);
+    savedata();
+  }
+  pcf8575_1.digitalWrite(pin_B1, !data.status_b1);
 }
 void offbom1() {
-  RelayState = LOW;
-  mcp.digitalWrite(pinbom1, !RelayState);
-  Blynk.virtualWrite(V0, RelayState);
+  if (data.status_b1 != LOW) {
+    data.status_b1 = LOW;
+    Blynk.virtualWrite(V0, data.status_b1);
+    savedata();
+  }
+  pcf8575_1.digitalWrite(pin_B1, !data.status_b1);
 }
 void onbom2() {
-  RelayState1 = HIGH;
-  mcp.digitalWrite(pinbom2, !RelayState1);
-  Blynk.virtualWrite(V1, RelayState1);
+  if (data.status_b2 != HIGH) {
+    data.status_b2 = HIGH;
+    Blynk.virtualWrite(V1, data.status_b2);
+    savedata();
+  }
+  pcf8575_1.digitalWrite(pin_B2, !data.status_b2);
 }
 void offbom2() {
-  RelayState1 = LOW;
-  mcp.digitalWrite(pinbom2, !RelayState1);
-  Blynk.virtualWrite(V1, RelayState1);
+  if (data.status_b2 != LOW) {
+    data.status_b2 = LOW;
+    Blynk.virtualWrite(V1, data.status_b2);
+    savedata();
+  }
+  pcf8575_1.digitalWrite(pin_B2, !data.status_b2);
+  Blynk.virtualWrite(V1, data.status_b2);
 }
 void hidden_all() {
-  Blynk.setProperty(V3, "isHidden", true);
-  Blynk.setProperty(V18, "isHidden", true);
-  Blynk.setProperty(V11, "isHidden", true);
-  Blynk.setProperty(V16, "isHidden", true);
-  Blynk.setProperty(V13, "isHidden", true);
-  Blynk.setProperty(V8, "isHidden", true);
-  Blynk.setProperty(V5, "isHidden", true);
-  Blynk.setProperty(V6, "isHidden", true);
-  Blynk.setProperty(V7, "isHidden", true);
+  Blynk.setProperty(V18, V11, V16, V13, V8, V5, V6, V7, "isHidden", true);
 }
 void visible_all() {
-  Blynk.setProperty(V3, V18, V11, V16, V13, V8, V5, V6, V7, V4, V9, "isHidden", false);
-  //Blynk.setProperty(V18, "isHidden", false);
-  //Blynk.setProperty(V11, "isHidden", false);
-  //Blynk.setProperty(V16, "isHidden", false);
-  //Blynk.setProperty(V13, "isHidden", false);
-  //Blynk.setProperty(V8, "isHidden", false);
-  //Blynk.setProperty(V5, "isHidden", false);
-  //Blynk.setProperty(V6, "isHidden", false);
-  //Blynk.setProperty(V7, "isHidden", false);
+  Blynk.setProperty(V18, V11, V16, V13, V8, V5, V6, V7, "isHidden", false);
 }
 void hidden_auto() {
-  Blynk.setProperty(V0, "isHidden", true);
-  Blynk.setProperty(V1, "isHidden", true);
-  Blynk.setProperty(V2, "isHidden", true);
+  Blynk.setProperty(V1, V0, "isHidden", true);
 }
 void visible_man() {
-  Blynk.setProperty(V0, "isHidden", false);
-  Blynk.setProperty(V1, "isHidden", false);
-  Blynk.setProperty(V2, "isHidden", false);
+  Blynk.setProperty(V1, V0, "isHidden", false);
 }
-void syncstatus() {
-  //Blynk.virtualWrite(V0, RelayState);
-  //Blynk.virtualWrite(V1, RelayState1);
-  //Blynk.virtualWrite(V2, RelayState2);
-  if (data.mode_cap2 == 3)  // Chạy 2 bơm
-    hidden_auto();
-  else if (data.mode_cap2 == 0)
-    visible_man();
-  //Blynk.virtualWrite(V17, statusRualoc);
+void rst_board() {
+  pcf8575_1.digitalWrite(pin_rst, LOW);
 }
+//--------------------------------
 void readPower()  // C2 - Giếng    - I0
 {
-  digitalWrite(S0pin, LOW);
-  digitalWrite(S1pin, HIGH);
-  digitalWrite(S2pin, LOW);
-  digitalWrite(S3pin, LOW);
+  pcf8575_1.digitalWrite(S0pin, LOW);
+  pcf8575_1.digitalWrite(S1pin, HIGH);
+  pcf8575_1.digitalWrite(S2pin, LOW);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float rms0 = emon0.calcIrms(1480);
   if (rms0 < 2) {
     Irms0 = 0;
     yIrms0 = 0;
+    if (G1_start != 0) {
+      data.timerun_g1 = millis() - G1_start;
+      savedata();
+      G1_start = 0;
+    }
   } else if (rms0 >= 2) {
     Irms0 = rms0;
     yIrms0 = yIrms0 + 1;
-    if ((yIrms0 > 3) && ((Irms0 >= data.SetAmpemax) || (Irms0 <= data.SetAmpemin))) {
-      xSetAmpe = xSetAmpe + 1;
-      if ((xSetAmpe >= 4) && (keyp)) {
-        offcap1();
-        xSetAmpe = 0;
-        trip0 = true;
-        if (keynoti)
-          Blynk.logEvent("error", String("Bơm GIẾNG lỗi: ") + Irms0 + String(" A"));
+    if (yIrms0 > 3) {
+      if (G1_start >= 0) {
+        if (G1_start == 0) G1_start = millis();
+        else if (millis() - G1_start > 15000) {
+          g1_save = true;
+        } else g1_save = false;
+      }
+      if ((Irms0 >= data.SetAmpemax) || (Irms0 <= data.SetAmpemin)) {
+        xSetAmpe = xSetAmpe + 1;
+        if ((xSetAmpe >= 4) && (keyp)) {
+          offcap1();
+          xSetAmpe = 0;
+          trip0 = true;
+          if (data.key_noti)
+            Blynk.logEvent("error", String("Bơm GIẾNG lỗi: ") + Irms0 + String(" A"));
+        }
       }
     }
   }
   //Blynk.virtualWrite(V27, Irms0);
 }
-void readPower1()  // C1 - Bơm 1    - I1
+void readPower1()  // C3 - Bơm 1    - I1
 {
-  digitalWrite(S0pin, HIGH);
-  digitalWrite(S1pin, LOW);
-  digitalWrite(S2pin, LOW);
-  digitalWrite(S3pin, LOW);
+  pcf8575_1.digitalWrite(S0pin, HIGH);
+  pcf8575_1.digitalWrite(S1pin, HIGH);
+  pcf8575_1.digitalWrite(S2pin, LOW);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float rms1 = emon1.calcIrms(1480);
   if (rms1 < 1) {
     Irms1 = 0;
@@ -369,19 +392,19 @@ void readPower1()  // C1 - Bơm 1    - I1
         offbom1();
         xSetAmpe1 = 0;
         trip1 = true;
-        if (keynoti)
+        if (data.key_noti)
           Blynk.logEvent("error", String("Bơm 1 lỗi: ") + Irms1 + String(" A"));
       }
     }
   }
   //Blynk.virtualWrite(V26, Irms1);
 }
-void readPower2()  // C3 - Bơm 2    - I2
+void readPower2()  // C4 - Bơm 2    - I2
 {
-  digitalWrite(S0pin, HIGH);
-  digitalWrite(S1pin, HIGH);
-  digitalWrite(S2pin, LOW);
-  digitalWrite(S3pin, LOW);
+  pcf8575_1.digitalWrite(S0pin, LOW);
+  pcf8575_1.digitalWrite(S1pin, LOW);
+  pcf8575_1.digitalWrite(S2pin, HIGH);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float rms2 = emon2.calcIrms(1480);
   if (rms2 < 1) {
     Irms2 = 0;
@@ -395,19 +418,19 @@ void readPower2()  // C3 - Bơm 2    - I2
         offbom2();
         xSetAmpe2 = 0;
         trip2 = true;
-        if (keynoti)
+        if (data.key_noti)
           Blynk.logEvent("error", String("Bơm 2 lỗi: ") + Irms2 + String(" A"));
       }
     }
   }
   //Blynk.virtualWrite(V24, Irms2);
 }
-void readPower3()  // C4 - Nén khí  - I3
+void readPower3()  // C5 - Nén khí  - I3
 {
-  digitalWrite(S0pin, LOW);
-  digitalWrite(S1pin, LOW);
-  digitalWrite(S2pin, HIGH);
-  digitalWrite(S3pin, LOW);
+  pcf8575_1.digitalWrite(S0pin, HIGH);
+  pcf8575_1.digitalWrite(S1pin, LOW);
+  pcf8575_1.digitalWrite(S2pin, HIGH);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float rms3 = emon3.calcIrms(740);
   if (rms3 < 1) {
     Irms3 = 0;
@@ -421,7 +444,7 @@ void readPower3()  // C4 - Nén khí  - I3
         offcap1();
         trip3 = true;
         xSetAmpe3 = 0;
-        if (keynoti)
+        if (data.key_noti)
           Blynk.logEvent("error", String("Máy NÉN KHÍ lỗi: ") + Irms3 + String(" A"));
       }
     } else {
@@ -430,12 +453,12 @@ void readPower3()  // C4 - Nén khí  - I3
   }
   //Blynk.virtualWrite(V30, Irms3);
 }
-void readPower4()  // C0 - Van điện - I4
+void readPower4()  // C6 - Van điện - I4
 {
-  digitalWrite(S0pin, LOW);
-  digitalWrite(S1pin, LOW);
-  digitalWrite(S2pin, LOW);
-  digitalWrite(S3pin, LOW);
+  pcf8575_1.digitalWrite(S0pin, LOW);
+  pcf8575_1.digitalWrite(S1pin, HIGH);
+  pcf8575_1.digitalWrite(S2pin, HIGH);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float rms4 = emon4.calcIrms(740);
   if (rms4 < 1) {
     Irms4 = 0;
@@ -448,10 +471,10 @@ void readPower4()  // C0 - Van điện - I4
       if ((xSetAmpe4 >= 2) && (keyp)) {
         data.statusRualoc = LOW;
         savedata();
-        mcp.digitalWrite(pinvandien, !data.statusRualoc);
+        pcf8575_1.digitalWrite(pin_Vandien, !data.statusRualoc);
         xSetAmpe4 = 0;
         trip4 = true;
-        if (keynoti)
+        if (data.key_noti)
           Blynk.logEvent("error", String("Van điện lỗi: ") + Irms4 + String(" A"));
       }
     } else {
@@ -469,39 +492,39 @@ void temperature() {  // Nhiệt độ
   //Blynk.virtualWrite(V23, temp[0]);
 }
 //-------------------------------------------------------------------
-void readPressure()  // C6 - Ap Luc
+void readPressure()  // C0 - Ap Luc
 {
-  digitalWrite(S0pin, LOW);
-  digitalWrite(S1pin, HIGH);
-  digitalWrite(S2pin, HIGH);
-  digitalWrite(S3pin, LOW);
+  pcf8575_1.digitalWrite(S0pin, LOW);
+  pcf8575_1.digitalWrite(S1pin, LOW);
+  pcf8575_1.digitalWrite(S2pin, LOW);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float sensorValue = analogRead(A0);
   float Result;
-  Result = (((sensorValue - 186) * 6) / (930 - 186));
+  Result = (((sensorValue - 186) * 6) / (805 - 186));
   if (Result > 0) {
     value += Result;
     Result1 = value / 16.0;
     value -= Result1;
   }
 }
-//-------------------------------------------------------------------
-void MeasureCmForSmoothing() {
-  digitalWrite(S0pin, HIGH);
-  digitalWrite(S1pin, LOW);
-  digitalWrite(S2pin, HIGH);
-  digitalWrite(S3pin, LOW);
+void MeasureCmForSmoothing()  //C1 - Muc Nuoc
+{
+  pcf8575_1.digitalWrite(S0pin, HIGH);
+  pcf8575_1.digitalWrite(S1pin, LOW);
+  pcf8575_1.digitalWrite(S2pin, LOW);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float sensorValue = analogRead(A0);
-  distance1 = (((sensorValue - 196.5) * 500) / (950 - 196.5));  // 915,74 (R=147.7)
+  distance1 = (((sensorValue - 196.5) * 500) / (750 - 196.5));  // 915,74 (R=147.7)
   if (distance1 > 0) {
     smoothDistance = digitalSmooth(distance1, sensSmoothArray1);
     volume1 = (dai * smoothDistance * rong) / 1000000;
-    if ((smoothDistance < (dosau / 2)) && (Irms3 == 0) && !trip3 && keynoti && keytank) {
+    if ((smoothDistance < (dosau / 2)) && (Irms3 == 0) && !trip3 && data.key_noti && keytank) {
       Blynk.logEvent("info", String("Mực nước thấp nhưng cấp 1 không chạy: ") + smoothDistance + String(" cm"));
       keytank = false;
       timer1.setTimeout(10 * m, []() {
         keytank = true;
       });
-    } else if ((smoothDistance - dosau >= 20) && (keynoti) && (keytank)) {
+    } else if ((smoothDistance - dosau >= 20) && (data.key_noti) && (keytank)) {
       Blynk.logEvent("info", String("Nước trong bể cao vượt mức ") + (smoothDistance - dosau) + String(" cm"));
       keytank = false;
       timer1.setTimeout(15 * m, []() {
@@ -521,7 +544,6 @@ void rtctime() {
   }
   timestamp = now.unixtime();
   Blynk.virtualWrite(V9, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
-
   int nowtime = (now.hour() * 3600 + now.minute() * 60);
   if (data.mode_cap2 == 3) {                                                                                                                                                                                                                         // Chọn chế độ chạy 2 bơm
     if ((nowtime > data.b1_1_start && nowtime < data.b1_1_stop) || (nowtime > data.b1_2_start && nowtime < data.b1_2_stop) || (nowtime > data.b1_3_start && nowtime < data.b1_3_stop) || (nowtime > data.b1_4_start && nowtime < data.b1_4_stop)) {  // Chạy bơm 1
@@ -529,7 +551,7 @@ void rtctime() {
         if ((Irms2 == 0 && !time_run2) || (time_run2)) onbom1();                                                                                                                                                                                     //Chạy bơm 1
         if (time_run1 && noti_3) {
           noti_3 = false;
-          if (keynoti) Blynk.logEvent("error", String("LỖI: Bơm 1 không chạy."));
+          if (data.key_noti) Blynk.logEvent("error", String("LỖI: Bơm 1 không chạy."));
           timer1.setTimeout(30 * m, []() {
             noti_3 = true;
           });
@@ -541,7 +563,7 @@ void rtctime() {
         offbom1();
         if (!time_run1 && noti_1) {
           noti_1 = false;
-          if (keynoti) Blynk.logEvent("error", String("Lỗi lịch chạy!\nBơm 1 đang chạy: ") + Irms1 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Lỗi lịch chạy!\nBơm 1 đang chạy: ") + Irms1 + String(" A"));
           timer1.setTimeout(5 * m, []() {
             noti_1 = true;
           });
@@ -554,7 +576,7 @@ void rtctime() {
         if ((Irms1 == 0 && !time_run1) || (time_run1)) onbom2();  //Chạy bơm 2
         if (time_run2 && noti_4) {
           noti_4 = false;
-          if (keynoti) Blynk.logEvent("error", String("LỖI: Bơm 2 không chạy."));
+          if (data.key_noti) Blynk.logEvent("error", String("LỖI: Bơm 2 không chạy."));
           timer1.setTimeout(30 * m, []() {
             noti_4 = true;
           });
@@ -566,7 +588,7 @@ void rtctime() {
         offbom2();
         if (!time_run2 && noti_2) {
           noti_2 = false;
-          if (keynoti) Blynk.logEvent("error", String("Lỗi lịch chạy!\nBơm 2 đang chạy: ") + Irms2 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Lỗi lịch chạy!\nBơm 2 đang chạy: ") + Irms2 + String(" A"));
           timer1.setTimeout(5 * m, []() {
             noti_2 = true;
           });
@@ -580,7 +602,7 @@ void rtctime() {
       timer1.setTimeout(3000L, []() {
         if (Irms0 != 0) {
           offbom2();
-          if (keynoti) Blynk.logEvent("error", String("Lỗi lịch chạy!\nBơm 2 đang chạy: ") + Irms0 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Lỗi lịch chạy!\nBơm 2 đang chạy: ") + Irms0 + String(" A"));
         }
       });
     }
@@ -592,7 +614,7 @@ void rtctime() {
           onbom1();
           if (Irms2 == 0) {
             f = f + 1;
-            if ((f == 3) && (keynoti))
+            if ((f == 3) && (data.key_noti))
               Blynk.logEvent("error", String("Bơm 1 bị lỗi không chạy kìa.\nKiểm tra lẹ."));
           }
         }
@@ -602,7 +624,7 @@ void rtctime() {
           onbom1();
           if (Irms2 == 0) {
             f = f + 1;
-            if ((f == 3) && (keynoti))
+            if ((f == 3) && (data.key_noti))
               Blynk.logEvent("error", String("Bơm 1 lỗi không thể chạy.\nXin hãy kiểm tra. "));
           }
         }
@@ -616,7 +638,7 @@ void rtctime() {
           onbom1();
           if (Irms2 == 0) {
             f = f + 1;
-            if ((f == 3) && (keynoti))
+            if ((f == 3) && (data.key_noti))
               Blynk.logEvent("error", String("Bơm 1 lỗi không thể chạy.\nXin hãy kiểm tra. "));
           }
         }
@@ -626,7 +648,7 @@ void rtctime() {
           onbom1();
           if (Irms2 == 0) {
             f = f + 1;
-            if ((f == 3) && (keynoti))
+            if ((f == 3) && (data.key_noti))
               Blynk.logEvent("error", String("Bơm 1 lỗi không thể chạy.\nXin hãy kiểm tra. "));
           }
         }
@@ -638,7 +660,7 @@ void rtctime() {
       timer1.setTimeout(3000L, []() {
         if (Irms2 != 0) {
           offbom1();
-          if (keynoti) Blynk.logEvent("error", String("Lỗi lịch chạy!\nBơm 1 đang chạy: ") + Irms2 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Lỗi lịch chạy!\nBơm 1 đang chạy: ") + Irms2 + String(" A"));
         }
       });
     }
@@ -650,7 +672,7 @@ void rtctime() {
           onbom2();
           if (Irms0 == 0) {
             f = f + 1;
-            if ((f == 3) && (keynoti))
+            if ((f == 3) && (data.key_noti))
               Blynk.logEvent("error", String("Bơm 2 bị lỗi không chạy kìa.\nKiểm tra lẹ."));
           }
         }
@@ -660,7 +682,7 @@ void rtctime() {
           onbom2();
           if (Irms0 == 0) {
             f = f + 1;
-            if ((f == 3) && (keynoti))
+            if ((f == 3) && (data.key_noti))
               Blynk.logEvent("error", String("Bơm 2 lỗi không thể chạy.\nXin hãy kiểm tra. "));
           }
         }
@@ -674,7 +696,7 @@ void rtctime() {
           onbom2();
           if (Irms0 == 0) {
             f = f + 1;
-            if ((f == 3) && (keynoti))
+            if ((f == 3) && (data.key_noti))
               Blynk.logEvent("error", String("Bơm 2 lỗi không thể chạy.\nXin hãy kiểm tra. "));
           }
         }
@@ -684,7 +706,7 @@ void rtctime() {
           onbom2();
           if (Irms0 == 0) {
             f = f + 1;
-            if ((f == 3) && (keynoti))
+            if ((f == 3) && (data.key_noti))
               Blynk.logEvent("error", String("Bơm 2 lỗi không thể chạy.\nXin hãy kiểm tra. "));
           }
         }
@@ -700,7 +722,7 @@ BLYNK_WRITE(V0)  // Bơm 1
       offbom1();
     else onbom1();
   else
-    Blynk.virtualWrite(V0, RelayState);
+    Blynk.virtualWrite(V0, data.status_b1);
 }
 BLYNK_WRITE(V1)  // Bơm 2
 {
@@ -709,7 +731,7 @@ BLYNK_WRITE(V1)  // Bơm 2
       offbom2();
     else onbom2();
   else
-    Blynk.virtualWrite(V1, RelayState1);
+    Blynk.virtualWrite(V1, data.status_b2);
 }
 BLYNK_WRITE(V2)  // Giếng
 {
@@ -718,11 +740,11 @@ BLYNK_WRITE(V2)  // Giếng
       offcap1();
     else oncap1();
   else
-    Blynk.virtualWrite(V2, RelayState2);
+    Blynk.virtualWrite(V2, data.status_g1);
 }
 BLYNK_WRITE(V3)  // Chọn chế độ Cấp 2
 {
-  if (keySet) {
+  if (key) {
     switch (param.asInt()) {
       case 0:
         {  // Man
@@ -749,24 +771,6 @@ BLYNK_WRITE(V3)  // Chọn chế độ Cấp 2
     }
   } else
     Blynk.virtualWrite(V3, data.mode_cap2);
-}
-BLYNK_WRITE(V4)  // Chọn người trực
-{
-  if (key) {
-    switch (param.asInt()) {
-      case 0:
-        {  // Quang
-          data.man = 0;
-          break;
-        }
-      case 1:
-        {  // GUEST
-          data.man = 1;
-          break;
-        }
-    }
-  } else
-    Blynk.virtualWrite(V4, data.man);
 }
 BLYNK_WRITE(V5)  // Chon máy cài đặt bảo vệ
 {
@@ -810,7 +814,7 @@ BLYNK_WRITE(V5)  // Chon máy cài đặt bảo vệ
 }
 BLYNK_WRITE(V6)  // min
 {
-  if (keySet) {
+  if (key) {
     if (c == 0)  //Giếng
       data.SetAmpemin = param.asInt();
     else if (c == 1)  //Bơm 1
@@ -827,7 +831,7 @@ BLYNK_WRITE(V6)  // min
 }
 BLYNK_WRITE(V7)  // max
 {
-  if (keySet) {
+  if (key) {
     if (c == 0)  //Giếng
       data.SetAmpemax = param.asInt();
     else if (c == 1)  //Bơm 1
@@ -842,7 +846,6 @@ BLYNK_WRITE(V7)  // max
     Blynk.virtualWrite(V7, 0);
   }
 }
-
 BLYNK_WRITE(V10)  // String
 {
   String dataS = param.asStr();
@@ -857,12 +860,12 @@ BLYNK_WRITE(V10)  // String
   } else if (dataS == "active") {
     terminal.clear();
     key = true;
-    keySet = true;
+    visible_all();
     Blynk.virtualWrite(V10, "KHÔNG sử dụng phần mềm cho đến khi thông báo này mất.\n");
   } else if (dataS == "deactive") {
     terminal.clear();
     key = false;
-    keySet = false;
+    hidden_all();
     Blynk.virtualWrite(V10, "Ok!\nNhập mã để điều khiển!\n");
   } else if (dataS == "save") {
     terminal.clear();
@@ -875,7 +878,7 @@ BLYNK_WRITE(V10)  // String
     trip2 = false;
     trip3 = false;
     trip4 = false;
-    mcp.digitalWrite(pincap1, HIGH);
+    pcf8575_1.digitalWrite(pin_G1, HIGH);
     Blynk.virtualWrite(V10, "Đã RESET! \nNhập mã để điều khiển!\n");
   } else if (dataS == "save_num") {
     terminal.clear();
@@ -884,7 +887,8 @@ BLYNK_WRITE(V10)  // String
     terminal.clear();
     Blynk.virtualWrite(V10, "ESP khởi động lại sau 3s");
     delay(3000);
-    ESP.restart();
+    //ESP.restart();
+    rst_board();
   } else if (dataS == "update") {
     terminal.clear();
     Blynk.virtualWrite(V10, "UPDATE FIRMWARE...");
@@ -904,7 +908,7 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
     switch (param.asInt()) {
       case 0:
         {
-          if (keySet) {
+          if (key) {
             data.cap2_chanle = 0;
             b = 8;
           }
@@ -913,7 +917,7 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
         }
       case 1:
         {
-          if (keySet) {
+          if (key) {
             data.cap2_chanle = 1;
             b = 8;
           }
@@ -922,7 +926,7 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
         }
       case 2:
         {  // Rửa lọc
-          if (keySet)
+          if (key)
             b = 9;
           Blynk.virtualWrite(V18, data.time_run_nenkhi, data.time_stop_nenkhi, tz);
           break;
@@ -943,63 +947,63 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
     switch (param.asInt()) {
       case 0:
         {  // Bơm 1 - Lần 1
-          if (keySet)
+          if (key)
             b = 0;
           Blynk.virtualWrite(V18, data.b1_1_start, data.b1_1_stop, tz);
           break;
         }
       case 1:
         {  // Bơm 2 - Lần 1
-          if (keySet)
+          if (key)
             b = 1;
           Blynk.virtualWrite(V18, data.b2_1_start, data.b2_1_stop, tz);
           break;
         }
       case 2:
         {  // Bơm 1 - Lần 2
-          if (keySet)
+          if (key)
             b = 2;
           Blynk.virtualWrite(V18, data.b1_2_start, data.b1_2_stop, tz);
           break;
         }
       case 3:
         {  // Bơm 2 - Lần 2
-          if (keySet)
+          if (key)
             b = 3;
           Blynk.virtualWrite(V18, data.b2_2_start, data.b2_2_stop, tz);
           break;
         }
       case 4:
         {  // Bơm 1 - Lần 3
-          if (keySet)
+          if (key)
             b = 4;
           Blynk.virtualWrite(V18, data.b1_3_start, data.b1_3_stop, tz);
           break;
         }
       case 5:
         {  // Bơm 2 - Lần 3
-          if (keySet)
+          if (key)
             b = 5;
           Blynk.virtualWrite(V18, data.b2_3_start, data.b2_3_stop, tz);
           break;
         }
       case 6:
         {  // Bơm 1 - Lần 4
-          if (keySet)
+          if (key)
             b = 6;
           Blynk.virtualWrite(V18, data.b1_4_start, data.b1_4_stop, tz);
           break;
         }
       case 7:
         {  // Bơm 2 - Lần 4
-          if (keySet)
+          if (key)
             b = 7;
           Blynk.virtualWrite(V18, data.b2_4_start, data.b2_4_stop, tz);
           break;
         }
       case 8:
         {  // Châm Clo
-          if (keySet)
+          if (key)
             b = 9;
           Blynk.virtualWrite(V18, data.time_run_nenkhi, data.time_stop_nenkhi, tz);
           break;
@@ -1009,7 +1013,7 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
 }
 BLYNK_WRITE(V13)  // Bảo vệ
 {
-  if (keySet) {
+  if (key) {
     int data13 = param.asInt();
     if (data13 == LOW)
       keyp = false;
@@ -1020,30 +1024,27 @@ BLYNK_WRITE(V13)  // Bảo vệ
 }
 BLYNK_WRITE(V16)  // Thông báo
 {
-  if (keySet) {
-    int data16 = param.asInt();
-    if (data16 == LOW)
-      keynoti = false;
-    else
-      keynoti = true;
-  } else
-    Blynk.virtualWrite(V16, keynoti);
+  if (key) {
+    if (param.asInt() == LOW) data.key_noti = false;
+    else data.key_noti = true;
+    savedata();
+  } else Blynk.virtualWrite(V16, data.key_noti);
 }
 BLYNK_WRITE(V17)  // Chế độ rửa lọc
 {
   if (key) {
     if (param.asInt() == LOW) {
       data.statusRualoc = LOW;
-      mcp.digitalWrite(pinvandien, !data.statusRualoc);
-      if (data.LL_RL != 0) {
-        Blynk.virtualWrite(V38, var_LLG - data.LL_RL);
-        data.LL_RL = 0;
+      pcf8575_1.digitalWrite(pin_Vandien, !data.statusRualoc);
+      if (data.LLG1_RL != 0) {
+        Blynk.virtualWrite(V38, LLG1_1m3 - data.LLG1_RL);
+        data.LLG1_RL = 0;
         savedata();
       }
     } else {
       data.statusRualoc = HIGH;
-      if (data.LL_RL == 0) {
-        data.LL_RL = var_LLG;
+      if (data.LLG1_RL == 0) {
+        data.LLG1_RL = LLG1_1m3;
         savedata();
       }
     }
@@ -1053,7 +1054,7 @@ BLYNK_WRITE(V17)  // Chế độ rửa lọc
 }
 BLYNK_WRITE(V18)  // Time input
 {
-  if (keySet) {
+  if (key) {
     TimeInputParam t(param);
     if (t.hasStartTime()) {
       if (b == 0)
@@ -1101,13 +1102,6 @@ BLYNK_WRITE(V18)  // Time input
     }
   } else
     Blynk.virtualWrite(V18, 0);
-}
-BLYNK_WRITE(V28)  // hidden_all/visible_all
-{
-  if (param.asInt() == 0)
-    hidden_all();
-  else
-    visible_all();
 }
 BLYNK_WRITE(V29)  // Info
 {
@@ -1189,91 +1183,54 @@ BLYNK_WRITE(V31) {
       data.time_clo = timestamp;
       Blynk.virtualWrite(V36, data.clo);
       savedata();
-      terminal_luuluong.clear();
+      terminal_clo.clear();
       Blynk.virtualWrite(V31, "Đã lưu - CLO:", data.clo, "kg");
     }
   }
 }
 BLYNK_WRITE(V32) {
   if (param.asFloat() > 0) {
-    if (menu_gieng_luuluong == 1) {
-      terminal_luuluong.clear();
-      clo_cache = param.asFloat();
-      Blynk.virtualWrite(V31, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
-    }
+    terminal_clo.clear();
+    clo_cache = param.asFloat();
+    Blynk.virtualWrite(V31, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
   }
 }
 BLYNK_WRITE(V33) {
   if (param.asInt() == 1) {
     DateTime dt(data.time_clo);
-    terminal_luuluong.clear();
+    terminal_clo.clear();
     Blynk.virtualWrite(V31, "Châm CLO: ", data.clo, " kg vào lúc ", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
   }
 }
-BLYNK_WRITE(V34) {
-  switch (param.asInt()) {
-    case 0:
-      {  //.....
-        menu_gieng_luuluong = 0;
-        terminal_luuluong.clear();
-        break;
-      }
-    case 1:
-      {  //Gieng
-        menu_gieng_luuluong = 1;
-        break;
-      }
-    case 2:
-      {  //Clo
-        menu_gieng_luuluong = 2;
-        break;
-      }
-  }
-  clo_cache = 0;
-  Blynk.virtualWrite(V32, 0);
-}
 BLYNK_WRITE(V37) {
-  var_LLG = param.asInt();
+  LLG1_1m3 = param.asInt();
 }
 //-------------------------------------------------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    //WiFi.disconnect();
-    //WiFi.mode(WIFI_STA);
-    //WiFi.begin(ssid, password);
-    //Blynk.config(auth);
     Serial.println("Khong ket noi WIFI");
+    WiFi.begin(ssid, password);
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
-    data.reboot_num = data.reboot_num + 1;
-    savedata();
-    //Serial.print("data.reboot_num: ");
-    //Serial.println(data.reboot_num);
-    if (data.reboot_num == 1) {
-      //Serial.println("Restart...");
-      //Serial.print("data.reboot_num: ");
-      //Serial.println(data.reboot_num);
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
-    if (data.reboot_num % 5 == 0) {
-      //Serial.print("data.reboot_num: ");
-      //Serial.println(data.reboot_num);
+    if (reboot_num % 5 == 0) {
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
   }
   if (Blynk.connected()) {
-    if (data.reboot_num != 0) {
-      data.reboot_num = 0;
-      savedata();
+    if (reboot_num != 0) {
+      reboot_num = 0;
     }
-    //Serial.print("data.reboot_num: ");
-    //Serial.println(data.reboot_num);
-    //Serial.println("Blynk OK");
   }
 }
-//------------------------
 void update_started() {
   Serial.println("CALLBACK:  HTTP update process started");
 }
@@ -1286,7 +1243,6 @@ void update_progress(int cur, int total) {
 void update_error(int err) {
   Serial.printf("CALLBACK:  HTTP update fatal error code %d\n", err);
 }
-//-------------------------
 void update_fw() {
   WiFiClientSecure client_;
   client_.setInsecure();
@@ -1310,41 +1266,36 @@ void setup() {
   Blynk.config(BLYNK_AUTH_TOKEN);
   delay(5000);
   //---------------------------------------------------------------------------------
-  pinMode(S0pin, OUTPUT);
-  pinMode(S1pin, OUTPUT);
-  pinMode(S2pin, OUTPUT);
-  pinMode(S3pin, OUTPUT);
+  emon0.current(A0, 105);  //Giếng
+  emon1.current(A0, 105);  //Bơm 1
+  emon2.current(A0, 105);  //Bơm 2
+  emon3.current(A0, 105);  //Nén khí
+  emon4.current(A0, 105);  //Van điện
 
-  emon0.current(A0, 102);  //Giếng
-  emon1.current(A0, 96);   //Bơm 1
-  emon2.current(A0, 86);   //Bơm 2
-  emon3.current(A0, 81);   //Nén khí
-  emon4.current(A0, 85);   //Van điện
-
-  //Wire.begin();
+  Wire.begin();
   sensors.begin();  // DS18B20 start
-
-  mcp.begin_I2C();
-
-  mcp.pinMode(2, OUTPUT);
-  mcp.digitalWrite(2, HIGH);
-  mcp.pinMode(0, OUTPUT);
-  mcp.digitalWrite(0, HIGH);
-  mcp.pinMode(9, OUTPUT);
-  mcp.digitalWrite(pinbom2, HIGH);  // Bom 2
-  mcp.pinMode(11, OUTPUT);
-  mcp.digitalWrite(pinvandien, HIGH);  // Rua loc
-  mcp.pinMode(13, OUTPUT);
-  mcp.digitalWrite(pinbom1, HIGH);  // Bom 1
-  mcp.pinMode(14, OUTPUT);
-  mcp.digitalWrite(pincap1, HIGH);  // Gieng
-
   rtc_module.begin();
-
   eeprom.initialize();
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
 
-  terminal.clear();
+  pcf8575_1.begin();
+  pcf8575_1.pinMode(S0pin, OUTPUT);
+  pcf8575_1.pinMode(S1pin, OUTPUT);
+  pcf8575_1.pinMode(S2pin, OUTPUT);
+  pcf8575_1.pinMode(S3pin, OUTPUT);
+
+  pcf8575_1.pinMode(pin_G1, OUTPUT);
+  pcf8575_1.digitalWrite(pin_G1, data.status_g1);
+  pcf8575_1.pinMode(pin_B1, OUTPUT);
+  pcf8575_1.digitalWrite(pin_B1, data.status_b1);
+  pcf8575_1.pinMode(pin_B2, OUTPUT);
+  pcf8575_1.digitalWrite(pin_B2, data.status_b2);
+  pcf8575_1.pinMode(pin_Vandien, OUTPUT);
+  pcf8575_1.digitalWrite(pin_Vandien, HIGH);
+  pcf8575_1.pinMode(pin_rst, OUTPUT);
+  pcf8575_1.digitalWrite(pin_rst, HIGH);
+  pcf8575_1.pinMode(pin_P3, OUTPUT);
+  pcf8575_1.digitalWrite(pin_P3, HIGH);
 
   timer.setTimeout(5000L, []() {
     timer_2 = timer.setInterval(243L, []() {
@@ -1357,23 +1308,24 @@ void setup() {
       readPower2();
       readPower3();
       readPower4();
-      //temperature();
+      temperature();
       up();
       timer.restartTimer(timer_1);
       timer.restartTimer(timer_2);
     });
     timer_5 = timer.setInterval(15006L, []() {
       rtctime();
+      time_run_motor();
       timer.restartTimer(timer_1);
       timer.restartTimer(timer_2);
     });
     timer.setInterval(900005L, []() {
       connectionstatus();
-      syncstatus();
       timer.restartTimer(timer_1);
       timer.restartTimer(timer_2);
     });
     timer.setInterval(long(((data.time_run_nenkhi + data.time_stop_nenkhi) * 1000) + 500), rualoc);
+    terminal.clear();
   });
 }
 
