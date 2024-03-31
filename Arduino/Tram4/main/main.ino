@@ -345,7 +345,7 @@ void readPower()  // C2 - Giếng    - I0
     Irms0 = 0;
     yIrms0 = 0;
     if (G1_start != 0) {
-      data.timerun_g1 = millis() - G1_start;
+      data.timerun_g1 = data.timerun_g1 + (millis() - G1_start);
       savedata();
       G1_start = 0;
     }
