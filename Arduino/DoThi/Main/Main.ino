@@ -26,6 +26,11 @@ V19 - Sta boke1
 V20 - G
 V21 - mode
 V22 - Btn van 1
+/////////// Nguyễn Thái Bình
+V23 - Sta ntbinh
+V24 - G
+V25 - mode
+V26 - Btn van 1
 */
 
 #define BLYNK_TEMPLATE_ID "TMPL6LdmF6nY7"

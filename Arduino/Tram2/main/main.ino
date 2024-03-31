@@ -12,7 +12,7 @@
    V11-Chọn máy để cài bảo vệ
    V12-Chọn giá trị bảo vệ Min
    V13-Chọn giá trị bảo vệ Max
-   V14-ip Wifi
+   V14-
    V15 - on Bom 30kw
    V16 - off bom 30kw
    V17 - 
@@ -33,8 +33,8 @@
    V46-I6
    V47- btn nén khí 1
    V48- btn nén khí 2
-   V49-dungtich
-   V50-Terminal Luu luong
+   V49-
+   V50-
    V51-input luu luong
    V52-check luu luong
    V53-
@@ -165,7 +165,7 @@ int digitalSmooth(int rawIn, int* sensSmoothArray) {
 }
 //----------------------------------
 bool keySwitchQ = false, keySwitchD = false, keySwitchP = false, keySet = false, data12 = true, data13 = true, keyPRE2 = true, keyPRE4 = true, noti = true;
-bool data.protect = true, timer_updata_status, timer_I_status;
+bool timer_updata_status, timer_I_status;
 bool kdata15 = true, kdata16 = true, kdata20 = true, kdata21 = true, kdata22 = true, kdata23 = true, kdata24 = true, kdata25 = true, kdata26 = true, kdata27 = true, kdata28 = true, kdata29 = true, kdata30 = true, kdata31 = true;
 bool event30p = true;
 bool blynk_first_connect = false;
@@ -200,7 +200,7 @@ struct Data {
   int time_clo, LLG2_RL, LLG1_RL;
   byte protect;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal keyterminal(V5);
 WidgetTerminal terminal_luuluong(V50);
@@ -342,10 +342,10 @@ void off_NK2() {
 }
 //----------------------------------
 void hidden() {
-  Blynk.setProperty(V11, v12, v13, V4, V8, V9, "isHidden", true);
+  Blynk.setProperty(V11, V12, V13, V4, V8, V9, "isHidden", true);
 }
 void visible() {
-  Blynk.setProperty(V11, v12, v13, V4, V8, V9, "isHidden", false);
+  Blynk.setProperty(V11, V12, V13, V4, V8, V9, "isHidden", false);
 }
 //----------------------------------
 BLYNK_WRITE(V0)  // Nguoi truc
@@ -546,6 +546,16 @@ BLYNK_WRITE(V5)  // data string
     Blynk.virtualWrite(V5, "ESP Khởi động lại sau 3s");
     delay(3000);
     ESP.restart();
+  } else if ((dataS == "ok") || (dataS == "Ok") || (dataS == "OK") || (dataS == "oK")) {
+    if (clo_cache > 0) {
+      data.clo = clo_cache;
+      clo_cache = 0;
+      data.time_clo = timestamp;
+      Blynk.virtualWrite(V56, data.clo);
+      savedata();
+      keyterminal.clear();
+      Blynk.virtualWrite(V5, "Đã lưu - CLO:", data.clo, "kg");
+    }
   } else {
     Blynk.virtualWrite(V5, "Mã không hợp lệ!\nVui lòng nhập lại.\n");
   }
@@ -1468,32 +1478,18 @@ void MeasureCmForSmoothing()  //C14
   }
 }
 //----------------------------------------------------
-BLYNK_WRITE(V50) {
-  String dataS = param.asStr();
-  if ((dataS == "ok") || (dataS == "Ok") || (dataS == "OK") || (dataS == "oK")) {
-    if (clo_cache > 0) {
-      data.clo = clo_cache;
-      clo_cache = 0;
-      data.time_clo = timestamp;
-      Blynk.virtualWrite(V56, data.clo);
-      savedata();
-      terminal_luuluong.clear();
-      Blynk.virtualWrite(V50, "Đã lưu - CLO:", data.clo, "kg");
-    }
-  }
-}
 BLYNK_WRITE(V51) {
   if (param.asFloat() > 0) {
-    terminal_luuluong.clear();
+    keyterminal.clear();
     clo_cache = param.asFloat();
-    Blynk.virtualWrite(V50, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
+    Blynk.virtualWrite(V5, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
   }
 }
 BLYNK_WRITE(V52) {
   if (param.asInt() == 1) {
     DateTime dt(data.time_clo);
-    terminal_luuluong.clear();
-    Blynk.virtualWrite(V50, "Châm CLO:", data.clo, "kg vào lúc", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
+    keyterminal.clear();
+    Blynk.virtualWrite(V5, "Châm CLO:", data.clo, "kg vào lúc", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
   }
 }
 //----------------------------------------------------
