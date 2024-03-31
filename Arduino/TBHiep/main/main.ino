@@ -14,8 +14,8 @@
  *V12 -
  *V13 -
  *V14 - bao ve
-  *V15 - thong bao
- *V16 - hidden/visible
+ *V15 - thong bao
+ *V16 - 
  *V17 -
  *V18 -
  *V19 -
@@ -27,9 +27,9 @@
 *V25 -
 */
 //-------------------------------------------------------------------
-#define BLYNK_TEMPLATE_ID "TMPLdGfzkVvi"
-#define BLYNK_TEMPLATE_NAME "Bình Hiệp"
-#define BLYNK_AUTH_TOKEN "tCAptndMM6EXqRkWvj_6tK76_mi7gbKf"
+#define BLYNK_TEMPLATE_ID "TMPL6Fz-ilSIi"
+#define BLYNK_TEMPLATE_NAME "TRẠM BÌNH HIỆP"
+#define BLYNK_AUTH_TOKEN "hTIQQoegUO-4hIC26z6pmy2lW9pHtv26"
 const char* ssid = "net";
 const char* password = "Password";
 //-------------------------------------------------------------------
@@ -94,8 +94,10 @@ struct Data {
   float SetAmpemax, SetAmpemin;
   float SetAmpe1max, SetAmpe1min;
   float pre_min;
+  int save_num;
+  byte noti, protect;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0 };
+const struct Data dataDefault = {  0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V11);
 
@@ -109,7 +111,9 @@ void savedata() {
     // Serial.println("structures same no need to write to EEPROM");
   } else {
     // Serial.println("\nWrite bytes to EEPROM memory...");
+    data.save_num = data.save_num + 1;
     eeprom.writeBytes(address, sizeof(dataDefault), (byte*)&data);
+    Blynk.setProperty(V11, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
 
@@ -137,18 +141,10 @@ void off_bom() {
   pcf8575.digitalWrite(pinbom, status_bom);
 }
 void hidden() {
-  Blynk.setProperty(V8, "isHidden", true);
-  Blynk.setProperty(V9, "isHidden", true);
-  Blynk.setProperty(V10, "isHidden", true);
-  Blynk.setProperty(V14, "isHidden", true);
-  Blynk.setProperty(V15, "isHidden", true);
+  Blynk.setProperty(V8, V9, V10, V14, V15, "isHidden", true);
 }
 void visible() {
-  Blynk.setProperty(V8, "isHidden", false);
-  Blynk.setProperty(V9, "isHidden", false);
-  Blynk.setProperty(V10, "isHidden", false);
-  Blynk.setProperty(V14, "isHidden", false);
-  Blynk.setProperty(V15, "isHidden", false);
+  Blynk.setProperty(V8, V9, V10, V14, V15, "isHidden", false);
 }
 void syncstatus() {
   Blynk.virtualWrite(V0, status_cap1);
@@ -275,7 +271,6 @@ void rtctime() {
   }
 }
 //-------------------------------------------------------------------
-//-------------------------------------------------------------------
 BLYNK_WRITE(InternalPinRTC)  // check the value of InternalPinRTC
 {
   t = param.asLong();
@@ -363,20 +358,24 @@ BLYNK_WRITE(V11)  // String
   if (dataS == "M") {
     terminal.clear();
     key = true;
+    keySet = true;
     Blynk.virtualWrite(V11, "Người vận hành: 'M.Quang'\nKích hoạt trong 10s\n");
     timer1.setTimeout(10000, []() {
       key = false;
+      keySet = false;
       terminal.clear();
     });
   } else if (dataS == "active") {
     terminal.clear();
     key = true;
     keySet = true;
+    visible();
     Blynk.virtualWrite(V11, "KHÔNG sử dụng phần mềm cho đến khi thông báo này mất.\n");
   } else if (dataS == "deactive") {
     terminal.clear();
     key = false;
     keySet = false;
+    hidden();
     Blynk.virtualWrite(V11, "Ok!\nNhập mã đ��� điều khiển!\n");
   } else if (dataS == "save") {
     terminal.clear();
@@ -389,6 +388,11 @@ BLYNK_WRITE(V11)  // String
     on_cap1();
     on_bom();
     Blynk.virtualWrite(V11, "Đã RESET! \nNhập mã để điều khiển!\n");
+  } else if (dataS == "rst") {
+    terminal.clear();
+    Blynk.virtualWrite(V11, "ESP khởi động lại sau 3s");
+    delay(3000);
+    ESP.restart();
   } else if (dataS == "update") {
     terminal.clear();
     Blynk.virtualWrite(V11, "ESP UPDATE...");
@@ -400,33 +404,28 @@ BLYNK_WRITE(V11)  // String
 BLYNK_WRITE(V14)  // Bảo vệ
 {
   if (keySet) {
-    int data14 = param.asInt();
-    if (data14 == LOW) {
-      keyp = false;
+    if (param.asInt() == LOW) {
+      data.protect = false;
+      savedata();
     } else {
-      keyp = true;
+      data.protect = true;
+      savedata();
     }
   } else
-    Blynk.virtualWrite(V14, keyp);
+    Blynk.virtualWrite(V14, data.protect);
 }
 BLYNK_WRITE(V15)  // Thông báo
 {
   if (keySet) {
-    int data15 = param.asInt();
-    if (data15 == LOW) {
-      keynoti = false;
+    if (param.asInt() == LOW) {
+      data.noti = false;
+      savedata();
     } else {
-      keynoti = true;
+      data.noti = true;
+      savedata();
     }
   } else
-    Blynk.virtualWrite(V15, keynoti);
-}
-BLYNK_WRITE(V16)  // Hidden/Visible
-{
-  if (param.asInt() == 0) {
-    hidden();
-  } else
-    visible();
+    Blynk.virtualWrite(V15, data.noti);
 }
 //-------------------------------------------------------------------
 void connectionstatus() {
