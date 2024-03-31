@@ -146,6 +146,15 @@ void up() {
   http.end();
 }
 */
+void check_status() {
+  String server_path = main_sever + "isHardwareConnected?token=" + ubndp2_TOKEN;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+  terminal.clear();
+  Blynk.virtualWrite(V0, httpResponseCode);
+}
+
 BLYNK_WRITE(V100) {
   String dataS = param.asStr();
   Blynk.logEvent("error", String(dataS));
@@ -187,6 +196,7 @@ BLYNK_WRITE(V0) {  //String
     });
   } else if (dataS == "update") {  //Update main
     terminal.clear();
+    Blynk.virtualWrite(V0, "MAIN UPDATE...");
     update_fw();
   } else if (dataS == "update_p2_ccd") {  //update Cầu cửa đông
     terminal.clear();
@@ -1165,6 +1175,7 @@ void setup() {
   timer_sta_ccd = timer.setInterval(30018, hidden_ccd);
   timer_sta_alb = timer.setInterval(30115, hidden_alb);
   timer_sta_ubndp2 = timer.setInterval(30045, hidden_ubndp2);
+  timer.setInterval(5000, check_status);
 }
 void loop() {
   Blynk.run();
