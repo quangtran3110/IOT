@@ -17,7 +17,7 @@
    V16 - off bom 30kw
    V17 - 
    V18 -
-   V19 - hidden/visible
+   V19 - 
    V20 - ONG3
    ...
    V32- I7
@@ -758,13 +758,6 @@ BLYNK_WRITE(V17)  // info
   }
 }
 */
-BLYNK_WRITE(V19)  // hidden/visible
-{
-  if (param.asInt() == HIGH) {
-    visible();
-  } else
-    hidden();
-}
 BLYNK_WRITE(V20)  // On G3
 {
   if (keySwitchQ || keySwitchP || keySwitchD) {
