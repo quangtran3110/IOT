@@ -27921,36 +27921,36 @@ END GROUP
                 0x000000003ffe8ac2       0x1e C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
                                          0x25 (size before relaxing)
  .rodata._ZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE8sendInfoEv.str1.1
-                0x000000003ffe8ae0       0x13 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8ae0       0x12 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._ZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE12virtualWriteIJPcPKchS9_hS9_tS9_hS9_hS9_hEEEviDpT_.str1.1
-                0x000000003ffe8af3        0x3 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8af2        0x3 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._ZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE12virtualWriteIJfEEEviDpT_.str1.1
-                0x000000003ffe8af6        0x6 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8af5        0x6 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._Z7visiblev.str1.1
-                0x000000003ffe8afc        0x9 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8afb        0x9 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._Z8savedatav.str1.1
-                0x000000003ffe8b05       0x16 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8b04       0x16 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._Z7rtctimev.str1.1
-                0x000000003ffe8b1b       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8b1a       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._ZN13BlynkProtocolI21BlynkArduinoClientGenI6ClientEE12processInputEv.str1.1
-                0x000000003ffe8b5e       0x6d C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8b5d       0x6d C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._ZN14WidgetTerminal5clearEv.str1.1
-                0x000000003ffe8bcb        0x4 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8bca        0x4 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata.setup.str1.1
-                0x000000003ffe8bcf       0x2d C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8bce       0x2d C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata.BlynkWidgetWrite11.str1.1
-                0x000000003ffe8bfc      0x16c C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8bfb      0x16c C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
                                         0x173 (size before relaxing)
  .rodata._Z10readPower1v.str1.1
-                0x000000003ffe8d68       0x19 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8d67       0x19 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._Z9readPowerv.str1.1
-                0x000000003ffe8d81       0x10 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8d80       0x10 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
  .rodata._ZZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE8sendInfoEvE7profile
-                0x000000003ffe8d91       0x75 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
-                0x000000003ffe8d91                _ZZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE8sendInfoEvE7profile
+                0x000000003ffe8d90       0x74 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+                0x000000003ffe8d90                _ZZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE8sendInfoEvE7profile
  .rodata.str1.1
-                0x000000003ffe8e06        0xd C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
- *fill*         0x000000003ffe8e13        0x1 
+                0x000000003ffe8e04        0xd C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\sketch\main.ino.cpp.o
+ *fill*         0x000000003ffe8e11        0x3 
  .rodata._ZL23BlynkWriteHandlerVector
                 0x000000003ffe8e14      0x200 C:\Users\quang\AppData\Local\Temp\arduino\sketches\92EF2B905EDCDFFC27635E4616A4F1FE\libraries\Blynk\utility\BlynkHandlers.cpp.o
  .rodata._ZL22BlynkReadHandlerVector

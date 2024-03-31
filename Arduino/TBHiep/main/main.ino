@@ -27,9 +27,9 @@
 *V25 -
 */
 //-------------------------------------------------------------------
-#define BLYNK_TEMPLATE_ID "TMPL6Fz-ilSIi"
-#define BLYNK_TEMPLATE_NAME "TRẠM BÌNH HIỆP"
-#define BLYNK_AUTH_TOKEN "hTIQQoegUO-4hIC26z6pmy2lW9pHtv26"
+#define BLYNK_TEMPLATE_ID "TMPLdGfzkVvi"
+#define BLYNK_TEMPLATE_NAME "Bình Hiệp"
+#define BLYNK_AUTH_TOKEN "tCAptndMM6EXqRkWvj_6tK76_mi7gbKf"
 const char* ssid = "net";
 const char* password = "Password";
 //-------------------------------------------------------------------

@@ -479,6 +479,7 @@ void rtctime() {
   int nowtime = (now.hour() * 3600 + now.minute() * 60);
 
   if (data.mode_cap2 == 1) {   // Chạy Tu Dong
+                               /*
     if (data.mode_run == 0) {  //Ngay chan tat may
       if (now.day() % 2 == 0) {
         if (nowtime > data.bom_chanle_stop) {
@@ -509,6 +510,7 @@ void rtctime() {
         }
       }
     }
+    */
     if (data.mode_run == 2) {  //Moi ngày
       if (data.bom_moingay_start > data.bom_moingay_stop) {
         if ((nowtime > data.bom_moingay_stop) && (nowtime < data.bom_moingay_start)) {
@@ -517,14 +519,15 @@ void rtctime() {
         if ((nowtime < data.bom_moingay_stop) || (nowtime > data.bom_moingay_start)) {
           on_time();
         }
-      }
-      if (data.bom_moingay_start < data.bom_moingay_stop) {
+      } else if (data.bom_moingay_start < data.bom_moingay_stop) {
         if ((nowtime > data.bom_moingay_stop) || (nowtime < data.bom_moingay_start)) {
           off_time();
         }
         if ((nowtime < data.bom_moingay_stop) && (nowtime > data.bom_moingay_start)) {
           on_time();
         }
+      } else if (data.bom_moingay_start == data.bom_moingay_stop) {
+        on_time();
       }
     }
   }
@@ -672,6 +675,16 @@ BLYNK_WRITE(V11)  // String
     Blynk.virtualWrite(V11, "ESP khởi động lại sau 3s");
     delay(3000);
     ESP.restart();
+  } else if ((dataS == "ok") || (dataS == "Ok") || (dataS == "OK") || (dataS == "oK")) {
+    if (clo_cache > 0) {
+      data.clo = clo_cache;
+      clo_cache = 0;
+      data.time_clo = timestamp;
+      Blynk.virtualWrite(V29, data.clo);
+      savedata();
+      terminal.clear();
+      Blynk.virtualWrite(V11, "Đã lưu - CLO:", data.clo, "kg");
+    }
   } else {
     Blynk.virtualWrite(V11, "Mật mã sai.\nVui lòng nhập lại!\n");
   }
@@ -832,35 +845,20 @@ BLYNK_WRITE(V24)  // Lưu lượng G1_1m3
   LLG1_1m3 = param.asInt();
 }
 //-------------------------
-BLYNK_WRITE(V21)  //String Clo
-{
-  String dataS = param.asStr();
-  if ((dataS == "ok") || (dataS == "Ok") || (dataS == "OK") || (dataS == "oK")) {
-    if (clo_cache > 0) {
-      data.clo = clo_cache;
-      clo_cache = 0;
-      data.time_clo = timestamp;
-      Blynk.virtualWrite(V29, data.clo);
-      savedata();
-      terminal_clo.clear();
-      Blynk.virtualWrite(V21, "Đã lưu - CLO:", data.clo, "kg");
-    }
-  }
-}
 BLYNK_WRITE(V28)  //Clo input
 {
   if (param.asFloat() > 0) {
-    terminal_clo.clear();
+    terminal.clear();
     clo_cache = param.asFloat();
-    Blynk.virtualWrite(V21, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
+    Blynk.virtualWrite(V11, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
   }
 }
 BLYNK_WRITE(V30)  //Check Clo
 {
   if (param.asInt() == 1) {
     DateTime dt(data.time_clo);
-    terminal_clo.clear();
-    Blynk.virtualWrite(V21, "Châm CLO:", data.clo, "kg vào lúc", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
+    terminal.clear();
+    Blynk.virtualWrite(V11, "Châm CLO:", data.clo, "kg vào lúc", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
   }
 }
 //----------------------------------------------------
@@ -942,14 +940,25 @@ void setup() {
   eeprom.initialize();
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
 
-  mcp.pinMode(6, INPUT);
-  mcp.pinMode(7, INPUT);
-  mcp.pinMode(pincap1, OUTPUT);
-  mcp.digitalWrite(pincap1, data.status_g1);  // Bom 1
-  mcp.pinMode(pinbom, OUTPUT);
-  mcp.digitalWrite(pinbom, data.status_b1);  // Bom 2
-  mcp.pinMode(pinnenkhi, OUTPUT);
-  mcp.digitalWrite(pinnenkhi, data.status_nk1);
+  if (data.mode_cap2 == 0) {
+    mcp.pinMode(6, INPUT);
+    mcp.pinMode(7, INPUT);
+    mcp.pinMode(pincap1, OUTPUT);
+    mcp.digitalWrite(pincap1, data.status_g1);  // Bom 1
+    mcp.pinMode(pinbom, OUTPUT);
+    mcp.digitalWrite(pinbom, data.status_b1);  // Bom 2
+    mcp.pinMode(pinnenkhi, OUTPUT);
+    mcp.digitalWrite(pinnenkhi, data.status_nk1);
+  } else {
+    mcp.pinMode(6, INPUT);
+    mcp.pinMode(7, INPUT);
+    mcp.pinMode(pincap1, OUTPUT);
+    mcp.digitalWrite(pincap1, HIGH);  // Bom 1
+    mcp.pinMode(pinbom, OUTPUT);
+    mcp.digitalWrite(pinbom, HIGH);  // Bom 2
+    mcp.pinMode(pinnenkhi, OUTPUT);
+    mcp.digitalWrite(pinnenkhi, HIGH);
+  }
   //------------------------------------
   timer.setTimeout(5000L, []() {
     timer.setInterval(201L, []() {
