@@ -1,6 +1,10 @@
 #define BLYNK_TEMPLATE_ID "TMPL60xJFuCEB"
 #define BLYNK_TEMPLATE_NAME "NTBinh"
 #define BLYNK_AUTH_TOKEN "5xw1AG7yoX1e7sphhfL2jgc-dPnW9_l2"
+#define pin_mode "&V25="
+#define pin_status "&V23="
+#define pin_G "&V24="
+
 #define BLYNK_FIRMWARE_VERSION "240401"
 
 #define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
@@ -46,7 +50,7 @@ const word address = 0;
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/UBND_P2/build/esp8266.esp8266.nodemcuv2/UBND_P2.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong3/NTBinh/build/esp8266.esp8266.nodemcuv2/NTBinh.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 int timer_I;
@@ -79,8 +83,8 @@ void up() {
   bitWrite(g, 0, data.mode);
   bitWrite(g, 1, sta_rl1);
   String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                       + "&V23=" + 1
-                       + "&V24=" + g;
+                       + pin_status + 1
+                       + pin_G + g;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -169,6 +173,8 @@ BLYNK_WRITE(V0) {
   String dataS = param.asStr();
   if (dataS == "update") {
     update_fw();
+  } else if (dataS == "rst") {
+    ESP.restart();
   } else if (dataS == "m") {  //man
     data.mode = 0;
     savedata();
@@ -177,7 +183,7 @@ BLYNK_WRITE(V0) {
     savedata();
   } else if (dataS == "mode") {  //mode?
     String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                         + "&V25=" + data.mode;
+                         + pin_mode + data.mode;
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();
@@ -283,7 +289,6 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
-  //-----------------------
   //-----------------------
   rtc_module.begin();
   eeprom.initialize();
