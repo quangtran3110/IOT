@@ -148,15 +148,100 @@ void up() {
 */
 void check_status() {
   String payload;
-  String server_path = main_sever + "isHardwareConnected?token=" + ubndp2_TOKEN;
-  http.begin(client, server_path.c_str());
-  int httpResponseCode = http.GET();
-  if (httpResponseCode > 0) {
-    payload = http.getString();
+  String server_path;
+  //-------- Cầu cửa đông
+  {
+    server_path = main_sever + "isHardwareConnected?token=" + ccd_TOKEN;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    if (httpResponseCode > 0) {
+      payload = http.getString();
+    }
+    http.end();
+    if (payload == "true") {
+      visible_ccd();
+    } else hidden_ccd();
   }
-  http.end();
-  terminal.clear();
-  Blynk.virtualWrite(V0, payload);
+  //-------- UBND P2
+  {
+    server_path = main_sever + "isHardwareConnected?token=" + ubndp2_TOKEN;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    if (httpResponseCode > 0) {
+      payload = http.getString();
+    }
+    http.end();
+    if (payload == "true") {
+      visible_ubndp2();
+    } else hidden_ubndp2();
+  }
+  //-------- Ao lục bình
+  {
+    server_path = main_sever + "isHardwareConnected?token=" + alb_TOKEN;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    if (httpResponseCode > 0) {
+      payload = http.getString();
+    }
+    http.end();
+    if (payload == "true") {
+      visible_alb();
+    } else hidden_alb();
+  }
+  //-------- N.T.Bình
+  {
+    server_path = main_sever + "isHardwareConnected?token=" + ntbinh_TOKEN;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    if (httpResponseCode > 0) {
+      payload = http.getString();
+    }
+    http.end();
+    if (payload == "true") {
+      visible_ntbinh();
+    } else hidden_ntbinh();
+  }
+  //-------- Bờ kè 1
+  {
+    server_path = main_sever + "isHardwareConnected?token=" + boke1_TOKEN;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    if (httpResponseCode > 0) {
+      payload = http.getString();
+    }
+    http.end();
+    if (payload == "true") {
+      visible_boke1();
+    } else hidden_boke1();
+  }
+  /*
+  //-------- Bờ kè 2
+  {
+    server_path = main_sever + "isHardwareConnected?token=" + boke2_TOKEN;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    if (httpResponseCode > 0) {
+      payload = http.getString();
+    }
+    http.end();
+    if (payload == "true") {
+      visible_boke2();
+    } else hidden_boke2();
+  }
+  //-------- Bờ kè 3
+  {
+    server_path = main_sever + "isHardwareConnected?token=" + boke3_TOKEN;
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    if (httpResponseCode > 0) {
+      payload = http.getString();
+    }
+    http.end();
+    if (payload == "true") {
+      visible_boke3();
+    } else hidden_boke3();
+  }
+  */
 }
 
 BLYNK_WRITE(V100) {
@@ -1176,9 +1261,6 @@ void setup() {
   timer.setInterval(900005L, []() {
     connectionstatus();
   });
-  timer_sta_ccd = timer.setInterval(30018, hidden_ccd);
-  timer_sta_alb = timer.setInterval(30115, hidden_alb);
-  timer_sta_ubndp2 = timer.setInterval(30045, hidden_ubndp2);
   timer.setInterval(5000, check_status);
 }
 void loop() {
