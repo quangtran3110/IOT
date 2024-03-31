@@ -147,12 +147,16 @@ void up() {
 }
 */
 void check_status() {
+  String payload;
   String server_path = main_sever + "isHardwareConnected?token=" + ubndp2_TOKEN;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
+  if (httpResponseCode > 0) {
+    payload = http.getString();
+  }
   http.end();
   terminal.clear();
-  Blynk.virtualWrite(V0, httpResponseCode);
+  Blynk.virtualWrite(V0, payload);
 }
 
 BLYNK_WRITE(V100) {
