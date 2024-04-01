@@ -30,7 +30,7 @@
  *V28 - 
  *V29 - Info
  *V30 - I3 - Nén khí
- *V31 - Terminal Luu luong
+ *V31 - 
  *V32 - input luu luong
  *V33 - check luu luong
  *V34 - 
@@ -63,7 +63,7 @@
 #define BLYNK_TEMPLATE_ID "TMPLJp_sN4GN"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 4"
 #define BLYNK_AUTH_TOKEN "o-H-k28kNBIzgNIAP89f2AElv--eWuVO"
-#define BLYNK_FIRMWARE_VERSION "240331"
+#define BLYNK_FIRMWARE_VERSION "240401"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
@@ -204,7 +204,6 @@ struct Data {
 const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V10);
-WidgetTerminal terminal_clo(V31);
 WidgetRTC rtc_widget;
 
 BlynkTimer timer, timer1;
@@ -254,7 +253,7 @@ void time_run_motor() {
       }
     }
   }
-  if (g1_save) {
+  if ((g1_save) && (G1_start != 0)) {
     data.timerun_g1 = data.timerun_g1 + (millis() - G1_start);
     savedata();
     G1_start = millis();
@@ -893,6 +892,16 @@ BLYNK_WRITE(V10)  // String
     terminal.clear();
     Blynk.virtualWrite(V10, "UPDATE FIRMWARE...");
     update_fw();
+  } else if ((dataS == "ok") || (dataS == "Ok") || (dataS == "OK") || (dataS == "oK")) {
+    if (clo_cache > 0) {
+      data.clo = clo_cache;
+      clo_cache = 0;
+      data.time_clo = timestamp;
+      Blynk.virtualWrite(V36, data.clo);
+      savedata();
+      terminal.clear();
+      Blynk.virtualWrite(V10, "Đã lưu - CLO:", data.clo, "kg");
+    }
   } else {
     Blynk.virtualWrite(V10, "Mật mã sai.\nVui lòng nhập lại!\n");
   }
@@ -1177,35 +1186,21 @@ BLYNK_WRITE(V29)  // Info
   timer.restartTimer(timer_2);
 }
 //-------------------------------------------------------------------
-BLYNK_WRITE(V31) {
-  String dataS = param.asStr();
-  if ((dataS == "ok") || (dataS == "Ok") || (dataS == "OK") || (dataS == "oK")) {
-    if (clo_cache > 0) {
-      data.clo = clo_cache;
-      clo_cache = 0;
-      data.time_clo = timestamp;
-      Blynk.virtualWrite(V36, data.clo);
-      savedata();
-      terminal_clo.clear();
-      Blynk.virtualWrite(V31, "Đã lưu - CLO:", data.clo, "kg");
-    }
-  }
-}
-BLYNK_WRITE(V32) {
+BLYNK_WRITE(V32) {  //Clo Input
   if (param.asFloat() > 0) {
-    terminal_clo.clear();
+    terminal.clear();
     clo_cache = param.asFloat();
-    Blynk.virtualWrite(V31, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
+    Blynk.virtualWrite(V10, " Lượng CLO châm hôm nay:", clo_cache, "kg\n Vui lòng kiểm tra kỹ, nếu đúng hãy nhập 'OK' để lưu");
   }
 }
-BLYNK_WRITE(V33) {
+BLYNK_WRITE(V33) {  //Check Clo
   if (param.asInt() == 1) {
     DateTime dt(data.time_clo);
-    terminal_clo.clear();
-    Blynk.virtualWrite(V31, "Châm CLO: ", data.clo, " kg vào lúc ", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
+    terminal.clear();
+    Blynk.virtualWrite(V10, "Châm CLO: ", data.clo, " kg vào lúc ", dt.hour(), ":", dt.minute(), "-", dt.day(), "/", dt.month(), "/", dt.year());
   }
 }
-BLYNK_WRITE(V37) {
+BLYNK_WRITE(V37) {  // LLG1_1m3
   LLG1_1m3 = param.asInt();
 }
 //-------------------------------------------------------------------
