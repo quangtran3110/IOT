@@ -8,10 +8,10 @@
 #define BLYNK_FIRMWARE_VERSION "240401"
 
 #define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
-//const char* ssid = "net";
-//const char* password = "Abcd@1234";
-const char* ssid = "tram bom so 4";
-const char* password = "0943950555";
+const char* ssid = "net";
+const char* password = "Abcd@1234";
+//const char* ssid = "tram bom so 4";
+//const char* password = "0943950555";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -25,13 +25,13 @@ const int S1 = P14;
 const int S2 = P13;
 const int S3 = P12;
 
-const int pin_RL1 = P7;
-const int pin_RL2 = P6;
-const int pin_RL3 = P5;
+const int pin_RL1 = P1;
+const int pin_RL2 = P2;
+const int pin_RL3 = P3;
 const int pin_RL4 = P4;
-const int pin_RL5 = P3;
-const int pin_RL6 = P2;
-const int pin_RL7 = P1;
+const int pin_RL5 = P5;
+const int pin_RL6 = P6;
+const int pin_RL7 = P7;
 //-----------------------------
 #include <WidgetRTC.h>
 #include "RTClib.h"
@@ -44,6 +44,12 @@ char tz[] = "Asia/Ho_Chi_Minh";
 #define EEPROM_ADDRESS 0x57
 static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
 const word address = 0;
+//-------------------
+#include <DallasTemperature.h>
+#include <OneWire.h>
+OneWire oneWire(D3);
+DallasTemperature sensors(&oneWire);
+float temp[1];
 //-----------------------------
 #include <ESP8266httpUpdate.h>
 #include <WiFiClientSecure.h>
@@ -56,7 +62,7 @@ String server_name = "http://sgp1.blynk.cloud/external/api/";
 int timer_I;
 int dayadjustment = -1;
 bool key = false, blynk_first_connect = false, dayOfTheWeek_ = false;
-bool sta_rl1 = LOW;
+bool sta_rl1 = LOW, sta_rl3 = LOW;
 String num_van;
 char B[50] = "";
 //-----------------------------
@@ -106,6 +112,14 @@ void on_van1() {
 void off_van1() {
   sta_rl1 = LOW;
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
+}
+void on_fan() {
+  sta_rl3 = HIGH;
+  pcf8575_1.digitalWrite(pin_RL3, !sta_rl3);
+}
+void off_fan() {
+  sta_rl3 = LOW;
+  pcf8575_1.digitalWrite(pin_RL3, !sta_rl3);
 }
 void weekday_() {
   int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
@@ -168,6 +182,18 @@ void rtctime() {
       if (sta_rl1 == HIGH) off_van1();
     }
   }
+}
+void temperature() {  // Nhiệt độ
+  sensors.requestTemperatures();
+  //Serial.println(sensors.getDeviceCount());
+  for (byte i = 0; i < sensors.getDeviceCount(); i++) {
+    temp[i] = sensors.getTempCByIndex(i);
+    //Serial.println(temp[i]);
+    if (temp[i] > 37 && sta_rl3 == LOW) on_fan();
+    else if (temp[i] < 34 && sta_rl3 == HIGH) off_fan();
+  }
+  //Blynk.virtualWrite(V15, temp[1]);
+  //Blynk.virtualWrite(V23, temp[0]);
 }
 BLYNK_WRITE(V0) {
   String dataS = param.asStr();
@@ -295,6 +321,7 @@ void setup() {
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
   //-----------------------
   Wire.begin();
+  sensors.begin();
   pcf8575_1.begin();
   delay(10000);
 
@@ -325,6 +352,7 @@ void setup() {
       //readcurrent2();
       //readcurrent3();
       up();
+      temperature();
       timer.restartTimer(timer_I);
     });
     timer.setInterval(15005L, []() {

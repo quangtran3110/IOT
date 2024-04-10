@@ -27,7 +27,7 @@
  *V25 - I4 - Van điện rửa lọc
  *V26 - I1 - Bơm 1
  *V27 - I0 - Giếng
- *V28 - 
+ *V28 - STATUS VOLUME
  *V29 - Info
  *V30 - I3 - Nén khí
  *V31 - 
