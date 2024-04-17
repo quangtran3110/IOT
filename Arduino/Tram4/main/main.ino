@@ -1283,7 +1283,7 @@ void setup() {
   pcf8575_1.pinMode(S3pin, OUTPUT);
 
   pcf8575_1.pinMode(pin_G1, OUTPUT);
-  pcf8575_1.digitalWrite(pin_G1, data.status_g1);
+  pcf8575_1.digitalWrite(pin_G1, HIGH);
   pcf8575_1.pinMode(pin_B1, OUTPUT);
   pcf8575_1.digitalWrite(pin_B1, data.status_b1);
   pcf8575_1.pinMode(pin_B2, OUTPUT);
