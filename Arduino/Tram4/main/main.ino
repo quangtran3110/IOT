@@ -246,7 +246,7 @@ void time_run_motor() {
   if (blynk_first_connect) {
     if (data.reset_day != day()) {
       if (Blynk.connected()) {
-        Blynk.virtualWrite(V40, data.timerun_g1);
+        Blynk.virtualWrite(V40, float(data.timerun_g1) / 1000 / 60 / 60);
         data.timerun_g1 = 0;
         data.reset_day = day();
         savedata();
