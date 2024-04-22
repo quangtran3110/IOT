@@ -65,7 +65,7 @@
 #define BLYNK_TEMPLATE_NAME "Trạm Cái Cát"
 #define BLYNK_AUTH_TOKEN "OwqkFUOpl8p9-AP235SQquza0fmhwImP"
 #define BLYNK_PRINT Serial
-#define BLYNK_FIRMWARE_VERSION "240103"
+#define BLYNK_FIRMWARE_VERSION "240424"
 const char* ssid = "NHA MAY NUOC CAI CAT";
 const char* password = "12345678";
 // const char *ssid = "Wifi";
@@ -133,8 +133,8 @@ const word address = 0;
 //-------------
 #include <ESP8266HTTPClient.h>
 HTTPClient http;
-String server_rualoc = "http://blynkkwaco.ddns.net:8080/";
-String rualoc = "p1Aq8WlkeB78YRnL9JBfZmrTdaOruolY";
+String server_rualoc = "http://sgp1.blynk.cloud/external/api/batch/update?token=";
+String rualoc = "mAEloc4FYavbw8Jh8KPbhJSjUGWyxKqn";
 String server_Main = "http://sgp1.blynk.cloud/external/api/";
 //-------------
 const int S0 = 14;
@@ -221,7 +221,7 @@ void savedata() {
   }
 }
 void send_rualoc(String token, int virtual_pin, float(value_to_send)) {
-  String server_path = server_rualoc + token + "/update/V" + String(virtual_pin) + "?value=" + value_to_send;
+  String server_path = server_rualoc + token + "V" + String(virtual_pin) + "=" + value_to_send;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();

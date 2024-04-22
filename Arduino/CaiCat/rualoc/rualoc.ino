@@ -1,13 +1,12 @@
-
-#define BLYNK_AUTH_TOKEN "p1Aq8WlkeB78YRnL9JBfZmrTdaOruolY"
+#define BLYNK_TEMPLATE_ID "TMPL6I6ISEvF5"
+#define BLYNK_TEMPLATE_NAME "SUPPORT 1"
+#define BLYNK_AUTH_TOKEN "mAEloc4FYavbw8Jh8KPbhJSjUGWyxKqn"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
 const char* ssid = "Wifi";
 const char* password = "Password";
 
-#define nameesp "[TCC.RL]"
-#include <ArduinoOTA.h>
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
 #include "EmonLib.h"
@@ -44,7 +43,7 @@ BLYNK_CONNECTED() {
 
 int SetAmpemax = 12, SetAmpe1max = 12;
 int SetAmpemin = 3, SetAmpe1min = 3;
-
+int reboot_num;
 
 void send_Main(String token, int virtual_pin, float value_to_send) {
   String server_path = server_name + "update?token=" + token + "&pin=v" + String(virtual_pin) + "&value=" + float(value_to_send);
@@ -58,14 +57,27 @@ void send_Main(String token, int virtual_pin, float value_to_send) {
 
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    //Serial.println("Khong ket noi WIFI");
+    Serial.println("Khong ket noi WIFI");
+    WiFi.begin(ssid, password);
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
-    //Serial.println("Khong ket noi Internet");
-    //WiFi.reconnect();
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
+      delay(1000);
+      WiFi.begin(ssid, password);
+    }
+    if (reboot_num % 5 == 0) {
+      WiFi.disconnect();
+      delay(1000);
+      WiFi.begin(ssid, password);
+    }
   }
   if (Blynk.connected()) {
-    //Serial.println("Đã kết nối");
+    if (reboot_num != 0) {
+      reboot_num = 0;
+    }
   }
 }
 
@@ -126,7 +138,7 @@ void readcurrent()  // C0 - NK1
       if (xSetAmpe >= 3) {
         trip1 = true;
         off_NK1();
-        Blynk.notify("Cái Cát - NK 1 lỗi: {Irms0}A!");
+        //Blynk.notify("Cái Cát - NK 1 lỗi: {Irms0}A!");
         xSetAmpe = 0;
       }
     } else {
@@ -153,7 +165,7 @@ void readcurrent1()  // C1 - NK 2
       if (xSetAmpe1 >= 3) {
         trip2 = true;
         off_NK2();
-        Blynk.notify("Cái Cát - NK 2 lỗi: {Irms1}A!");
+        //Blynk.notify("Cái Cát - NK 2 lỗi: {Irms1}A!");
         xSetAmpe1 = 0;
       }
     } else {
@@ -234,38 +246,26 @@ void setup() {
   Serial.begin(9600);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  Blynk.config(BLYNK_AUTH_TOKEN, "Blynkkwaco.ddns.net", 8080);
-  delay(7000);
-
-  ArduinoOTA.setHostname(nameesp);
-  //ArduinoOTA.setPassword(passota);
-  ArduinoOTA.onError([](ota_error_t error) {
-    ESP.restart();
-  });
-  ArduinoOTA.begin();
+  Blynk.config(BLYNK_AUTH_TOKEN);
+  delay(5000);
 
   emon0.current(A0, 59);
   emon1.current(A0, 111);
 
-
-
-  timer.setInterval((10 * 60 * 1000), loc1);
-  timer.setInterval((10 * 61 * 1000), loc2);
+  timer.setInterval((10 * 50 * 1000), loc1);
+  timer.setInterval((10 * 51 * 1000), loc2);
   timer.setInterval(1503, send_data_main);
   timer_I = timer.setInterval(689, []() {
     readcurrent();
     readcurrent1();
   });
-  /*
   timer.setInterval(900005L, []() {
     connectionstatus();
     timer.restartTimer(timer_I);
   });
-  */
 }
 
 void loop() {
-  ArduinoOTA.handle();
   Blynk.run();
   timer.run();
 }

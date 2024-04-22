@@ -1,6 +1,6 @@
-#define BLYNK_TEMPLATE_ID "TMPL6PNR4qqpm"
-#define BLYNK_TEMPLATE_NAME "Multi"
-#define BLYNK_AUTH_TOKEN "1nmLSMB-Q2dVjnPGKYbrGaEXcJ_droWB"
+#define BLYNK_TEMPLATE_ID "TMPL6I6ISEvF5"
+#define BLYNK_TEMPLATE_NAME "SUPPORT 1"
+#define BLYNK_AUTH_TOKEN "mAEloc4FYavbw8Jh8KPbhJSjUGWyxKqn"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -9,8 +9,6 @@ const char* password = "Password";
 //const char* ssid = "tram bom so 4";
 //const char* password = "0943950555";
 
-#define nameesp "[T2.RL]"
-#include <ArduinoOTA.h>
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
 
@@ -46,7 +44,7 @@ void loc1() {
   if (statusRualoc1 == HIGH) {
     digitalWrite(rl1, LOW);
     digitalWrite(rl2, LOW);
-    timer.setTimeout((7 * 60 * 1000), []() {
+    timer.setTimeout((6 * 60 * 1000), []() {
       digitalWrite(rl1, HIGH);
       digitalWrite(rl2, HIGH);
     });
@@ -55,7 +53,7 @@ void loc1() {
 void loc3() {
   if (statusRualoc3 == HIGH) {
     digitalWrite(rl3, LOW);
-    timer.setTimeout((6 * 60 * 1000), []() {
+    timer.setTimeout((5 * 60 * 1000), []() {
       digitalWrite(rl3, HIGH);
     });
   }
@@ -85,15 +83,8 @@ void setup() {
   Serial.begin(9600);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  Blynk.config(BLYNK_AUTH_TOKEN, "Blynkkwaco.ddns.net", 8080);
+  Blynk.config(BLYNK_AUTH_TOKEN);
   delay(5000);
-
-  ArduinoOTA.setHostname(nameesp);
-  //ArduinoOTA.setPassword(passota);
-  ArduinoOTA.onError([](ota_error_t error) {
-    ESP.restart();
-  });
-  ArduinoOTA.begin();
 
   pinMode(rl1, OUTPUT);
   digitalWrite(rl1, HIGH);
@@ -110,7 +101,6 @@ void setup() {
   timer.setInterval(5013, status);
 }
 void loop() {
-  //ArduinoOTA.handle();
   Blynk.run();
   timer.run();
 }

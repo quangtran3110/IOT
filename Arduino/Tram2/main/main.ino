@@ -55,7 +55,7 @@
 #define BLYNK_TEMPLATE_NAME "Trạm Số 2"
 #define BLYNK_AUTH_TOKEN "ESzia3fpA-29cs8gt85pGnrPq_rICcqf"
 
-#define BLYNK_FIRMWARE_VERSION "240228"
+#define BLYNK_FIRMWARE_VERSION "240422"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -107,8 +107,7 @@ const int pin_off_Bom4 = P15;
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-String server_local = "http://blynkkwaco.ddns.net:8080/";
-String Tram2_Rualoc = "1nmLSMB-Q2dVjnPGKYbrGaEXcJ_droWB";
+String Tram2_Rualoc = "mAEloc4FYavbw8Jh8KPbhJSjUGWyxKqn";
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram2/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 //-----------------------------
@@ -212,7 +211,7 @@ BLYNK_CONNECTED() {
 }
 
 void bridge_Tram2C(String token, int virtual_pin, float(value_to_send)) {
-  String server_path = server_local + token + "/update/V" + String(virtual_pin) + "?value=" + value_to_send;
+  String server_path = server_name + token + "V" + String(virtual_pin) + "=" + value_to_send;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   if (httpResponseCode > 0) {
