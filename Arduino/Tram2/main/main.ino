@@ -107,7 +107,7 @@ const int pin_off_Bom4 = P15;
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-String Tram2_Rualoc = "mAEloc4FYavbw8Jh8KPbhJSjUGWyxKqn";
+String Tram2_Rualoc = "f_mIttU4MH80_pakaBYWjXq1cOWpqqYg";
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram2/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 //-----------------------------

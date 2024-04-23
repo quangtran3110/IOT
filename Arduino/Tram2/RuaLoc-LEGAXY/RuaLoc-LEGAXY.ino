@@ -1,6 +1,6 @@
 #define BLYNK_TEMPLATE_ID "TMPL6I6ISEvF5"
 #define BLYNK_TEMPLATE_NAME "SUPPORT 1"
-#define BLYNK_AUTH_TOKEN "mAEloc4FYavbw8Jh8KPbhJSjUGWyxKqn"
+#define BLYNK_AUTH_TOKEN "f_mIttU4MH80_pakaBYWjXq1cOWpqqYg"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
