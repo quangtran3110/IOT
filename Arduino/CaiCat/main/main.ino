@@ -221,7 +221,7 @@ void savedata() {
   }
 }
 void send_rualoc(String token, int virtual_pin, float(value_to_send)) {
-  String server_path = server_rualoc + token + "V" + String(virtual_pin) + "=" + value_to_send;
+  String server_path = server_rualoc + token + "&V" + String(virtual_pin) + "=" + value_to_send;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
