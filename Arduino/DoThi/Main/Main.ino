@@ -81,6 +81,10 @@ char A[50] = "";
 byte reboot_num;
 bool blynk_first_connect = false, key_set = false, key = false;
 //------------------- Cầu Cửa Đông
+String pin_mode_ccd = "V8";
+String pin_sta_ccd = "V6";
+String pin_v1_ccd = "V7";
+String pin_G_ccd = "V9";
 bool sta_v1_ccd, mode_ccd;
 int timer_sta_ccd;
 bool hidden_key_ccd = false;
@@ -120,14 +124,13 @@ bool mode_ntbinh;
 int timer_sta_ntbinh;
 byte sta_ntbinh;
 bool hidden_key_ntbinh = false;
-//-------------------
+//------------------- D.H.Vuong
 bool sta_v1_dhvuong;
 bool mode_dhvuong;
 int timer_sta_dhvuong;
 byte sta_dhvuong;
 bool hidden_key_dhvuong = false;
 //-------------------
-
 WidgetRTC rtc_widget;
 WidgetTerminal terminal(V0);
 
@@ -1286,13 +1289,13 @@ BLYNK_WRITE(V28) {  //data
       case 0:
         if (mode_dhvuong != bit) {
           mode_dhvuong = bit;
-          Blynk.virtualWrite(V25, mode_dhvuong);
+          Blynk.virtualWrite(V29, mode_dhvuong);
         }
         break;
       case 1:
         if (sta_v1_dhvuong != bit) {
           sta_v1_dhvuong = bit;
-          Blynk.virtualWrite(V26, sta_v1_dhvuong);
+          Blynk.virtualWrite(V30, sta_v1_dhvuong);
         }
         break;
     }

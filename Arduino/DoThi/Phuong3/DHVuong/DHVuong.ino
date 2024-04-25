@@ -9,10 +9,10 @@
 #define BLYNK_FIRMWARE_VERSION "240426"
 
 #define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
-//const char* ssid = "net";
-//const char* password = "Abcd@1234";
-const char* ssid = "tram bom so 4";
-const char* password = "0943950555";
+const char* ssid = "net";
+const char* password = "Abcd@1234";
+//const char* ssid = "tram bom so 4";
+//const char* password = "0943950555";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
