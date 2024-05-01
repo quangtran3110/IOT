@@ -10,7 +10,7 @@
  *V9 - Ngày/Giờ
  *V10 - terminal key
  *V11 - Thời gian chạy Bơm
- *V12 - Hide/visible
+ *V12 - 
  *V13 - Bảo vệ
  *V14 - Ap luc
  *V15 - Nhiet do dong co 1
@@ -614,11 +614,13 @@ BLYNK_WRITE(V10)  // String
     terminal.clear();
     key = true;
     keySet = true;
+    visible();
     Blynk.virtualWrite(V10, "KHÔNG sử dụng phần mềm cho đến khi thông báo này mất.\n");
   } else if (dataS == "deactive") {
     terminal.clear();
     key = false;
     keySet = false;
+    hidden();
     Blynk.virtualWrite(V10, "Ok!\nNhập mã để điều khiển!\n");
   } else if (dataS == "save") {
     terminal.clear();
@@ -638,6 +640,10 @@ BLYNK_WRITE(V10)  // String
     terminal.clear();
     Blynk.virtualWrite(V10, "ESP UPDATE...");
     update_fw();
+  } else if (dataS == "rst") {
+    terminal.clear();
+    Blynk.virtualWrite(V10, "ESP RESTART...");
+    ESP.restart();
   } else {
     Blynk.virtualWrite(V10, "Mật mã sai.\nVui lòng nhập lại!\n");
   }
@@ -714,13 +720,6 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
         }
     }
   }
-}
-BLYNK_WRITE(V12)  // Hidden/Visible
-{
-  if (param.asInt() == 0) {
-    hidden();
-  } else
-    visible();
 }
 BLYNK_WRITE(V13)  // Bảo vệ
 {
