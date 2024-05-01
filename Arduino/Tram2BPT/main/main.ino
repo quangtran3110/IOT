@@ -3,7 +3,7 @@ V0 - Btn Cap 1
 V1 - Btn Bom 1
 V2 - Btn Bom 2
 V3 - Btn Nen khi
-V4 - Hidden/visible
+V4 - 
 V5 - Irms 0
 V6 - I_vdf
 V7 - Irms 2
@@ -22,10 +22,16 @@ V19- Nhiệt độ biên tần
 V20- date/time
 V21- Nhiệt độ động cơ
 */
+/*
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
 #define BLYNK_TEMPLATE_NAME "MH TRAM 2 BPT"
 #define BLYNK_AUTH_TOKEN "CJNSfOtHYJ0poN7g4Qaswwqopwzko_Ux"
-#define BLYNK_FIRMWARE_VERSION "240117"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6D2ion8Uo"
+#define BLYNK_TEMPLATE_NAME "TRẠM 2 BPT"
+#define BLYNK_AUTH_TOKEN "YZXkYAgH44t-kjJPKapydw5vMlR7MGAC"
+
+#define BLYNK_FIRMWARE_VERSION "240503"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -549,13 +555,7 @@ BLYNK_WRITE(V3)  // Nen Khi
     }
   } else Blynk.virtualWrite(V3, data.status_nenkhi);
 }
-BLYNK_WRITE(V4)  // hidden/visible
-{
-  if (param.asInt() == HIGH) {
-    visible();
-  } else
-    hidden();
-}
+
 BLYNK_WRITE(V9)  // Chon máy cài đặt bảo vệ
 {
   switch (param.asInt()) {
@@ -638,10 +638,12 @@ BLYNK_WRITE(V12)  // String
   } else if (dataS == "active") {
     terminal.clear();
     key = true;
+    visible();
     Blynk.virtualWrite(V12, "KHÔNG sử dụng phần mềm cho đến khi thông báo này mất.\n");
   } else if (dataS == "deactive") {
     terminal.clear();
     key = false;
+    hidden();
     Blynk.virtualWrite(V12, "Ok!\nNhập mã để điều khiển!\n");
   } else if (dataS == "save") {
     terminal.clear();
