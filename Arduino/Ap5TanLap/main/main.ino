@@ -1,7 +1,13 @@
+/*
 #define BLYNK_TEMPLATE_ID "TMPL6PNR4qqpm"
 #define BLYNK_TEMPLATE_NAME "Multi"
 #define BLYNK_AUTH_TOKEN "LtMwtUXWi8mAX47_K17_z5rr8C3HNDjk"
-#define BLYNK_FIRMWARE_VERSION "AP5.07923"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6I6ISEvF5"
+#define BLYNK_TEMPLATE_NAME "SUPPORT ACTIVE"
+#define BLYNK_AUTH_TOKEN "g3GPiciujLdMuATrIxJ0zNInoUo72DiN"
+
+#define BLYNK_FIRMWARE_VERSION "240503.AP5"
 #define BLYNK_PRINT Serial
 #define I2C_ADDRESS 0x40
 #define APP_DEBUG
@@ -20,8 +26,8 @@
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "0mWyl3eT8xTCqSlVecGw6DzzNPhTadoa";
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/ap5/main/main.ino.bin"
+String Main = "91thFYXxhfcs2ij5GDVg6NTjEgMqFBwi";
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Ap5TanLap/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 
 INA226_WE ina226 = INA226_WE(I2C_ADDRESS);
 OneWire oneWire(D7);
