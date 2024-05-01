@@ -27,14 +27,20 @@
 *V25 -
 */
 //-------------------------------------------------------------------
+/*
 #define BLYNK_TEMPLATE_ID "TMPLdGfzkVvi"
 #define BLYNK_TEMPLATE_NAME "Bình Hiệp"
 #define BLYNK_AUTH_TOKEN "tCAptndMM6EXqRkWvj_6tK76_mi7gbKf"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6Fz-ilSIi"
+#define BLYNK_TEMPLATE_NAME "TRẠM BÌNH HIỆP"
+#define BLYNK_AUTH_TOKEN "hTIQQoegUO-4hIC26z6pmy2lW9pHtv26"
+
 const char* ssid = "net";
 const char* password = "Password";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
-#define BLYNK_FIRMWARE_VERSION "240331"
+#define BLYNK_FIRMWARE_VERSION "240503"
 #define APP_DEBUG
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>

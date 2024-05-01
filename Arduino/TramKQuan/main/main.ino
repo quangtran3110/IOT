@@ -44,12 +44,16 @@
  *
  */
 
-
+/*
 #define BLYNK_TEMPLATE_ID "TMPLRfSY8RNu"
 #define BLYNK_TEMPLATE_NAME "Trạm Kinh Quận"
 #define BLYNK_AUTH_TOKEN "KoAzw_0S67PUz85E83pj3O7uremeAPhS"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL68fxciJDf"
+#define BLYNK_TEMPLATE_NAME "TRẠM KINH QUẬN"
+#define BLYNK_AUTH_TOKEN "YTaSFuqD9VYDpkceWb-a7P59cTbsYl9-"
 
-#define BLYNK_FIRMWARE_VERSION "23.08.29.1"
+#define BLYNK_FIRMWARE_VERSION "240503"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -78,7 +82,8 @@ DallasTemperature sensors(&oneWire);
 
 #include <ESP8266httpUpdate.h>
 #include <WiFiClientSecure.h>
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/kinhquan/main/main.ino.bin"
+//#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/kinhquan/main/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/TramKQuan/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 
 const char* ssid = "net";
 const char* password = "Password";
