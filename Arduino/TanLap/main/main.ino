@@ -68,7 +68,6 @@ RTC_DS3231 rtc;
 
 Adafruit_MCP23X17 mcp;
 EnergyMonitor emon0, emon1;
-char auth[] = "0mWyl3eT8xTCqSlVecGw6DzzNPhTadoa";
 const char* ssid = "Tram Nuoc";
 const char* password = "0917173339";
 
@@ -819,7 +818,7 @@ void connectionstatus() {
     //WiFi.disconnect();
     //WiFi.mode(WIFI_STA);
     //WiFi.begin(ssid, password);
-    //Blynk.config(auth);
+    //Blynk.config(BLYNK_AUTH_TOKEN);
     Serial.println("Khong ket noi WIFI");
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
@@ -886,7 +885,7 @@ void setup() {
   Serial.begin(9600);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  Blynk.config(auth);
+  Blynk.config(BLYNK_AUTH_TOKEN);
   delay(5000);
 
   //---------------------------------------------------------------------------------
