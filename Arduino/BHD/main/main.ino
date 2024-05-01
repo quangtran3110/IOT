@@ -26,7 +26,7 @@
  *V25 - I1 - Cap 2
  *V26 - I2
  *V27 - I3
- *V28 - Hide/visible
+ *V28 - 
  *V29 - Info
  *V30 - I4
  *V31 -
@@ -56,11 +56,16 @@
  *
  */
 
-
+/*
 #define BLYNK_TEMPLATE_ID "TMPLMrUg6ea8"
 #define BLYNK_TEMPLATE_NAME "Tram BHĐ"
 #define BLYNK_AUTH_TOKEN "FW_e5wcvT49ltI7RH6qf2v68F5xksayD"
-#define BLYNK_FIRMWARE_VERSION "23.10.1"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6WyHMhloh"
+#define BLYNK_TEMPLATE_NAME "TRẠM BHĐ"
+#define BLYNK_AUTH_TOKEN "8rYwP5-2nYyA6G1txMqXMamUNITRd-k9"
+
+#define BLYNK_FIRMWARE_VERSION "240503"
 const char* ssid = "Cap Nuoc";
 const char* password = "0919126757";
 //const char* ssid = "tram bom so 4";
@@ -82,9 +87,9 @@ const char* password = "0919126757";
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/BHD/main.ino.bin"
+//#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/BHD/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/BHD/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "FW_e5wcvT49ltI7RH6qf2v68F5xksayD";
 
 #define filterSamples 121
 #define EEPROM_ADDRESS 0x57
@@ -583,10 +588,12 @@ BLYNK_WRITE(V10)  // String
   } else if (dataS == "active") {
     terminal.clear();
     key = true;
+    visible();
     Blynk.virtualWrite(V10, "KHÔNG sử dụng phần mềm cho đến khi thông báo này mất.\n");
   } else if (dataS == "deactive") {
     terminal.clear();
     key = false;
+    hidden();
     Blynk.virtualWrite(V10, "Ok!\nNhập mã để điều khiển!\n");
   } else if (dataS == "save") {
     terminal.clear();
@@ -831,13 +838,6 @@ BLYNK_WRITE(V18) // Time input
     Blynk.virtualWrite(V18, 0);
 }
 */
-BLYNK_WRITE(V28)  // Hidden/Visible
-{
-  if (param.asInt() == 0) {
-    hidden();
-  } else
-    visible();
-}
 /*
 BLYNK_WRITE(V29) // Info
 {
@@ -946,7 +946,7 @@ BLYNK_WRITE(V29) // Info
 */
 //-------------------------------------------------------------------
 void updata() {
-  String server_path = server_name + "batch/update?token=" + Main
+  String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
                        + "&V14=" + Result1
                        + "&V24=" + Irms0
                        + "&V25=" + Irms1
