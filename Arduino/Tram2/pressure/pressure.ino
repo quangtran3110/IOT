@@ -1,7 +1,13 @@
+/*
 #define BLYNK_TEMPLATE_ID "TMPL6OXV1bmFt"
 #define BLYNK_TEMPLATE_NAME "Support"
 #define BLYNK_AUTH_TOKEN "7sISC1fJBO2OhzgOrlCUbspnne6I3LWr"
-#define BLYNK_FIRMWARE_VERSION "T2.PRE.070923"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6H_Q3XkK9"
+#define BLYNK_TEMPLATE_NAME "SUPPORT DEACTIVE"
+#define BLYNK_AUTH_TOKEN "IXPS9jkvL6tmMMOqPhhn4YTfXimuEGu4"
+
+#define BLYNK_FIRMWARE_VERSION "240503.T2.PRE"
 
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -12,7 +18,7 @@
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "ESzia3fpA-29cs8gt85pGnrPq_rICcqf";
+String Main = "BDm1LNQi_LhtaKAQU8RWUaGbiOyKIcd3";
 
 const char* ssid = "Nha May Nuoc So 2";
 const char* password = "02723841572";

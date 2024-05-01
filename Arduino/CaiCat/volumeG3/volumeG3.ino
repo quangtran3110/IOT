@@ -1,8 +1,13 @@
-
+/*
 #define BLYNK_TEMPLATE_ID "TMPL0DBjAEt-"
 #define BLYNK_TEMPLATE_NAME "VOLUME"
 #define BLYNK_AUTH_TOKEN "XBbjtsi_sGTyvvs_zF4yN2s_4OoRvMjA"
-#define BLYNK_FIRMWARE_VERSION "240203.CC.VL.G3"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6H_Q3XkK9"
+#define BLYNK_TEMPLATE_NAME "SUPPORT DEACTIVE"
+#define BLYNK_AUTH_TOKEN "IXPS9jkvL6tmMMOqPhhn4YTfXimuEGu4"
+
+#define BLYNK_FIRMWARE_VERSION "240503.CC.VL.G3"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -28,7 +33,7 @@ const char* password = "Password";
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "OwqkFUOpl8p9-AP235SQquza0fmhwImP";
+String Main = "vcz0jVXPSGPK6XmFP5Dqi_etQA32VNPL";
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/CaiCat/volumeG3/build/esp8266.esp8266.nodemcuv2/volumeG3.ino.bin"
 
 String LL1m3 = "&V57=";

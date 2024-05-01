@@ -34,10 +34,17 @@
 
 #define APP_DEBUG
 #define BLYNK_PRINT Serial
+/*
 #define BLYNK_TEMPLATE_ID "TMPL83MCPItm"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 1"
 #define BLYNK_AUTH_TOKEN "NkRHGVvq7kogEc7VhRgbcJXDJbFA-dMa"
-#define BLYNK_FIRMWARE_VERSION "240101"
+*/
+
+#define BLYNK_TEMPLATE_ID "TMPL67KBbwuNv"
+#define BLYNK_TEMPLATE_NAME "TRẠM SỐ 1"
+#define BLYNK_AUTH_TOKEN "SZfJItqPgAVkiB8VdBuzyl5f94BU3E4x"
+
+#define BLYNK_FIRMWARE_VERSION "240503"
 //------------------
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>

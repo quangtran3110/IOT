@@ -51,11 +51,16 @@
    V64-LLG1_RL
    V65-LLG2_RL
 */
+/*
 #define BLYNK_TEMPLATE_ID "TMPLK0N90h0w"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 2"
 #define BLYNK_AUTH_TOKEN "ESzia3fpA-29cs8gt85pGnrPq_rICcqf"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6iEcXJQ6i"
+#define BLYNK_TEMPLATE_NAME "TRẠM SỐ 2"
+#define BLYNK_AUTH_TOKEN "BDm1LNQi_LhtaKAQU8RWUaGbiOyKIcd3"
 
-#define BLYNK_FIRMWARE_VERSION "240422"
+#define BLYNK_FIRMWARE_VERSION "240503"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -459,7 +464,7 @@ BLYNK_WRITE(V3)  // Chon gio Start-Stop
   }
 }
 */
-BLYNK_WRITE(V4)  // On/off chuc nang bao ve
+BLYNK_WRITE(V4)  // PROTECT
 {
   if (keySet) {
     if (param.asInt() == LOW) {

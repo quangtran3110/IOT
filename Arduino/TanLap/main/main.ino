@@ -14,7 +14,7 @@
  *V13 - timeinput
  *V14 - bao ve
  *V15 - thong bao
- *V16 - hidden/visible
+ *V16 - 
  *V17 - info
  *V18 - min pre
  *V19 - max pre
@@ -31,11 +31,16 @@
  */
 
 
+/*
 #define BLYNK_TEMPLATE_ID "TMPLFpa9NbqF"
 #define BLYNK_TEMPLATE_NAME "Tân Lập"
 #define BLYNK_AUTH_TOKEN "0mWyl3eT8xTCqSlVecGw6DzzNPhTadoa"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6TClJ6X_r"
+#define BLYNK_TEMPLATE_NAME "TRẠM TÂN LẬP"
+#define BLYNK_AUTH_TOKEN "91thFYXxhfcs2ij5GDVg6NTjEgMqFBwi"
 
-#define BLYNK_FIRMWARE_VERSION "2023.11.1"
+#define BLYNK_FIRMWARE_VERSION "240503"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -52,8 +57,8 @@
 WiFiClient client;
 HTTPClient http;
 String server_main = "http://sgp1.blynk.cloud/external/api/";
-String Main = "lvmyPh1nGcSjs3n1CTJrX4DyuWLlS0i0";
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/tanlap/main/main.ino.bin"
+//#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/tanlap/main/main.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/TanLap/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 
 #define filterSamples 121
 #define EEPROM_ADDRESS 0x57
@@ -620,11 +625,13 @@ BLYNK_WRITE(V11)  // String
     });
   } else if (dataS == "active") {
     terminal.clear();
+    visible();
     key = true;
     keySet = true;
     Blynk.virtualWrite(V11, "KHÔNG sử dụng phần mềm cho đến khi thông báo này mất.\n");
   } else if (dataS == "deactive") {
     terminal.clear();
+    hidden();
     key = false;
     keySet = false;
     Blynk.virtualWrite(V11, "Ok!\nNhập mã để điều khiển!\n");
@@ -745,13 +752,6 @@ BLYNK_WRITE(V15)  // Thông báo
     }
   } else
     Blynk.virtualWrite(V15, keynoti);
-}
-BLYNK_WRITE(V16)  // Hidden/Visible
-{
-  if (param.asInt() == 0) {
-    hidden();
-  } else
-    visible();
 }
 BLYNK_WRITE(V17)  // Info
 {

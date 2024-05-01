@@ -1,5 +1,5 @@
 #define BLYNK_TEMPLATE_ID "TMPL6I6ISEvF5"
-#define BLYNK_TEMPLATE_NAME "SUPPORT 1"
+#define BLYNK_TEMPLATE_NAME "SUPPORT ACTIVE"
 #define BLYNK_AUTH_TOKEN "mAEloc4FYavbw8Jh8KPbhJSjUGWyxKqn"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -16,7 +16,7 @@ EnergyMonitor emon0, emon1;
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "OwqkFUOpl8p9-AP235SQquza0fmhwImP";
+String Main = "vcz0jVXPSGPK6XmFP5Dqi_etQA32VNPL";
 
 
 const int S0 = D0;

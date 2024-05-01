@@ -28119,90 +28119,89 @@ END GROUP
                 0x000000003ffe8a93       0x1e C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
                                          0x25 (size before relaxing)
  .rodata._ZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE8sendInfoEv.str1.1
-                0x000000003ffe8ab1       0x12 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8ab1       0x13 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZN13BlynkProtocolI21BlynkArduinoClientGenI6ClientEE12processInputEv.str1.1
-                0x000000003ffe8ac3       0x6d C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8ac4       0x6d C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE12virtualWriteIJPKcfS8_hS8_hS8_hS8_hS8_tEEEviDpT_.str1.1
-                0x000000003ffe8b30        0x3 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8b31        0x3 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z7rtctimev.str1.1
-                0x000000003ffe8b33        0x7 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8b34        0x7 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
                                           0xb (size before relaxing)
  .rodata._Z12readcurrent8v.str1.1
-                0x000000003ffe8b3a       0x22 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8b3b       0x22 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z12readcurrent7v.str1.1
-                0x000000003ffe8b5c       0x19 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8b5d       0x19 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z12readcurrent6v.str1.1
-                0x000000003ffe8b75       0x12 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8b76       0x12 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z12readcurrent5v.str1.1
-                0x000000003ffe8b87       0x14 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8b88       0x14 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z12readcurrent4v.str1.1
-                0x000000003ffe8b9b       0x13 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8b9c       0x13 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z12readcurrent2v.str1.1
-                0x000000003ffe8bae       0x12 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8baf       0x12 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z11readcurrentv.str1.1
-                0x000000003ffe8bc0       0x14 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8bc1       0x14 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z7visiblev.str1.1
-                0x000000003ffe8bd4        0x9 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8bd5        0x9 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z8savedatav.str1.1
-                0x000000003ffe8bdd       0x16 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8bde       0x16 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite31EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8bf3       0x45 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8bf4       0x45 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite30EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8c38       0x40 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8c39       0x40 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite29EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8c78       0x40 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8c79       0x40 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite28EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8cb8       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8cb9       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite27EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8cfb       0x46 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8cfc       0x46 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite26EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8d41       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8d42       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite25EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8d84       0x49 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8d85       0x49 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite24EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8dcd       0x46 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8dce       0x46 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite23EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8e13       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8e14       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite22EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8e56       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8e57       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite21EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8e99       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8e9a       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite20EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8edc       0x40 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8edd       0x40 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite16EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8f1c       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8f1d       0x43 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZNSt17_Function_handlerIFvvEZ18BlynkWidgetWrite15EUlvE_E9_M_invokeERKSt9_Any_data.str1.1
-                0x000000003ffe8f5f       0x40 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8f60       0x40 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z14event_pressurev.str1.1
-                0x000000003ffe8f9f       0x30 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8fa0       0x30 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z9event_30pv$part$0.str1.1
-                0x000000003ffe8fcf       0x39 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe8fd0       0x39 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
                                          0x3d (size before relaxing)
  .rodata._Z12readcurrent3v.str1.1
-                0x000000003ffe9008       0x12 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe9009       0x12 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._Z12readcurrent1v.str1.1
-                0x000000003ffe901a       0x13 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe901b       0x13 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZN9WidgetRTC15requestTimeSyncEv.str1.1
-                0x000000003ffe902d        0x9 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe902e        0x9 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZN14WidgetTerminal5clearEv.str1.1
-                0x000000003ffe9036        0x4 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe9037        0x4 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata.setup.str1.1
-                0x000000003ffe903a       0xc8 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe903b       0xc8 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata.BlynkWidgetWrite52.str1.1
-                0x000000003ffe9102       0x1a C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe9103       0x1a C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata.BlynkWidgetWrite51.str1.1
-                0x000000003ffe911c       0x66 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe911d       0x66 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata.BlynkWidgetWrite5.str1.1
-                0x000000003ffe9182      0x20e C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe9183      0x20e C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
                                         0x218 (size before relaxing)
  .rodata._GLOBAL__sub_I_Blynk.str1.1
-                0x000000003ffe9390       0x47 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe9391       0x47 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE8sendInfoEvE7profile
-                0x000000003ffe93d7       0x74 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
-                0x000000003ffe93d7                _ZZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE8sendInfoEvE7profile
+                0x000000003ffe93d8       0x75 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+                0x000000003ffe93d8                _ZZN8BlynkApiI13BlynkProtocolI21BlynkArduinoClientGenI6ClientEEE8sendInfoEvE7profile
  .rodata.str1.1
-                0x000000003ffe944b       0x13 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
- *fill*         0x000000003ffe945e        0x2 
+                0x000000003ffe944d       0x13 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
  .rodata._ZL23BlynkWriteHandlerVector
                 0x000000003ffe9460      0x200 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Blynk\utility\BlynkHandlers.cpp.o
  .rodata._ZL22BlynkReadHandlerVector
@@ -31375,280 +31374,280 @@ OUTPUT(C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C54
  .debug_ranges  0x000000000001c698       0x10 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(aes_unwrap.cpp.o)
  .debug_ranges  0x000000000001c6a8      0x5e0 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(time.cpp.o)
 
-.debug_line     0x0000000000000000   0x11b03d
- .debug_line    0x0000000000000000    0x1208a C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
- .debug_line    0x000000000001208a      0xaa0 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Blynk\utility\BlynkDebug.cpp.o
- .debug_line    0x0000000000012b2a      0xa3e C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Blynk\utility\BlynkHandlers.cpp.o
- .debug_line    0x0000000000013568     0x1abb C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Blynk\utility\BlynkTimer.cpp.o
- .debug_line    0x0000000000015023      0xfea C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(ESP8266WiFi.cpp.o)
- .debug_line    0x000000000001600d     0x9247 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(ESP8266WiFiGeneric.cpp.o)
- .debug_line    0x000000000001f254     0x2597 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(ESP8266WiFiSTA.cpp.o)
- .debug_line    0x00000000000217eb     0x4c20 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(WiFiClient.cpp.o)
- .debug_line    0x000000000002640b     0xbb2e C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(WiFiClientSecureBearSSL.cpp.o)
- .debug_line    0x0000000000031f39     0x54ff C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(BearSSLHelpers.cpp.o)
- .debug_line    0x0000000000037438     0x1901 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Wire\Wire.cpp.o
- .debug_line    0x0000000000038d39     0x1438 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\EmonLib\EmonLib.cpp.o
- .debug_line    0x000000000003a171     0x1964 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Time\Time.cpp.o
- .debug_line    0x000000000003bad5     0x21f3 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\RTClib\RTC_DS3231.cpp.o
- .debug_line    0x000000000003dcc8     0x2644 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\RTClib\RTClib.cpp.o
- .debug_line    0x000000000004030c      0xf60 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Adafruit_BusIO\Adafruit_I2CDevice.cpp.o
- .debug_line    0x000000000004126c     0x129a C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Eeprom24C32_64-master\Eeprom24C32_64.cpp.o
- .debug_line    0x0000000000042506     0x192b C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\PCF8575_library\PCF8575.cpp.o
- .debug_line    0x0000000000043e31     0x4b4d C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266httpUpdate\ESP8266httpUpdate.a(ESP8266httpUpdate.cpp.o)
- .debug_line    0x000000000004897e     0x7111 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266HTTPClient\ESP8266HTTPClient.a(ESP8266HTTPClient.cpp.o)
- .debug_line    0x000000000004fa8f     0x26fc C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\SPI\SPI.cpp.o
- .debug_line    0x000000000005218b     0x306d C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Esp.cpp.o)
- .debug_line    0x00000000000551f8     0x1511 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(HardwareSerial.cpp.o)
- .debug_line    0x0000000000056709     0x1e4e C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(IPAddress.cpp.o)
- .debug_line    0x0000000000058557     0x11ef C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(MD5Builder.cpp.o)
- .debug_line    0x0000000000059746     0x1e53 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Print.cpp.o)
- .debug_line    0x000000000005b599      0xac4 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(StackThunk.cpp.o)
- .debug_line    0x000000000005c05d     0x17b7 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Stream.cpp.o)
- .debug_line    0x000000000005d814     0x29c8 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(StreamSend.cpp.o)
- .debug_line    0x00000000000601dc     0x332c C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Updater.cpp.o)
- .debug_line    0x0000000000063508     0x6a79 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(WString.cpp.o)
- .debug_line    0x0000000000069f81      0xbd7 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(abi.cpp.o)
- .debug_line    0x000000000006ab58      0xbe7 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(base64.cpp.o)
- .debug_line    0x000000000006b73f      0x55c C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(cont_util.cpp.o)
- .debug_line    0x000000000006bc9b      0x86d C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_eboot_command.cpp.o)
- .debug_line    0x000000000006c508     0x1672 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_main.cpp.o)
- .debug_line    0x000000000006db7a      0xcd6 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_noniso.cpp.o)
- .debug_line    0x000000000006e850      0x7b2 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_phy.cpp.o)
- .debug_line    0x000000000006f002     0x1406 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_postmortem.cpp.o)
- .debug_line    0x0000000000070408     0x346e C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_si2c.cpp.o)
- .debug_line    0x0000000000073876      0xc7a C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_wiring.cpp.o)
- .debug_line    0x00000000000744f0      0x9d1 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_wiring_analog.cpp.o)
- .debug_line    0x0000000000074ec1     0x193a C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_wiring_digital.cpp.o)
- .debug_line    0x00000000000767fb      0xbd9 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_wiring_pwm.cpp.o)
- .debug_line    0x00000000000773d4      0x762 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(crc32.cpp.o)
- .debug_line    0x0000000000077b36       0xae C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(gdb_hooks.cpp.o)
- .debug_line    0x0000000000077be4      0x954 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(heap.cpp.o)
- .debug_line    0x0000000000078538      0x7a5 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(cencode.cpp.o)
- .debug_line    0x0000000000078cdd      0xae4 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(libc_replacements.cpp.o)
- .debug_line    0x00000000000797c1     0x2f8c C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(uart.cpp.o)
- .debug_line    0x000000000007c74d     0x290f C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(umm_malloc.cpp.o)
- .debug_line    0x000000000007f05c     0x1acf C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Schedule.cpp.o)
- .debug_line    0x0000000000080b2b      0x1e3 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(cont.S.o)
- .debug_line    0x0000000000080d0e      0x318 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_features.cpp.o)
- .debug_line    0x0000000000081026      0x416 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_flash_quirks.cpp.o)
- .debug_line    0x000000000008143c      0xb65 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_spi_utils.cpp.o)
- .debug_line    0x0000000000081fa1      0xceb C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_timer.cpp.o)
- .debug_line    0x0000000000082c8c     0x274f C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_waveform_pwm.cpp.o)
- .debug_line    0x00000000000853db     0x1686 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(lwip-esp.o)
- .debug_line    0x0000000000086a61     0x132f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(lwip-git.o)
- .debug_line    0x0000000000087d90      0x484 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ethernet.o)
- .debug_line    0x0000000000088214      0x6ae C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(def.o)
- .debug_line    0x00000000000888c2     0x1800 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(dns.o)
- .debug_line    0x000000000008a0c2      0x172 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(init.o)
- .debug_line    0x000000000008a234      0x37f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(mem.o)
- .debug_line    0x000000000008a5b3      0x4f5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(memp.o)
- .debug_line    0x000000000008aaa8     0x1450 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(netif.o)
- .debug_line    0x000000000008bef8     0x25eb C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(pbuf.o)
- .debug_line    0x000000000008e4e3      0xd3d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(raw.o)
- .debug_line    0x000000000008f220     0x3fda C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(tcp.o)
- .debug_line    0x00000000000931fa     0x3f6f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(tcp_in.o)
- .debug_line    0x0000000000097169     0x2d34 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(tcp_out.o)
- .debug_line    0x0000000000099e9d      0x9d0 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(timeouts.o)
- .debug_line    0x000000000009a86d     0x18a0 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(udp.o)
- .debug_line    0x000000000009c10d      0xc3b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(autoip.o)
- .debug_line    0x000000000009cd48     0x3fdf C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(dhcp.o)
- .debug_line    0x00000000000a0d27     0x18c4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(etharp.o)
- .debug_line    0x00000000000a25eb      0x7fa C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(icmp.o)
- .debug_line    0x00000000000a2de5     0x1525 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(igmp.o)
- .debug_line    0x00000000000a430a     0x353a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ip4.o)
- .debug_line    0x00000000000a7844      0xaf9 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ip4_addr.o)
- .debug_line    0x00000000000a833d     0x156d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ip4_frag.o)
- .debug_line    0x00000000000a98aa     0x113a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(sntp.o)
- .debug_line    0x00000000000aa9e4     0x161a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ppp.o)
- .debug_line    0x00000000000abffe     0x1672 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(pppos.o)
- .debug_line    0x00000000000ad670      0xb2a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(inet_chksum.o)
- .debug_line    0x00000000000ae19a       0xbd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ip.o)
- .debug_line    0x00000000000ae257      0x208 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(magic.o)
- .debug_line    0x00000000000ae45f      0x1c7 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_default.o)
- .debug_line    0x00000000000ae626      0x1e6 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_default_sign_asn1.o)
- .debug_line    0x00000000000ae80c      0x1d3 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_default_vrfy_raw.o)
- .debug_line    0x00000000000ae9df      0x276 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_sign_asn1.o)
- .debug_line    0x00000000000aec55      0x5e0 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_sign_raw.o)
- .debug_line    0x00000000000af235      0x546 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_vrfy_raw.o)
- .debug_line    0x00000000000af77b      0x59b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_rta.o)
- .debug_line    0x00000000000afd16      0xe2c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(md5.o)
- .debug_line    0x00000000000b0b42     0x11f2 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(sha1.o)
- .debug_line    0x00000000000b1d34     0x154c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(sha2big.o)
- .debug_line    0x00000000000b3280     0x1307 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(sha2small.o)
- .debug_line    0x00000000000b4587      0x3ba C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_add.o)
- .debug_line    0x00000000000b4941      0x7f6 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_decmod.o)
- .debug_line    0x00000000000b5137      0x40f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_decode.o)
- .debug_line    0x00000000000b5546      0x36a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_encode.o)
- .debug_line    0x00000000000b58b0      0x49f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_fmont.o)
- .debug_line    0x00000000000b5d4f      0x2e4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_iszero.o)
- .debug_line    0x00000000000b6033      0x4dc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_modpow.o)
- .debug_line    0x00000000000b650f     0x194b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_montmul.o)
- .debug_line    0x00000000000b7e5a      0x20a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_ninv15.o)
- .debug_line    0x00000000000b8064      0x3c8 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_sub.o)
- .debug_line    0x00000000000b842c      0x24d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_tmont.o)
- .debug_line    0x00000000000b8679      0x777 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(hmac_drbg.o)
- .debug_line    0x00000000000b8df0      0x1d5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_default_pkcs1_sign.o)
- .debug_line    0x00000000000b8fc5      0x1d5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_default_pkcs1_vrfy.o)
- .debug_line    0x00000000000b919a      0x250 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_i15_pkcs1_sign.o)
- .debug_line    0x00000000000b93ea      0x26e C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_i15_pkcs1_vrfy.o)
- .debug_line    0x00000000000b9658      0x8c6 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_i15_priv.o)
- .debug_line    0x00000000000b9f1e      0x4a9 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_i15_pub.o)
- .debug_line    0x00000000000ba3c7      0x4fd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_pkcs1_sig_pad.o)
- .debug_line    0x00000000000ba8c4      0x4b7 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_pkcs1_sig_unpad.o)
- .debug_line    0x00000000000bad7b      0x2af C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(prf_md5sha1.o)
- .debug_line    0x00000000000bb02a      0x260 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(prf_sha256.o)
- .debug_line    0x00000000000bb28a      0x260 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(prf_sha384.o)
- .debug_line    0x00000000000bb4ea      0x85f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_ccert_single_ec.o)
- .debug_line    0x00000000000bbd49      0x5a4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_ccert_single_rsa.o)
- .debug_line    0x00000000000bc2ed      0x480 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_client.o)
- .debug_line    0x00000000000bc76d      0x2b5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_client_default_rsapub.o)
- .debug_line    0x00000000000bca22     0x3f02 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine.o)
- .debug_line    0x00000000000c0924      0x2e1 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_aescbc.o)
- .debug_line    0x00000000000c0c05      0x2d5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_aesccm.o)
- .debug_line    0x00000000000c0eda      0x2fd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_aesgcm.o)
- .debug_line    0x00000000000c11d7      0x2fd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_chapol.o)
- .debug_line    0x00000000000c14d4      0x2e1 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_descbc.o)
- .debug_line    0x00000000000c17b5      0x2bc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_ecdsa.o)
- .debug_line    0x00000000000c1a71      0x2b6 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_rsavrfy.o)
- .debug_line    0x00000000000c1d27      0x163 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_hashes.o)
- .debug_line    0x00000000000c1e8a     0x36a5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_hs_client.o)
- .debug_line    0x00000000000c552f     0x1ba4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_rec_cbc.o)
- .debug_line    0x00000000000c70d3      0xe0b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_rec_ccm.o)
- .debug_line    0x00000000000c7ede      0xb12 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_rec_chapol.o)
- .debug_line    0x00000000000c89f0      0xf14 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_rec_gcm.o)
- .debug_line    0x00000000000c9904      0x795 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_scert_single_rsa.o)
- .debug_line    0x00000000000ca099      0xdfe C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_cbcdec.o)
- .debug_line    0x00000000000cae97      0xaee C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_cbcenc.o)
- .debug_line    0x00000000000cb985      0xa51 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_ctr.o)
- .debug_line    0x00000000000cc3d6     0x302b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_ctrcbc.o)
- .debug_line    0x00000000000cf401     0x115e C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_dec.o)
- .debug_line    0x00000000000d055f      0xbd5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_enc.o)
- .debug_line    0x00000000000d1134     0x111c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(chacha20_ct.o)
- .debug_line    0x00000000000d2250      0x4e8 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(des_ct_cbcdec.o)
- .debug_line    0x00000000000d2738      0x386 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(des_ct_cbcenc.o)
- .debug_line    0x00000000000d2abe      0x926 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(des_support.o)
- .debug_line    0x00000000000d33e4     0x19e0 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(poly1305_ctmul32.o)
- .debug_line    0x00000000000d4dc4     0x13e3 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(x509_decoder.o)
- .debug_line    0x00000000000d61a7      0x3f4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(x509_knownkey.o)
- .debug_line    0x00000000000d659b     0x2e4b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(x509_minimal.o)
- .debug_line    0x00000000000d93e6     0x11fd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ccm.o)
- .debug_line    0x00000000000da5e3      0x29e C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ccopy.o)
- .debug_line    0x00000000000da881      0x23c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(dec32be.o)
- .debug_line    0x00000000000daabd      0x252 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(dec32le.o)
- .debug_line    0x00000000000dad0f      0x268 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(dec64be.o)
- .debug_line    0x00000000000daf77      0x2aa C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(enc32be.o)
- .debug_line    0x00000000000db221      0x2aa C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(enc32le.o)
- .debug_line    0x00000000000db4cb      0x33e C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(enc64be.o)
- .debug_line    0x00000000000db809      0x3e5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_all_m15.o)
- .debug_line    0x00000000000dbbee     0x3d7b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_c25519_m15.o)
- .debug_line    0x00000000000df969     0x588b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_p256_m15.o)
- .debug_line    0x00000000000e51f4     0x1a81 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_prime_i15.o)
- .debug_line    0x00000000000e6c75       0xbc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_secp256r1.o)
- .debug_line    0x00000000000e6d31       0xbc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_secp384r1.o)
- .debug_line    0x00000000000e6ded       0xbc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_secp521r1.o)
- .debug_line    0x00000000000e6ea9      0x302 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_bits.o)
- .debug_line    0x00000000000e71ab      0x25c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_vrfy_asn1.o)
- .debug_line    0x00000000000e7407     0x15db C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ghash_ctmul32.o)
- .debug_line    0x00000000000e89e2      0x753 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(multihash.o)
- .debug_line    0x00000000000e9135      0x697 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_bitlen.o)
- .debug_line    0x00000000000e97cc      0x638 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_decred.o)
- .debug_line    0x00000000000e9e04      0xbf8 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_modpow2.o)
- .debug_line    0x00000000000ea9fc      0x59b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_mulacc.o)
- .debug_line    0x00000000000eaf97      0xe60 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_muladd.o)
- .debug_line    0x00000000000ebdf7      0x4d1 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_reduce.o)
- .debug_line    0x00000000000ec2c8      0x2f4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_rshift.o)
- .debug_line    0x00000000000ec5bc      0x814 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(hmac.o)
- .debug_line    0x00000000000ecdd0      0xa59 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(hmac_ct.o)
- .debug_line    0x00000000000ed829      0x2ac C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(sysrng.o)
- .debug_line    0x00000000000edad5      0x1ce C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_default_pub.o)
- .debug_line    0x00000000000edca3      0x51f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(prf.o)
- .debug_line    0x00000000000ee1c2     0x1973 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct.o)
- .debug_line    0x00000000000efb35     0x16eb C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(des_ct.o)
- .debug_line    0x00000000000f1220      0x3db C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_atr.o)
- .debug_line    0x00000000000f15fb      0x1ae C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(del_ops.o)
- .debug_line    0x00000000000f17a9      0x1ae C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(del_opv.o)
- .debug_line    0x00000000000f1957      0x1af C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(del_opvs.o)
- .debug_line    0x00000000000f1b06      0x757 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(eh_terminate.o)
- .debug_line    0x00000000000f225d      0x33a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(new_handler.o)
- .debug_line    0x00000000000f2597      0x547 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(list.o)
- .debug_line    0x00000000000f2ade      0x31b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(functional.o)
- .debug_line    0x00000000000f2df9      0x62f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(shared_ptr.o)
- .debug_line    0x00000000000f3428      0x22d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(del_op.o)
- .debug_line    0x00000000000f3655      0x24d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(eh_term_handler.o)
- .debug_line    0x00000000000f38a2      0x19d c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libm.a(lib_a-w_sqrt.o)
- .debug_line    0x00000000000f3a3f      0x74a c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libm.a(lib_a-e_sqrt.o)
- .debug_line    0x00000000000f4189       0xb7 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libm.a(lib_a-sf_nan.o)
- .debug_line    0x00000000000f4240       0xad c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-atof.o)
- .debug_line    0x00000000000f42ed      0x1b7 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-atoi.o)
- .debug_line    0x00000000000f44a4      0x1b7 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-atol.o)
- .debug_line    0x00000000000f465b      0x165 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-errno.o)
- .debug_line    0x00000000000f47c0      0x138 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-impure.o)
- .debug_line    0x00000000000f48f8      0x1c8 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-isspace.o)
- .debug_line    0x00000000000f4ac0      0x18b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-itoa.o)
- .debug_line    0x00000000000f4c4b      0x15b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-memchr.o)
- .debug_line    0x00000000000f4da6     0x1134 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-vfprintf_float.o)
- .debug_line    0x00000000000f5eda      0xe09 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-vfprintf_i.o)
- .debug_line    0x00000000000f6ce3      0xbb5 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-vfscanf_float.o)
- .debug_line    0x00000000000f7898      0x516 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-snprintf.o)
- .debug_line    0x00000000000f7dae      0x392 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-sprintf.o)
- .debug_line    0x00000000000f8140      0x30b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strcasecmp.o)
- .debug_line    0x00000000000f844b      0x113 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strchr.o)
- .debug_line    0x00000000000f855e      0x1d7 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strcpy.o)
- .debug_line    0x00000000000f8735     0x27b2 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strtod.o)
- .debug_line    0x00000000000faee7      0x7dd c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strtol.o)
- .debug_line    0x00000000000fb6c4      0x1d9 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-tolower.o)
- .debug_line    0x00000000000fb89d      0x3ed c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-utoa.o)
- .debug_line    0x00000000000fbc8a      0x373 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-vsnprintf.o)
- .debug_line    0x00000000000fbffd      0x2aa c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(stdio_pgmspace.o)
- .debug_line    0x00000000000fc2a7      0xf5d c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(string_pgmspace.o)
- .debug_line    0x00000000000fd204       0x51 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-ctype_.o)
- .debug_line    0x00000000000fd255     0x2751 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-dtoa.o)
- .debug_line    0x00000000000ff9a6      0x188 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fast_strcpy.o)
- .debug_line    0x00000000000ffb2e      0x2a3 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fast_strncpy.o)
- .debug_line    0x00000000000ffdd1      0x9d2 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-findfp.o)
- .debug_line    0x00000000001007a3      0x40c c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fwalk.o)
- .debug_line    0x0000000000100baf     0x139d c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-gdtoa-gethex.o)
- .debug_line    0x0000000000101f4c      0x6f5 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-gdtoa-hexnan.o)
- .debug_line    0x0000000000102641      0x1c5 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-lnumeric.o)
- .debug_line    0x0000000000102806      0x2c1 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-locale.o)
- .debug_line    0x0000000000102ac7      0x27f c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-localeconv.o)
- .debug_line    0x0000000000102d46      0x2b5 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-mbtowc_r.o)
- .debug_line    0x0000000000102ffb     0x2b2b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-mprec.o)
- .debug_line    0x0000000000105b26     0x11dc c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-svfprintf.o)
- .debug_line    0x0000000000106d02      0xf8c c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-vfprintf.o)
- .debug_line    0x0000000000107c8e       0xb8 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-s_nan.o)
- .debug_line    0x0000000000107d46      0x3ca c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-stdio.o)
- .debug_line    0x0000000000108110      0x314 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-vprintf.o)
- .debug_line    0x0000000000108424      0x2a8 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-vsprintf.o)
- .debug_line    0x00000000001086cc      0x414 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-wbuf.o)
- .debug_line    0x0000000000108ae0      0x2af c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-wctomb_r.o)
- .debug_line    0x0000000000108d8f      0x48c c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-wsetup.o)
- .debug_line    0x000000000010921b       0xc6 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lock.o)
- .debug_line    0x00000000001092e1      0x46c c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fclose.o)
- .debug_line    0x000000000010974d      0x7cb c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fflush.o)
- .debug_line    0x0000000000109f18      0x5a1 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fputwc.o)
- .debug_line    0x000000000010a4b9      0xadb c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fvwrite.o)
- .debug_line    0x000000000010af94      0x51a c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-makebuf.o)
- .debug_line    0x000000000010b4ae      0x2f4 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-wcrtomb.o)
- .debug_line    0x000000000010b7a2      0x26e c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(isatty.o)
- .debug_line    0x000000000010ba10       0xf2 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_modsi3.o)
- .debug_line    0x000000000010bb02       0x92 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_ashrdi3.o)
- .debug_line    0x000000000010bb94      0x2fd c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_divsf3.o)
- .debug_line    0x000000000010be91      0x2d3 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_cmpsf2.o)
- .debug_line    0x000000000010c164       0xed c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_fixsfsi.o)
- .debug_line    0x000000000010c251      0x369 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_cmpdf2.o)
- .debug_line    0x000000000010c5ba      0x14d c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_fixdfdi.o)
- .debug_line    0x000000000010c707      0x16b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_floatdidf.o)
- .debug_line    0x000000000010c872      0x326 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_moddi3.o)
- .debug_line    0x000000000010cb98     0x2a65 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(unwind-dw2-fde.o)
- .debug_line    0x000000000010f5fd       0x92 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_ashldi3.o)
- .debug_line    0x000000000010f68f       0x92 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_lshrdi3.o)
- .debug_line    0x000000000010f721     0x1a44 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(ESP8266WiFiAP.cpp.o)
- .debug_line    0x0000000000111165     0x3375 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(WiFiUdp.cpp.o)
- .debug_line    0x00000000001144da      0xbfb C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(LwipDhcpServer-NonOS.cpp.o)
- .debug_line    0x00000000001150d5     0x3124 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(LwipDhcpServer.cpp.o)
- .debug_line    0x00000000001181f9      0x761 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(aes_unwrap.cpp.o)
- .debug_line    0x000000000011895a     0x26e3 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(time.cpp.o)
+.debug_line     0x0000000000000000   0x11b03c
+ .debug_line    0x0000000000000000    0x12089 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o
+ .debug_line    0x0000000000012089      0xaa0 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Blynk\utility\BlynkDebug.cpp.o
+ .debug_line    0x0000000000012b29      0xa3e C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Blynk\utility\BlynkHandlers.cpp.o
+ .debug_line    0x0000000000013567     0x1abb C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Blynk\utility\BlynkTimer.cpp.o
+ .debug_line    0x0000000000015022      0xfea C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(ESP8266WiFi.cpp.o)
+ .debug_line    0x000000000001600c     0x9247 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(ESP8266WiFiGeneric.cpp.o)
+ .debug_line    0x000000000001f253     0x2597 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(ESP8266WiFiSTA.cpp.o)
+ .debug_line    0x00000000000217ea     0x4c20 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(WiFiClient.cpp.o)
+ .debug_line    0x000000000002640a     0xbb2e C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(WiFiClientSecureBearSSL.cpp.o)
+ .debug_line    0x0000000000031f38     0x54ff C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(BearSSLHelpers.cpp.o)
+ .debug_line    0x0000000000037437     0x1901 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Wire\Wire.cpp.o
+ .debug_line    0x0000000000038d38     0x1438 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\EmonLib\EmonLib.cpp.o
+ .debug_line    0x000000000003a170     0x1964 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Time\Time.cpp.o
+ .debug_line    0x000000000003bad4     0x21f3 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\RTClib\RTC_DS3231.cpp.o
+ .debug_line    0x000000000003dcc7     0x2644 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\RTClib\RTClib.cpp.o
+ .debug_line    0x000000000004030b      0xf60 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Adafruit_BusIO\Adafruit_I2CDevice.cpp.o
+ .debug_line    0x000000000004126b     0x129a C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\Eeprom24C32_64-master\Eeprom24C32_64.cpp.o
+ .debug_line    0x0000000000042505     0x192b C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\PCF8575_library\PCF8575.cpp.o
+ .debug_line    0x0000000000043e30     0x4b4d C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266httpUpdate\ESP8266httpUpdate.a(ESP8266httpUpdate.cpp.o)
+ .debug_line    0x000000000004897d     0x7111 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266HTTPClient\ESP8266HTTPClient.a(ESP8266HTTPClient.cpp.o)
+ .debug_line    0x000000000004fa8e     0x26fc C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\SPI\SPI.cpp.o
+ .debug_line    0x000000000005218a     0x306d C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Esp.cpp.o)
+ .debug_line    0x00000000000551f7     0x1511 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(HardwareSerial.cpp.o)
+ .debug_line    0x0000000000056708     0x1e4e C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(IPAddress.cpp.o)
+ .debug_line    0x0000000000058556     0x11ef C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(MD5Builder.cpp.o)
+ .debug_line    0x0000000000059745     0x1e53 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Print.cpp.o)
+ .debug_line    0x000000000005b598      0xac4 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(StackThunk.cpp.o)
+ .debug_line    0x000000000005c05c     0x17b7 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Stream.cpp.o)
+ .debug_line    0x000000000005d813     0x29c8 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(StreamSend.cpp.o)
+ .debug_line    0x00000000000601db     0x332c C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Updater.cpp.o)
+ .debug_line    0x0000000000063507     0x6a79 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(WString.cpp.o)
+ .debug_line    0x0000000000069f80      0xbd7 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(abi.cpp.o)
+ .debug_line    0x000000000006ab57      0xbe7 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(base64.cpp.o)
+ .debug_line    0x000000000006b73e      0x55c C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(cont_util.cpp.o)
+ .debug_line    0x000000000006bc9a      0x86d C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_eboot_command.cpp.o)
+ .debug_line    0x000000000006c507     0x1672 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_main.cpp.o)
+ .debug_line    0x000000000006db79      0xcd6 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_noniso.cpp.o)
+ .debug_line    0x000000000006e84f      0x7b2 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_phy.cpp.o)
+ .debug_line    0x000000000006f001     0x1406 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_postmortem.cpp.o)
+ .debug_line    0x0000000000070407     0x346e C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_si2c.cpp.o)
+ .debug_line    0x0000000000073875      0xc7a C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_wiring.cpp.o)
+ .debug_line    0x00000000000744ef      0x9d1 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_wiring_analog.cpp.o)
+ .debug_line    0x0000000000074ec0     0x193a C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_wiring_digital.cpp.o)
+ .debug_line    0x00000000000767fa      0xbd9 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_wiring_pwm.cpp.o)
+ .debug_line    0x00000000000773d3      0x762 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(crc32.cpp.o)
+ .debug_line    0x0000000000077b35       0xae C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(gdb_hooks.cpp.o)
+ .debug_line    0x0000000000077be3      0x954 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(heap.cpp.o)
+ .debug_line    0x0000000000078537      0x7a5 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(cencode.cpp.o)
+ .debug_line    0x0000000000078cdc      0xae4 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(libc_replacements.cpp.o)
+ .debug_line    0x00000000000797c0     0x2f8c C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(uart.cpp.o)
+ .debug_line    0x000000000007c74c     0x290f C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(umm_malloc.cpp.o)
+ .debug_line    0x000000000007f05b     0x1acf C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(Schedule.cpp.o)
+ .debug_line    0x0000000000080b2a      0x1e3 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(cont.S.o)
+ .debug_line    0x0000000000080d0d      0x318 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_features.cpp.o)
+ .debug_line    0x0000000000081025      0x416 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_flash_quirks.cpp.o)
+ .debug_line    0x000000000008143b      0xb65 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_spi_utils.cpp.o)
+ .debug_line    0x0000000000081fa0      0xceb C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_timer.cpp.o)
+ .debug_line    0x0000000000082c8b     0x274f C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(core_esp8266_waveform_pwm.cpp.o)
+ .debug_line    0x00000000000853da     0x1686 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(lwip-esp.o)
+ .debug_line    0x0000000000086a60     0x132f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(lwip-git.o)
+ .debug_line    0x0000000000087d8f      0x484 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ethernet.o)
+ .debug_line    0x0000000000088213      0x6ae C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(def.o)
+ .debug_line    0x00000000000888c1     0x1800 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(dns.o)
+ .debug_line    0x000000000008a0c1      0x172 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(init.o)
+ .debug_line    0x000000000008a233      0x37f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(mem.o)
+ .debug_line    0x000000000008a5b2      0x4f5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(memp.o)
+ .debug_line    0x000000000008aaa7     0x1450 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(netif.o)
+ .debug_line    0x000000000008bef7     0x25eb C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(pbuf.o)
+ .debug_line    0x000000000008e4e2      0xd3d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(raw.o)
+ .debug_line    0x000000000008f21f     0x3fda C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(tcp.o)
+ .debug_line    0x00000000000931f9     0x3f6f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(tcp_in.o)
+ .debug_line    0x0000000000097168     0x2d34 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(tcp_out.o)
+ .debug_line    0x0000000000099e9c      0x9d0 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(timeouts.o)
+ .debug_line    0x000000000009a86c     0x18a0 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(udp.o)
+ .debug_line    0x000000000009c10c      0xc3b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(autoip.o)
+ .debug_line    0x000000000009cd47     0x3fdf C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(dhcp.o)
+ .debug_line    0x00000000000a0d26     0x18c4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(etharp.o)
+ .debug_line    0x00000000000a25ea      0x7fa C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(icmp.o)
+ .debug_line    0x00000000000a2de4     0x1525 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(igmp.o)
+ .debug_line    0x00000000000a4309     0x353a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ip4.o)
+ .debug_line    0x00000000000a7843      0xaf9 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ip4_addr.o)
+ .debug_line    0x00000000000a833c     0x156d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ip4_frag.o)
+ .debug_line    0x00000000000a98a9     0x113a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(sntp.o)
+ .debug_line    0x00000000000aa9e3     0x161a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ppp.o)
+ .debug_line    0x00000000000abffd     0x1672 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(pppos.o)
+ .debug_line    0x00000000000ad66f      0xb2a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(inet_chksum.o)
+ .debug_line    0x00000000000ae199       0xbd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(ip.o)
+ .debug_line    0x00000000000ae256      0x208 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\liblwip2-536-feat.a(magic.o)
+ .debug_line    0x00000000000ae45e      0x1c7 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_default.o)
+ .debug_line    0x00000000000ae625      0x1e6 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_default_sign_asn1.o)
+ .debug_line    0x00000000000ae80b      0x1d3 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_default_vrfy_raw.o)
+ .debug_line    0x00000000000ae9de      0x276 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_sign_asn1.o)
+ .debug_line    0x00000000000aec54      0x5e0 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_sign_raw.o)
+ .debug_line    0x00000000000af234      0x546 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_vrfy_raw.o)
+ .debug_line    0x00000000000af77a      0x59b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_rta.o)
+ .debug_line    0x00000000000afd15      0xe2c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(md5.o)
+ .debug_line    0x00000000000b0b41     0x11f2 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(sha1.o)
+ .debug_line    0x00000000000b1d33     0x154c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(sha2big.o)
+ .debug_line    0x00000000000b327f     0x1307 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(sha2small.o)
+ .debug_line    0x00000000000b4586      0x3ba C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_add.o)
+ .debug_line    0x00000000000b4940      0x7f6 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_decmod.o)
+ .debug_line    0x00000000000b5136      0x40f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_decode.o)
+ .debug_line    0x00000000000b5545      0x36a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_encode.o)
+ .debug_line    0x00000000000b58af      0x49f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_fmont.o)
+ .debug_line    0x00000000000b5d4e      0x2e4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_iszero.o)
+ .debug_line    0x00000000000b6032      0x4dc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_modpow.o)
+ .debug_line    0x00000000000b650e     0x194b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_montmul.o)
+ .debug_line    0x00000000000b7e59      0x20a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_ninv15.o)
+ .debug_line    0x00000000000b8063      0x3c8 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_sub.o)
+ .debug_line    0x00000000000b842b      0x24d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_tmont.o)
+ .debug_line    0x00000000000b8678      0x777 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(hmac_drbg.o)
+ .debug_line    0x00000000000b8def      0x1d5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_default_pkcs1_sign.o)
+ .debug_line    0x00000000000b8fc4      0x1d5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_default_pkcs1_vrfy.o)
+ .debug_line    0x00000000000b9199      0x250 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_i15_pkcs1_sign.o)
+ .debug_line    0x00000000000b93e9      0x26e C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_i15_pkcs1_vrfy.o)
+ .debug_line    0x00000000000b9657      0x8c6 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_i15_priv.o)
+ .debug_line    0x00000000000b9f1d      0x4a9 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_i15_pub.o)
+ .debug_line    0x00000000000ba3c6      0x4fd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_pkcs1_sig_pad.o)
+ .debug_line    0x00000000000ba8c3      0x4b7 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_pkcs1_sig_unpad.o)
+ .debug_line    0x00000000000bad7a      0x2af C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(prf_md5sha1.o)
+ .debug_line    0x00000000000bb029      0x260 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(prf_sha256.o)
+ .debug_line    0x00000000000bb289      0x260 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(prf_sha384.o)
+ .debug_line    0x00000000000bb4e9      0x85f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_ccert_single_ec.o)
+ .debug_line    0x00000000000bbd48      0x5a4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_ccert_single_rsa.o)
+ .debug_line    0x00000000000bc2ec      0x480 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_client.o)
+ .debug_line    0x00000000000bc76c      0x2b5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_client_default_rsapub.o)
+ .debug_line    0x00000000000bca21     0x3f02 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine.o)
+ .debug_line    0x00000000000c0923      0x2e1 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_aescbc.o)
+ .debug_line    0x00000000000c0c04      0x2d5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_aesccm.o)
+ .debug_line    0x00000000000c0ed9      0x2fd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_aesgcm.o)
+ .debug_line    0x00000000000c11d6      0x2fd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_chapol.o)
+ .debug_line    0x00000000000c14d3      0x2e1 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_descbc.o)
+ .debug_line    0x00000000000c17b4      0x2bc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_ecdsa.o)
+ .debug_line    0x00000000000c1a70      0x2b6 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_engine_default_rsavrfy.o)
+ .debug_line    0x00000000000c1d26      0x163 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_hashes.o)
+ .debug_line    0x00000000000c1e89     0x36a5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_hs_client.o)
+ .debug_line    0x00000000000c552e     0x1ba4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_rec_cbc.o)
+ .debug_line    0x00000000000c70d2      0xe0b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_rec_ccm.o)
+ .debug_line    0x00000000000c7edd      0xb12 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_rec_chapol.o)
+ .debug_line    0x00000000000c89ef      0xf14 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_rec_gcm.o)
+ .debug_line    0x00000000000c9903      0x795 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ssl_scert_single_rsa.o)
+ .debug_line    0x00000000000ca098      0xdfe C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_cbcdec.o)
+ .debug_line    0x00000000000cae96      0xaee C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_cbcenc.o)
+ .debug_line    0x00000000000cb984      0xa51 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_ctr.o)
+ .debug_line    0x00000000000cc3d5     0x302b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_ctrcbc.o)
+ .debug_line    0x00000000000cf400     0x115e C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_dec.o)
+ .debug_line    0x00000000000d055e      0xbd5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct_enc.o)
+ .debug_line    0x00000000000d1133     0x111c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(chacha20_ct.o)
+ .debug_line    0x00000000000d224f      0x4e8 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(des_ct_cbcdec.o)
+ .debug_line    0x00000000000d2737      0x386 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(des_ct_cbcenc.o)
+ .debug_line    0x00000000000d2abd      0x926 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(des_support.o)
+ .debug_line    0x00000000000d33e3     0x19e0 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(poly1305_ctmul32.o)
+ .debug_line    0x00000000000d4dc3     0x13e3 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(x509_decoder.o)
+ .debug_line    0x00000000000d61a6      0x3f4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(x509_knownkey.o)
+ .debug_line    0x00000000000d659a     0x2e4b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(x509_minimal.o)
+ .debug_line    0x00000000000d93e5     0x11fd C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ccm.o)
+ .debug_line    0x00000000000da5e2      0x29e C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ccopy.o)
+ .debug_line    0x00000000000da880      0x23c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(dec32be.o)
+ .debug_line    0x00000000000daabc      0x252 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(dec32le.o)
+ .debug_line    0x00000000000dad0e      0x268 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(dec64be.o)
+ .debug_line    0x00000000000daf76      0x2aa C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(enc32be.o)
+ .debug_line    0x00000000000db220      0x2aa C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(enc32le.o)
+ .debug_line    0x00000000000db4ca      0x33e C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(enc64be.o)
+ .debug_line    0x00000000000db808      0x3e5 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_all_m15.o)
+ .debug_line    0x00000000000dbbed     0x3d7b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_c25519_m15.o)
+ .debug_line    0x00000000000df968     0x588b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_p256_m15.o)
+ .debug_line    0x00000000000e51f3     0x1a81 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_prime_i15.o)
+ .debug_line    0x00000000000e6c74       0xbc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_secp256r1.o)
+ .debug_line    0x00000000000e6d30       0xbc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_secp384r1.o)
+ .debug_line    0x00000000000e6dec       0xbc C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ec_secp521r1.o)
+ .debug_line    0x00000000000e6ea8      0x302 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_bits.o)
+ .debug_line    0x00000000000e71aa      0x25c C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_i15_vrfy_asn1.o)
+ .debug_line    0x00000000000e7406     0x15db C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ghash_ctmul32.o)
+ .debug_line    0x00000000000e89e1      0x753 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(multihash.o)
+ .debug_line    0x00000000000e9134      0x697 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_bitlen.o)
+ .debug_line    0x00000000000e97cb      0x638 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_decred.o)
+ .debug_line    0x00000000000e9e03      0xbf8 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_modpow2.o)
+ .debug_line    0x00000000000ea9fb      0x59b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_mulacc.o)
+ .debug_line    0x00000000000eaf96      0xe60 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_muladd.o)
+ .debug_line    0x00000000000ebdf6      0x4d1 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_reduce.o)
+ .debug_line    0x00000000000ec2c7      0x2f4 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(i15_rshift.o)
+ .debug_line    0x00000000000ec5bb      0x814 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(hmac.o)
+ .debug_line    0x00000000000ecdcf      0xa59 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(hmac_ct.o)
+ .debug_line    0x00000000000ed828      0x2ac C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(sysrng.o)
+ .debug_line    0x00000000000edad4      0x1ce C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(rsa_default_pub.o)
+ .debug_line    0x00000000000edca2      0x51f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(prf.o)
+ .debug_line    0x00000000000ee1c1     0x1973 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(aes_ct.o)
+ .debug_line    0x00000000000efb34     0x16eb C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(des_ct.o)
+ .debug_line    0x00000000000f121f      0x3db C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libbearssl.a(ecdsa_atr.o)
+ .debug_line    0x00000000000f15fa      0x1ae C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(del_ops.o)
+ .debug_line    0x00000000000f17a8      0x1ae C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(del_opv.o)
+ .debug_line    0x00000000000f1956      0x1af C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(del_opvs.o)
+ .debug_line    0x00000000000f1b05      0x757 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(eh_terminate.o)
+ .debug_line    0x00000000000f225c      0x33a C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(new_handler.o)
+ .debug_line    0x00000000000f2596      0x547 C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(list.o)
+ .debug_line    0x00000000000f2add      0x31b C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(functional.o)
+ .debug_line    0x00000000000f2df8      0x62f C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(shared_ptr.o)
+ .debug_line    0x00000000000f3427      0x22d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(del_op.o)
+ .debug_line    0x00000000000f3654      0x24d C:\Users\quang\AppData\Local\Arduino15\packages\esp8266\hardware\esp8266\3.1.2/tools/sdk/lib\libstdc++.a(eh_term_handler.o)
+ .debug_line    0x00000000000f38a1      0x19d c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libm.a(lib_a-w_sqrt.o)
+ .debug_line    0x00000000000f3a3e      0x74a c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libm.a(lib_a-e_sqrt.o)
+ .debug_line    0x00000000000f4188       0xb7 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libm.a(lib_a-sf_nan.o)
+ .debug_line    0x00000000000f423f       0xad c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-atof.o)
+ .debug_line    0x00000000000f42ec      0x1b7 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-atoi.o)
+ .debug_line    0x00000000000f44a3      0x1b7 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-atol.o)
+ .debug_line    0x00000000000f465a      0x165 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-errno.o)
+ .debug_line    0x00000000000f47bf      0x138 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-impure.o)
+ .debug_line    0x00000000000f48f7      0x1c8 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-isspace.o)
+ .debug_line    0x00000000000f4abf      0x18b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-itoa.o)
+ .debug_line    0x00000000000f4c4a      0x15b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-memchr.o)
+ .debug_line    0x00000000000f4da5     0x1134 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-vfprintf_float.o)
+ .debug_line    0x00000000000f5ed9      0xe09 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-vfprintf_i.o)
+ .debug_line    0x00000000000f6ce2      0xbb5 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-vfscanf_float.o)
+ .debug_line    0x00000000000f7897      0x516 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-snprintf.o)
+ .debug_line    0x00000000000f7dad      0x392 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-sprintf.o)
+ .debug_line    0x00000000000f813f      0x30b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strcasecmp.o)
+ .debug_line    0x00000000000f844a      0x113 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strchr.o)
+ .debug_line    0x00000000000f855d      0x1d7 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strcpy.o)
+ .debug_line    0x00000000000f8734     0x27b2 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strtod.o)
+ .debug_line    0x00000000000faee6      0x7dd c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-strtol.o)
+ .debug_line    0x00000000000fb6c3      0x1d9 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-tolower.o)
+ .debug_line    0x00000000000fb89c      0x3ed c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-utoa.o)
+ .debug_line    0x00000000000fbc89      0x373 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-vsnprintf.o)
+ .debug_line    0x00000000000fbffc      0x2aa c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(stdio_pgmspace.o)
+ .debug_line    0x00000000000fc2a6      0xf5d c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(string_pgmspace.o)
+ .debug_line    0x00000000000fd203       0x51 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-ctype_.o)
+ .debug_line    0x00000000000fd254     0x2751 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-dtoa.o)
+ .debug_line    0x00000000000ff9a5      0x188 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fast_strcpy.o)
+ .debug_line    0x00000000000ffb2d      0x2a3 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fast_strncpy.o)
+ .debug_line    0x00000000000ffdd0      0x9d2 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-findfp.o)
+ .debug_line    0x00000000001007a2      0x40c c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fwalk.o)
+ .debug_line    0x0000000000100bae     0x139d c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-gdtoa-gethex.o)
+ .debug_line    0x0000000000101f4b      0x6f5 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-gdtoa-hexnan.o)
+ .debug_line    0x0000000000102640      0x1c5 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-lnumeric.o)
+ .debug_line    0x0000000000102805      0x2c1 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-locale.o)
+ .debug_line    0x0000000000102ac6      0x27f c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-localeconv.o)
+ .debug_line    0x0000000000102d45      0x2b5 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-mbtowc_r.o)
+ .debug_line    0x0000000000102ffa     0x2b2b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-mprec.o)
+ .debug_line    0x0000000000105b25     0x11dc c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-svfprintf.o)
+ .debug_line    0x0000000000106d01      0xf8c c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-nano-vfprintf.o)
+ .debug_line    0x0000000000107c8d       0xb8 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-s_nan.o)
+ .debug_line    0x0000000000107d45      0x3ca c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-stdio.o)
+ .debug_line    0x000000000010810f      0x314 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-vprintf.o)
+ .debug_line    0x0000000000108423      0x2a8 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-vsprintf.o)
+ .debug_line    0x00000000001086cb      0x414 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-wbuf.o)
+ .debug_line    0x0000000000108adf      0x2af c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-wctomb_r.o)
+ .debug_line    0x0000000000108d8e      0x48c c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-wsetup.o)
+ .debug_line    0x000000000010921a       0xc6 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lock.o)
+ .debug_line    0x00000000001092e0      0x46c c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fclose.o)
+ .debug_line    0x000000000010974c      0x7cb c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fflush.o)
+ .debug_line    0x0000000000109f17      0x5a1 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fputwc.o)
+ .debug_line    0x000000000010a4b8      0xadb c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-fvwrite.o)
+ .debug_line    0x000000000010af93      0x51a c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-makebuf.o)
+ .debug_line    0x000000000010b4ad      0x2f4 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(lib_a-wcrtomb.o)
+ .debug_line    0x000000000010b7a1      0x26e c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0/../../../../xtensa-lx106-elf/lib\libc.a(isatty.o)
+ .debug_line    0x000000000010ba0f       0xf2 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_modsi3.o)
+ .debug_line    0x000000000010bb01       0x92 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_ashrdi3.o)
+ .debug_line    0x000000000010bb93      0x2fd c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_divsf3.o)
+ .debug_line    0x000000000010be90      0x2d3 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_cmpsf2.o)
+ .debug_line    0x000000000010c163       0xed c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_fixsfsi.o)
+ .debug_line    0x000000000010c250      0x369 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_cmpdf2.o)
+ .debug_line    0x000000000010c5b9      0x14d c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_fixdfdi.o)
+ .debug_line    0x000000000010c706      0x16b c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_floatdidf.o)
+ .debug_line    0x000000000010c871      0x326 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_moddi3.o)
+ .debug_line    0x000000000010cb97     0x2a65 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(unwind-dw2-fde.o)
+ .debug_line    0x000000000010f5fc       0x92 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_ashldi3.o)
+ .debug_line    0x000000000010f68e       0x92 c:/users/quang/appdata/local/arduino15/packages/esp8266/tools/xtensa-lx106-elf-gcc/3.1.0-gcc10.3-e5f9fec/bin/../lib/gcc/xtensa-lx106-elf/10.3.0\libgcc.a(_lshrdi3.o)
+ .debug_line    0x000000000010f720     0x1a44 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(ESP8266WiFiAP.cpp.o)
+ .debug_line    0x0000000000111164     0x3375 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\libraries\ESP8266WiFi\ESP8266WiFi.a(WiFiUdp.cpp.o)
+ .debug_line    0x00000000001144d9      0xbfb C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(LwipDhcpServer-NonOS.cpp.o)
+ .debug_line    0x00000000001150d4     0x3124 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(LwipDhcpServer.cpp.o)
+ .debug_line    0x00000000001181f8      0x761 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(aes_unwrap.cpp.o)
+ .debug_line    0x0000000000118959     0x26e3 C:\Users\quang\AppData\Local\Temp\arduino\cores\98095bfcf87bec9192ef4d4e965e1d9a\core.a(time.cpp.o)
 
 .debug_str      0x0000000000000000    0x85c7e
  .debug_str     0x0000000000000000    0x23848 C:\Users\quang\AppData\Local\Temp\arduino\sketches\64BF3531D76EF516A16C541CD6E291A8\sketch\main.ino.cpp.o

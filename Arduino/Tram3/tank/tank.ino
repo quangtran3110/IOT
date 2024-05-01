@@ -1,6 +1,13 @@
+/*
 #define BLYNK_TEMPLATE_ID "TMPL6OXV1bmFt"
 #define BLYNK_TEMPLATE_NAME "Support"
 #define BLYNK_AUTH_TOKEN "7sISC1fJBO2OhzgOrlCUbspnne6I3LWr"
+*/
+
+#define BLYNK_TEMPLATE_ID "TMPL6H_Q3XkK9"
+#define BLYNK_TEMPLATE_NAME "SUPPORT DEACTIVE"
+#define BLYNK_AUTH_TOKEN "IXPS9jkvL6tmMMOqPhhn4YTfXimuEGu4"
+
 #define BLYNK_FIRMWARE_VERSION "T3.TANK"
 
 #define BLYNK_PRINT Serial
@@ -15,7 +22,7 @@ const char* password = "0974040699";
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "lvmyPh1nGcSjs3n1CTJrX4DyuWLlS0i0";
+String Main = "R_V1bJ9xeyl6Yokg1rhlaLhK-NYcDVpx";
 //----------------------
 #define filterSamples 121
 //----------------------------------

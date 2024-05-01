@@ -34,10 +34,10 @@
  *V32 - input luu luong
  *V33 - check luu luong
  *V34 - 
- *V35 - Luu Luong G1
+ *V35 - Luu Luong G1 - 24h
  *V36 - Khoi luong Clo
- *V37 - Luu Luong G1 trong ngay
-
+ *V37 - Luu Luong G1 - 1m3
+ *V38 - Luu Luong G1 rửa lọc
  *V39 - thời gian chạy G1
  *V40 - thời gian chạy G1-24h
  *V41 - 
@@ -60,10 +60,16 @@
  */
 
 #define BLYNK_PRINT Serial
+/*
 #define BLYNK_TEMPLATE_ID "TMPLJp_sN4GN"
 #define BLYNK_TEMPLATE_NAME "Trạm Số 4"
 #define BLYNK_AUTH_TOKEN "o-H-k28kNBIzgNIAP89f2AElv--eWuVO"
-#define BLYNK_FIRMWARE_VERSION "240401"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL67lOs7dLq"
+#define BLYNK_TEMPLATE_NAME "TRẠM SỐ 4"
+#define BLYNK_AUTH_TOKEN "ra1gZtR0irrwiTH1L-L_nhXI6TMRH7M9"
+
+#define BLYNK_FIRMWARE_VERSION "240503"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
@@ -119,7 +125,6 @@ WiFiClient client;
 HTTPClient http;
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/Tram4/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "o-H-k28kNBIzgNIAP89f2AElv--eWuVO";
 //-------------------
 #define filterSamples 121
 int dai = 800;
@@ -213,7 +218,7 @@ BLYNK_CONNECTED() {
 }
 //-------------------------------------------------------------------
 void up() {
-  String server_path = server_name + "batch/update?token=" + Main
+  String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
                        //+ "&V0=" + byte(data.status_b1)
                        //+ "&V1=" + byte(data.status_b2)
                        //+ "&V2=" + byte(data.status_g1)
