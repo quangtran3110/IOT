@@ -549,7 +549,7 @@ void rtctime() {
   timestamp = now.unixtime();
   Blynk.virtualWrite(V9, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
   int nowtime = (now.hour() * 3600 + now.minute() * 60);
-  if (data.mode_cap2 == 3) {                                                                                                                                                                                                                         // Chọn chế độ chạy 2 bơm
+  if (data.mode_cap2 == 1) {                                                                                                                                                                                                                         // Chọn chế độ chạy 2 bơm
     if ((nowtime > data.b1_1_start && nowtime < data.b1_1_stop) || (nowtime > data.b1_2_start && nowtime < data.b1_2_stop) || (nowtime > data.b1_3_start && nowtime < data.b1_3_stop) || (nowtime > data.b1_4_start && nowtime < data.b1_4_stop)) {  // Chạy bơm 1
       if (Irms1 == 0 && !trip1) {                                                                                                                                                                                                                    // Nếu bơm 1 đang tắt và không lỗi
         if ((Irms2 == 0 && !time_run2) || (time_run2)) onbom1();                                                                                                                                                                                     //Chạy bơm 1
@@ -757,24 +757,11 @@ BLYNK_WRITE(V3)  // Chọn chế độ Cấp 2
           break;
         }
       case 1:
-        {  // Bơm 1
-          data.mode_cap2 = 1;
-          break;
-        }
-      case 2:
-        {  // Bơm 2
-          data.mode_cap2 = 2;
-          break;
-        }
-      case 3:
-        {  // Bơm 1 + 2
-          data.mode_cap2 = 3;
-          hidden_auto();
-          break;
-        }
+        data.mode_cap2 = 1;
+        hidden_auto();
+        break;
     }
-  } else
-    Blynk.virtualWrite(V3, data.mode_cap2);
+  } else Blynk.virtualWrite(V3, data.mode_cap2);
 }
 BLYNK_WRITE(V5)  // Chon máy cài đặt bảo vệ
 {
