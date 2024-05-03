@@ -83,7 +83,7 @@ const word address = 0;
 long t;
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 char tz[] = "Asia/Ho_Chi_Minh";
-bool key = false, keySet = false, keyp = true, keynoti = true;
+bool key = false, keySet = false, keyp = true;
 bool trip0 = false, trip1 = false, trip_mcp = false;
 bool timer_I_status, connect = true;
 int c, i = 0, check_connect = 0;
@@ -188,7 +188,7 @@ void readPower()  // C3 - Cấp 1  - I0
           off_cap1();
           xSetAmpe = 0;
           trip0 = true;
-          if (keynoti) {
+          if (data.noti) {
             Blynk.logEvent("error", String("Cấp 1 lỗi: ") + Irms0 + String(" A"));
           }
         }
@@ -223,7 +223,7 @@ void readPower1()  // C4 - Bơm    - I1
           off_bom();
           xSetAmpe1 = 0;
           trip1 = true;
-          if (keynoti) {
+          if (data.noti) {
             Blynk.logEvent("error", String("Cấp 2 lỗi: ") + Irms1 + String(" A"));
           }
         }
@@ -269,7 +269,7 @@ void rtctime() {
 
   if (Result1 < data.pre_min) {
     i = i + 1;
-    if ((i >= 2) && (Irms1 == 0) && (keynoti)) {
+    if ((i >= 2) && (Irms1 == 0) && (data.noti)) {
       Blynk.logEvent("info", String("Lỗi BƠM không chạy, xin kiểm tra."));
     }
   } else {
