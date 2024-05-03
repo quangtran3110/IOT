@@ -45,12 +45,16 @@
  *
  */
 
-
+/*
 #define BLYNK_TEMPLATE_ID "TMPLbPLEi8uh"
 #define BLYNK_TEMPLATE_NAME "Trạm Mộc Hóa"
 #define BLYNK_AUTH_TOKEN "tKNZ99XnCSeCsoDEva3kx-O0YWw83nMn"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6coHtFMJ-"
+#define BLYNK_TEMPLATE_NAME "TRẠM 3 BPT"
+#define BLYNK_AUTH_TOKEN "Xd_XI0fm9nIsXBvvMZ6pjEtRd0irLLR2"
 
-#define BLYNK_FIRMWARE_VERSION "231114"
+#define BLYNK_FIRMWARE_VERSION "240503"
 #define BLYNK_PRINT Serial
 const char* ssid = "KwacoBlynk";
 const char* password = "Password";
@@ -87,7 +91,6 @@ WiFiClient client;
 HTTPClient http;
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/work/kwaco/mochoa/main.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "tKNZ99XnCSeCsoDEva3kx-O0YWw83nMn";
 //--------------
 #define filterSamples 121
 const int S0pin = 14;
@@ -765,10 +768,12 @@ BLYNK_WRITE(V10)  // String
   } else if (dataS == "active") {
     terminal.clear();
     key = true;
+    visible();
     Blynk.virtualWrite(V10, "KHÔNG sử dụng phần mềm cho đến khi thông báo này mất.\n");
   } else if (dataS == "deactive") {
     terminal.clear();
     key = false;
+    hidden();
     Blynk.virtualWrite(V10, "Ok!\nNhập mã để điều khiển!\n");
   } else if (dataS == "save") {
     terminal.clear();
@@ -816,13 +821,6 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
       }
   }
 }
-BLYNK_WRITE(V12)  // Hidden/Visible
-{
-  if (param.asInt() == 0) {
-    hidden();
-  } else
-    visible();
-}
 BLYNK_WRITE(V13)  // Bảo vệ
 {
   if (key) {
@@ -866,7 +864,7 @@ BLYNK_WRITE(V18)  // Time input
 }
 //-------------------------------------------------------------------
 void up() {
-  String server_path = server_name + "batch/update?token=" + Main
+  String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
                        + "&V14=" + Result1
                        + "&V21=" + Irms1
                        + "&V22=" + Irms2

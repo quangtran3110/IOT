@@ -14,10 +14,16 @@ V11- Dung tich
 V12- dosau
 
 */
+/*
 #define BLYNK_TEMPLATE_ID "TMPLrdcYlz_1"
 #define BLYNK_TEMPLATE_NAME "Trạm Cả Đá"
 #define BLYNK_AUTH_TOKEN "HRuqR5DchX_9Nlk--FAFkQiLEaDtr1VV"
-#define BLYNK_FIRMWARE_VERSION "240316"
+*/
+#define BLYNK_TEMPLATE_ID "TMPL6MowNW4lw"
+#define BLYNK_TEMPLATE_NAME "TRẠM CẢ ĐÁ"
+#define BLYNK_AUTH_TOKEN "QZeQANTaoPgXFP9IkGlk84oZ4MDIpnSz"
+
+#define BLYNK_FIRMWARE_VERSION "240503"
 #define BLYNK_PRINT Serial
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
@@ -30,7 +36,6 @@ WiFiClient client;
 HTTPClient http;
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/CaDa/main/build/esp8266.esp8266.nodemcuv2/main.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "HRuqR5DchX_9Nlk--FAFkQiLEaDtr1VV";
 
 #define filterSamples 121
 
@@ -256,7 +261,7 @@ void MeasureCmForSmoothing() {
 }
 
 void updata() {
-  String server_path = server_name + "batch/update?token=" + Main
+  String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
                        + "&V2=" + Result1
                        + "&V0=" + Irms0
                        + "&V1=" + Irms1
