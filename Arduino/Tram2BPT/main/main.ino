@@ -284,11 +284,13 @@ void hidden() {
   Blynk.setProperty(V9, "isHidden", true);
   Blynk.setProperty(V10, "isHidden", true);
   Blynk.setProperty(V11, "isHidden", true);
+  Blynk.setProperty(V17, "isHidden", true);
 }
 void visible() {
   Blynk.setProperty(V9, "isHidden", false);
   Blynk.setProperty(V10, "isHidden", false);
   Blynk.setProperty(V11, "isHidden", false);
+  Blynk.setProperty(V17, "isHidden", false);
 }
 //-------------------------------------------------------------------
 void MeasureCmForSmoothing()  //C1
