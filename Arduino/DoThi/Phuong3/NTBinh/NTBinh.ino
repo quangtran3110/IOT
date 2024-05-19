@@ -5,9 +5,9 @@
 #define pin_status "&V23="
 #define pin_G "&V24="
 
-#define BLYNK_FIRMWARE_VERSION "240401"
+#define BLYNK_FIRMWARE_VERSION "240508"
+#define Main_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
 
-#define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
 const char* ssid = "net";
 const char* password = "Abcd@1234";
 //const char* ssid = "tram bom so 4";

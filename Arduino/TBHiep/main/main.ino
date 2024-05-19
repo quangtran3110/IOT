@@ -37,7 +37,7 @@
 #define BLYNK_AUTH_TOKEN "hTIQQoegUO-4hIC26z6pmy2lW9pHtv26"
 
 const char* ssid = "net";
-const char* password = "Password";
+const char* password = "Abcd@1234";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
 #define BLYNK_FIRMWARE_VERSION "240503"

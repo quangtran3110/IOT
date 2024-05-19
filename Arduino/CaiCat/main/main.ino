@@ -350,7 +350,8 @@ void readcurrent()  // C0 - Bơm 1
         pcf8575_1.digitalWrite(pin_off_Bom1, LOW);
         trip0 = true;
         xSetAmpe = 0;
-        timer1.setTimeout(600000L, []() {
+        timer1.setTimeout(15000L, []() {
+          trip0 = false;
           pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
         });
       }
@@ -381,7 +382,8 @@ void readcurrent1()  // C1 - Bơm 2
         trip1 = true;
         xSetAmpe1 = 0;
         pcf8575_1.digitalWrite(pin_off_Bom2, LOW);
-        timer.setTimeout(600000L, []() {
+        timer.setTimeout(15000L, []() {
+          trip1 = false;
           pcf8575_1.digitalWrite(pin_off_Bom2, HIGH);
         });
       }
@@ -412,7 +414,8 @@ void readcurrent2()  // C2 - Bơm 3
         trip2 = true;
         xSetAmpe2 = 0;
         pcf8575_1.digitalWrite(pin_off_Bom3, LOW);
-        timer.setTimeout(600000L, []() {
+        timer.setTimeout(15000L, []() {
+          trip2 = false;
           pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
         });
       }
@@ -443,7 +446,8 @@ void readcurrent3()  // C3 - Gieng 1
         trip3 = true;
         xSetAmpe3 = 0;
         pcf8575_1.digitalWrite(pin_off_G1, LOW);
-        timer.setTimeout(600000L, []() {
+        timer.setTimeout(15000L, []() {
+          trip3 = false;
           pcf8575_1.digitalWrite(pin_off_G1, HIGH);
         });
       }
@@ -474,7 +478,8 @@ void readcurrent4()  // C4 - Giếng 2
         trip4 = true;
         xSetAmpe4 = 0;
         pcf8575_1.digitalWrite(pin_off_G2, LOW);
-        timer.setTimeout(300000L, []() {
+        timer.setTimeout(15000L, []() {
+          trip4 = false;
           pcf8575_1.digitalWrite(pin_off_G2, HIGH);
         });
       }
@@ -505,7 +510,8 @@ void readcurrent5()  // C5 - Gieng 3
         trip5 = true;
         xSetAmpe5 = 0;
         pcf8575_1.digitalWrite(pin_off_G3, LOW);
-        timer.setTimeout(300000L, []() {
+        timer.setTimeout(15000L, []() {
+          trip4 = false;
           pcf8575_1.digitalWrite(pin_off_G3, HIGH);
         });
       }
@@ -653,24 +659,25 @@ void rtctime() {
   Blynk.virtualWrite(V1, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
   int nowtime = (now.hour() * 3600 + now.minute() * 60);
 
-  if (data.man == 1) {
+  if ((data.man == 1) && (blynk_first_connect)) {
     if (data.start < data.stop) {
       if (nowtime > data.start && nowtime < data.stop) {
-        if (!trip3) {
-          pcf8575_1.digitalWrite(pin_on_G1, LOW);
+        if ((!trip2) && (Irms2 == 0)) {
+          on_Bom3();
+          timer.setTimeout(600000L, []() {
+            if (Irms2 != 0) {
+              if ((Irms4 == 0) && (!trip4)) {
+                onG2();
+              }
+              if ((Irms5 == 0) && (!trip5)) {
+                onG3();
+              }
+            }
+          });
         }
-        if (!trip4) {
-          pcf8575_1.digitalWrite(pin_on_G2, LOW);
-        }
-        if (!trip5) {
-          pcf8575_1.digitalWrite(pin_on_G3, LOW);
-        }
-      } else {
-        pcf8575_1.digitalWrite(pin_on_G1, HIGH);
-        pcf8575_1.digitalWrite(pin_on_G2, HIGH);
-        pcf8575_1.digitalWrite(pin_on_G3, HIGH);
       }
-    } else if (data.start > data.stop) {
+    }
+    /*else if (data.start > data.stop) {
       if ((nowtime > data.start) || (nowtime < data.stop)) {
         if (!trip3) {
           pcf8575_1.digitalWrite(pin_on_G1, LOW);
@@ -687,6 +694,7 @@ void rtctime() {
         pcf8575_1.digitalWrite(pin_on_G3, HIGH);
       }
     }
+    */
   }
 }
 //------------

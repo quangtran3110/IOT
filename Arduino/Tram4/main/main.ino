@@ -40,9 +40,10 @@
  *V38 - Luu Luong G1 rửa lọc
  *V39 - thời gian chạy G1
  *V40 - thời gian chạy G1-24h
- *V41 - 
- *V42 -
- *V43 -
+ *V41 - thời gian chạy B1
+ *V42 - thời gian chạy B1 - 24h
+ *V43 - thời gian chạy B2
+ *V44 - thời gian chạy B2 - 24h
 
  *MCP------
  *pin8 - B0 - nối relay 1
@@ -183,8 +184,11 @@ uint32_t timestamp;
 int a, c, b, f = 0;
 int timer_2, timer_1, timer_3, timer_4, timer_5;
 int LLG1_1m3, reboot_num;
-int G1_start;
-bool g1_save = false;
+int time_run_nenkhi = 5 * 60;
+int time_stop_nenkhi = 10 * 60;
+byte status_b1 = LOW, status_b2 = LOW, status_g1 = LOW;
+int G1_start, B1_start, B2_start;
+bool G1_save = false, B1_save = false, B2_save = false;
 //-------------------
 struct Data {
   byte SetAmpemax, SetAmpemin;
@@ -192,21 +196,18 @@ struct Data {
   byte SetAmpe2max, SetAmpe2min;
   byte SetAmpe3max, SetAmpe3min;
   byte SetAmpe4max, SetAmpe4min;
-  byte man, mode_cap2, cap2_chanle;
+  byte man, mode_cap2;
   int b1_1_start, b1_1_stop, b1_2_start, b1_2_stop, b1_3_start, b1_3_stop, b1_4_start, b1_4_stop;
   int b2_1_start, b2_1_stop, b2_2_start, b2_2_stop, b2_3_start, b2_3_stop, b2_4_start, b2_4_stop;
-  //int bom_chanle_start, bom_chanle_stop;
-  byte reboot_num;
   int save_num;
-  int time_run_nenkhi, time_stop_nenkhi;
-  float clo;
+  byte clo;
   int time_clo, LLG1_RL;
   byte statusRualoc;
-  byte status_b1, status_b2, status_g1, key_noti;
+  byte key_noti;
   byte reset_day;
-  int timerun_g1;
+  int timerun_G1, timerun_B1, timerun_B2;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = {  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V10);
 WidgetRTC rtc_widget;
@@ -219,9 +220,6 @@ BLYNK_CONNECTED() {
 //-------------------------------------------------------------------
 void up() {
   String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
-                       //+ "&V0=" + byte(data.status_b1)
-                       //+ "&V1=" + byte(data.status_b2)
-                       //+ "&V2=" + byte(data.status_g1)
                        + "&V14=" + float(Result1)
                        + "&V15=" + temp[1]
                        + "&V19=" + volume1
@@ -232,7 +230,16 @@ void up() {
                        + "&V24=" + Irms2
                        + "&V30=" + Irms3
                        + "&V25=" + Irms4
-                       + "&V39=" + float(data.timerun_g1) / 1000 / 60 / 60;
+                       + "&V39=" + float(data.timerun_G1) / 1000 / 60 / 60;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+}
+void up_timerun_motor() {
+  String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
+                       + "&V40=" + float(data.timerun_G1) / 1000 / 60 / 60
+                       + "&V42=" + float(data.timerun_B1) / 1000 / 60 / 60
+                       + "&V44=" + float(data.timerun_B2) / 1000 / 60 / 60;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -251,76 +258,90 @@ void time_run_motor() {
   if (blynk_first_connect) {
     if (data.reset_day != day()) {
       if (Blynk.connected()) {
-        Blynk.virtualWrite(V40, float(data.timerun_g1) / 1000 / 60 / 60);
-        data.timerun_g1 = 0;
+        up_timerun_motor();
+        data.timerun_G1 = 0;
+        data.timerun_B1 = 0;
+        data.timerun_B2 = 0;
         data.reset_day = day();
         savedata();
       }
     }
   }
-  if ((g1_save) && (G1_start != 0)) {
-    data.timerun_g1 = data.timerun_g1 + (millis() - G1_start);
+  if (G1_save || B1_save || B2_save) {
+    if (G1_start != 0) {
+      data.timerun_G1 = data.timerun_G1 + (millis() - G1_start);
+      G1_start = millis();
+      G1_save = false;
+    }
+    if (B1_start != 0) {
+      data.timerun_B1 = data.timerun_B1 + (millis() - B1_start);
+      B1_start = millis();
+      B1_save = false;
+    }
+    if (B2_start != 0) {
+      data.timerun_B2 = data.timerun_B2 + (millis() - B2_start);
+      B2_start = millis();
+      B2_save = false;
+    }
     savedata();
-    G1_start = millis();
-    g1_save = false;
   }
 }
 void rualoc() {
   if (data.statusRualoc == HIGH) {
     pcf8575_1.digitalWrite(pin_Vandien, !data.statusRualoc);
-    timer1.setTimeout(long(data.time_run_nenkhi * 1000), []() {
+    timer1.setTimeout(long(time_run_nenkhi * 1000), []() {
       pcf8575_1.digitalWrite(pin_Vandien, HIGH);
     });
   }
 }
 void oncap1() {
-  if (data.status_g1 != HIGH) {
-    data.status_g1 = HIGH;
-    Blynk.virtualWrite(V2, data.status_g1);
+  if (status_g1 != HIGH) {
+    status_g1 = HIGH;
+    Blynk.virtualWrite(V2, status_g1);
     savedata();
   }
-  pcf8575_1.digitalWrite(pin_G1, data.status_g1);
+  pcf8575_1.digitalWrite(pin_G1, status_g1);
 }
 void offcap1() {
-  if (data.status_g1 != LOW) {
-    data.status_g1 = LOW;
-    Blynk.virtualWrite(V2, data.status_g1);
+  if (status_g1 != LOW) {
+    status_g1 = LOW;
+    Blynk.virtualWrite(V2, status_g1);
     savedata();
   }
-  pcf8575_1.digitalWrite(pin_G1, data.status_g1);
+  pcf8575_1.digitalWrite(pin_G1, status_g1);
 }
 void onbom1() {
-  if (data.status_b1 != HIGH) {
-    data.status_b1 = HIGH;
-    Blynk.virtualWrite(V0, data.status_b1);
+  if (status_b1 != HIGH) {
+    status_b1 = HIGH;
+    Blynk.virtualWrite(V0, status_b1);
     savedata();
   }
-  pcf8575_1.digitalWrite(pin_B1, !data.status_b1);
+  pcf8575_1.digitalWrite(pin_B1, !status_b1);
 }
 void offbom1() {
-  if (data.status_b1 != LOW) {
-    data.status_b1 = LOW;
-    Blynk.virtualWrite(V0, data.status_b1);
+  if (status_b1 != LOW) {
+    status_b1 = LOW;
+    Blynk.virtualWrite(V0, status_b1);
     savedata();
   }
-  pcf8575_1.digitalWrite(pin_B1, !data.status_b1);
+  pcf8575_1.digitalWrite(pin_B1, !status_b1);
 }
 void onbom2() {
-  if (data.status_b2 != HIGH) {
-    data.status_b2 = HIGH;
-    Blynk.virtualWrite(V1, data.status_b2);
+  if (status_b2 != HIGH) {
+    status_b2 = HIGH;
+    Blynk.virtualWrite(V1, status_b2);
     savedata();
   }
-  pcf8575_1.digitalWrite(pin_B2, !data.status_b2);
+  pcf8575_1.digitalWrite(pin_B2, !status_b2);
 }
 void offbom2() {
-  if (data.status_b2 != LOW) {
-    data.status_b2 = LOW;
-    Blynk.virtualWrite(V1, data.status_b2);
+  if (status_b2 != LOW) {
+    status_b2 = LOW;
+    Blynk.virtualWrite(V1, status_b2);
     savedata();
   }
-  pcf8575_1.digitalWrite(pin_B2, !data.status_b2);
-  Blynk.virtualWrite(V1, data.status_b2);
+  pcf8575_1.digitalWrite(pin_B2, !status_b2);
+  Blynk.virtualWrite(V1, status_b2);
 }
 void hidden_all() {
   Blynk.setProperty(V18, V11, V16, V13, V8, V5, V6, V7, "isHidden", true);
@@ -349,7 +370,7 @@ void readPower()  // C2 - Giếng    - I0
     Irms0 = 0;
     yIrms0 = 0;
     if (G1_start != 0) {
-      data.timerun_g1 = data.timerun_g1 + (millis() - G1_start);
+      data.timerun_G1 = data.timerun_G1 + (millis() - G1_start);
       savedata();
       G1_start = 0;
     }
@@ -360,8 +381,8 @@ void readPower()  // C2 - Giếng    - I0
       if (G1_start >= 0) {
         if (G1_start == 0) G1_start = millis();
         else if (millis() - G1_start > 60000) {
-          g1_save = true;
-        } else g1_save = false;
+          G1_save = true;
+        } else G1_save = false;
       }
       if ((Irms0 >= data.SetAmpemax) || (Irms0 <= data.SetAmpemin)) {
         xSetAmpe = xSetAmpe + 1;
@@ -387,18 +408,31 @@ void readPower1()  // C3 - Bơm 1    - I1
   if (rms1 < 1) {
     Irms1 = 0;
     yIrms1 = 0;
+    if (B1_start != 0) {
+      data.timerun_B1 = data.timerun_B1 + (millis() - B1_start);
+      savedata();
+      B1_start = 0;
+    }
   } else if (rms1 >= 1) {
     Irms1 = rms1;
     yIrms1 = yIrms1 + 1;
-    if ((yIrms1 > 3) && ((Irms1 >= data.SetAmpe1max) || (Irms1 <= data.SetAmpe1min))) {
-      xSetAmpe1 = xSetAmpe1 + 1;
-      if ((xSetAmpe1 >= 2) && (keyp)) {
-        offbom1();
-        xSetAmpe1 = 0;
-        trip1 = true;
-        if (data.key_noti)
-          Blynk.logEvent("error", String("Bơm 1 lỗi: ") + Irms1 + String(" A"));
+    if (yIrms1 > 3) {
+      if (B1_start >= 0) {
+        if (B1_start == 0) B1_start = millis();
+        else if (millis() - B1_start > 60000) {
+          B1_save = true;
+        } else B1_save = false;
       }
+      if ((Irms1 >= data.SetAmpe1max) || (Irms1 <= data.SetAmpe1min)) {
+          xSetAmpe1 = xSetAmpe1 + 1;
+          if ((xSetAmpe1 >= 2) && (keyp)) {
+            offbom1();
+            xSetAmpe1 = 0;
+            trip1 = true;
+            if (data.key_noti)
+              Blynk.logEvent("error", String("Bơm 1 lỗi: ") + Irms1 + String(" A"));
+          }
+        }
     }
   }
   //Blynk.virtualWrite(V26, Irms1);
@@ -413,18 +447,31 @@ void readPower2()  // C4 - Bơm 2    - I2
   if (rms2 < 1) {
     Irms2 = 0;
     yIrms2 = 0;
+    if (B2_start != 0) {
+      data.timerun_B2 = data.timerun_B2 + (millis() - B2_start);
+      savedata();
+      B2_start = 0;
+    }
   } else if (rms2 >= 1) {
     Irms2 = rms2;
     yIrms2 = yIrms2 + 1;
-    if ((yIrms2 > 3) && ((Irms2 >= data.SetAmpe2max) || (Irms2 <= data.SetAmpe2min))) {
-      xSetAmpe2 = xSetAmpe2 + 1;
-      if ((xSetAmpe2 >= 2) && (keyp)) {
-        offbom2();
-        xSetAmpe2 = 0;
-        trip2 = true;
-        if (data.key_noti)
-          Blynk.logEvent("error", String("Bơm 2 lỗi: ") + Irms2 + String(" A"));
+    if (yIrms2 > 3) {
+      if (B2_start >= 0) {
+        if (B2_start == 0) B2_start = millis();
+        else if (millis() - B2_start > 60000) {
+          B2_save = true;
+        } else B2_save = false;
       }
+      if ((Irms2 >= data.SetAmpe2max) || (Irms2 <= data.SetAmpe2min)) {
+          xSetAmpe2 = xSetAmpe2 + 1;
+          if ((xSetAmpe2 >= 2) && (keyp)) {
+            offbom2();
+            xSetAmpe2 = 0;
+            trip2 = true;
+            if (data.key_noti)
+              Blynk.logEvent("error", String("Bơm 2 lỗi: ") + Irms2 + String(" A"));
+          }
+        }
     }
   }
   //Blynk.virtualWrite(V24, Irms2);
@@ -726,7 +773,7 @@ BLYNK_WRITE(V0)  // Bơm 1
       offbom1();
     else onbom1();
   else
-    Blynk.virtualWrite(V0, data.status_b1);
+    Blynk.virtualWrite(V0, status_b1);
 }
 BLYNK_WRITE(V1)  // Bơm 2
 {
@@ -735,7 +782,7 @@ BLYNK_WRITE(V1)  // Bơm 2
       offbom2();
     else onbom2();
   else
-    Blynk.virtualWrite(V1, data.status_b2);
+    Blynk.virtualWrite(V1, status_b2);
 }
 BLYNK_WRITE(V2)  // Giếng
 {
@@ -744,7 +791,7 @@ BLYNK_WRITE(V2)  // Giếng
       offcap1();
     else oncap1();
   else
-    Blynk.virtualWrite(V2, data.status_g1);
+    Blynk.virtualWrite(V2, status_g1);
 }
 BLYNK_WRITE(V3)  // Chọn chế độ Cấp 2
 {
@@ -900,40 +947,7 @@ BLYNK_WRITE(V10)  // String
 }
 BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
 {
-  if ((data.mode_cap2 == 1) || (data.mode_cap2 == 2)) {
-    BlynkParamAllocated menu(128);  // list length, in bytes
-    menu.add("NGÀY CHẴN");
-    menu.add("NGÀY LẺ");
-    menu.add("THỜI GIAN RỬA LỌC");
-    Blynk.setProperty(V11, "labels", menu);
-    switch (param.asInt()) {
-      case 0:
-        {
-          if (key) {
-            data.cap2_chanle = 0;
-            b = 8;
-          }
-          //Blynk.virtualWrite(V18, data.bom_chanle_start, data.bom_chanle_stop, tz);
-          break;
-        }
-      case 1:
-        {
-          if (key) {
-            data.cap2_chanle = 1;
-            b = 8;
-          }
-          //Blynk.virtualWrite(V18, data.bom_chanle_start, data.bom_chanle_stop, tz);
-          break;
-        }
-      case 2:
-        {  // Rửa lọc
-          if (key)
-            b = 9;
-          Blynk.virtualWrite(V18, data.time_run_nenkhi, data.time_stop_nenkhi, tz);
-          break;
-        }
-    }
-  } else if (data.mode_cap2 == 3) {
+  if (data.mode_cap2 == 1) {
     BlynkParamAllocated menu(255);  // list length, in bytes
     menu.add("BƠM 1 - LẦN 1");
     menu.add("BƠM 2 - LẦN 1");
@@ -1002,13 +1016,6 @@ BLYNK_WRITE(V11)  // Chọn thời gian chạy 2 Bơm
           Blynk.virtualWrite(V18, data.b2_4_start, data.b2_4_stop, tz);
           break;
         }
-      case 8:
-        {  // Châm Clo
-          if (key)
-            b = 9;
-          Blynk.virtualWrite(V18, data.time_run_nenkhi, data.time_stop_nenkhi, tz);
-          break;
-        }
     }
   }
 }
@@ -1074,11 +1081,6 @@ BLYNK_WRITE(V18)  // Time input
         data.b1_4_start = t.getStartHour() * 3600 + t.getStartMinute() * 60;
       else if (b == 7)
         data.b2_4_start = t.getStartHour() * 3600 + t.getStartMinute() * 60;
-      else if (b == 8) {
-      }
-      //data.bom_chanle_start = t.getStartHour() * 3600 + t.getStartMinute() * 60;
-      else if (b == 9)
-        data.time_run_nenkhi = t.getStartHour() * 3600 + t.getStartMinute() * 60;
     }
     if (t.hasStopTime()) {
       if (b == 0)
@@ -1097,11 +1099,6 @@ BLYNK_WRITE(V18)  // Time input
         data.b1_4_stop = t.getStopHour() * 3600 + t.getStopMinute() * 60;
       else if (b == 7)
         data.b2_4_stop = t.getStopHour() * 3600 + t.getStopMinute() * 60;
-      else if (b == 8) {
-      }
-      //data.bom_chanle_stop = t.getStopHour() * 3600 + t.getStopMinute() * 60;
-      else if (b == 9)
-        data.time_stop_nenkhi = t.getStopHour() * 3600 + t.getStopMinute() * 60;
     }
   } else
     Blynk.virtualWrite(V18, 0);
@@ -1277,9 +1274,9 @@ void setup() {
   pcf8575_1.pinMode(pin_G1, OUTPUT);
   pcf8575_1.digitalWrite(pin_G1, HIGH);
   pcf8575_1.pinMode(pin_B1, OUTPUT);
-  pcf8575_1.digitalWrite(pin_B1, data.status_b1);
+  //pcf8575_1.digitalWrite(pin_B1, status_b1);
   pcf8575_1.pinMode(pin_B2, OUTPUT);
-  pcf8575_1.digitalWrite(pin_B2, data.status_b2);
+  //pcf8575_1.digitalWrite(pin_B2, status_b2);
   pcf8575_1.pinMode(pin_Vandien, OUTPUT);
   pcf8575_1.digitalWrite(pin_Vandien, HIGH);
   pcf8575_1.pinMode(pin_rst, OUTPUT);
@@ -1314,7 +1311,7 @@ void setup() {
       timer.restartTimer(timer_1);
       timer.restartTimer(timer_2);
     });
-    timer.setInterval(long(((data.time_run_nenkhi + data.time_stop_nenkhi) * 1000) + 500), rualoc);
+    timer.setInterval(long(((time_run_nenkhi + time_stop_nenkhi) * 1000) + 500), rualoc);
     terminal.clear();
   });
 }

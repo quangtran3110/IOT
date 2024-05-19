@@ -38,10 +38,10 @@ V29 - mode
 V30 - Btn van 1
 */
 
-#define BLYNK_TEMPLATE_ID "TMPL6LdmF6nY7"
-#define BLYNK_TEMPLATE_NAME "Đô Thị"
-#define BLYNK_AUTH_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
-#define BLYNK_FIRMWARE_VERSION "280324"
+#define BLYNK_TEMPLATE_ID "TMPL67uSt4c-z"
+#define BLYNK_TEMPLATE_NAME "ĐÔ THỊ"
+#define BLYNK_AUTH_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
+#define BLYNK_FIRMWARE_VERSION "280508"
 
 #define ccd_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 #define ubndp2_TOKEN "gvfnRXv14oMohtqMWTPQXbduFKww1zfu"
@@ -51,7 +51,6 @@ V30 - Btn van 1
 #define boke2_TOKEN "I"
 #define boke3_TOKEN "I"
 #define dhvuong_TOKEN "eBeqi9ZJhRK3r66cUzgdD1gp2xGxG7kS"
-
 
 #define BLYNK_PRINT Serial
 #define APP_DEBUG

@@ -1,8 +1,10 @@
-#define BLYNK_TEMPLATE_ID "TMPL7Z9cnaGi"
-#define BLYNK_TEMPLATE_NAME "Support1"
-#define BLYNK_AUTH_TOKEN "d54fFy8o6_fj09EOfaIFuZY_KwwmRNEw"
+
+#define BLYNK_TEMPLATE_ID "TMPL6H_Q3XkK9"
+#define BLYNK_TEMPLATE_NAME "SUPPORT DEACTIVE"
+#define BLYNK_AUTH_TOKEN "IXPS9jkvL6tmMMOqPhhn4YTfXimuEGu4"
+
 #define BLYNK_FIRMWARE_VERSION "MH-cu.23.10.1"
-const char* ssid = "Cap Nuoc Moc Hoa ";
+const char* ssid = "Cap Nuoc Moc Hoa";
 const char* password = "capnuoc@1992";
 //const char* ssid = "Wifi";
 //const char* password = "Password";
@@ -18,7 +20,7 @@ EnergyMonitor emon0;
 WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
-String Main = "tKNZ99XnCSeCsoDEva3kx-O0YWw83nMn";
+String Main = "Xd_XI0fm9nIsXBvvMZ6pjEtRd0irLLR2";
 //---------------
 long m = 60000;
 double Irms0 = 0;

@@ -1,9 +1,9 @@
 #define BLYNK_TEMPLATE_ID "TMPL6Ym_1ed4M"
 #define BLYNK_TEMPLATE_NAME "Bo ke 1"
 #define BLYNK_AUTH_TOKEN "Ip_LElKywC_tQiM7uChCt_5QKd_RfjWG"
-#define BLYNK_FIRMWARE_VERSION "240329"
+#define BLYNK_FIRMWARE_VERSION "240508"
 
-#define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
+#define Main_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
 const char* ssid = "net";
 const char* password = "Abcd@1234";
 //const char* ssid = "tram bom so 4";
