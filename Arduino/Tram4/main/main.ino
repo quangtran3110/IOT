@@ -70,7 +70,7 @@
 #define BLYNK_TEMPLATE_NAME "TRẠM SỐ 4"
 #define BLYNK_AUTH_TOKEN "ra1gZtR0irrwiTH1L-L_nhXI6TMRH7M9"
 
-#define BLYNK_FIRMWARE_VERSION "240503"
+#define BLYNK_FIRMWARE_VERSION "240520"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
@@ -1128,7 +1128,7 @@ BLYNK_WRITE(V29)  // Info
           Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 2 tự động\nTắt máy vào: NGÀY LẺ\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
       }
     } */
-    else if (data.mode_cap2 == 3) {
+    else if (data.mode_cap2 == 1) {
       int hour_start_b1_1 = data.b1_1_start / 3600;
       int minute_start_b1_1 = (data.b1_1_start - (hour_start_b1_1 * 3600)) / 60;
       int hour_stop_b1_1 = data.b1_1_stop / 3600;
