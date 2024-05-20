@@ -65,7 +65,7 @@
 #define BLYNK_TEMPLATE_NAME "TRẠM BHĐ"
 #define BLYNK_AUTH_TOKEN "8rYwP5-2nYyA6G1txMqXMamUNITRd-k9"
 
-#define BLYNK_FIRMWARE_VERSION "240520"
+#define BLYNK_FIRMWARE_VERSION "240521"
 const char* ssid = "Cap Nuoc";
 const char* password = "0919126757";
 //const char* ssid = "tram bom so 4";
@@ -965,8 +965,6 @@ BLYNK_WRITE(V29) // Info
   timer.restartTimer(timer_2);
 }
 */
-//-------------------------------------------------------------------
-
 //-------------------------------------------------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
