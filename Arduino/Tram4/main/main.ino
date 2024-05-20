@@ -207,7 +207,7 @@ struct Data {
   byte reset_day;
   int timerun_G1, timerun_B1, timerun_B2;
 } data, dataCheck;
-const struct Data dataDefault = {  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V10);
 WidgetRTC rtc_widget;
@@ -426,15 +426,15 @@ void readPower1()  // C3 - Bơm 1    - I1
         } else B1_save = false;
       }
       if ((Irms1 >= data.SetAmpe1max) || (Irms1 <= data.SetAmpe1min)) {
-          xSetAmpe1 = xSetAmpe1 + 1;
-          if ((xSetAmpe1 >= 2) && (keyp)) {
-            offbom1();
-            xSetAmpe1 = 0;
-            trip1 = true;
-            if (data.key_noti)
-              Blynk.logEvent("error", String("Bơm 1 lỗi: ") + Irms1 + String(" A"));
-          }
+        xSetAmpe1 = xSetAmpe1 + 1;
+        if ((xSetAmpe1 >= 2) && (keyp)) {
+          offbom1();
+          xSetAmpe1 = 0;
+          trip1 = true;
+          if (data.key_noti)
+            Blynk.logEvent("error", String("Bơm 1 lỗi: ") + Irms1 + String(" A"));
         }
+      }
     }
   }
   //Blynk.virtualWrite(V26, Irms1);
@@ -465,15 +465,15 @@ void readPower2()  // C4 - Bơm 2    - I2
         } else B2_save = false;
       }
       if ((Irms2 >= data.SetAmpe2max) || (Irms2 <= data.SetAmpe2min)) {
-          xSetAmpe2 = xSetAmpe2 + 1;
-          if ((xSetAmpe2 >= 2) && (keyp)) {
-            offbom2();
-            xSetAmpe2 = 0;
-            trip2 = true;
-            if (data.key_noti)
-              Blynk.logEvent("error", String("Bơm 2 lỗi: ") + Irms2 + String(" A"));
-          }
+        xSetAmpe2 = xSetAmpe2 + 1;
+        if ((xSetAmpe2 >= 2) && (keyp)) {
+          offbom2();
+          xSetAmpe2 = 0;
+          trip2 = true;
+          if (data.key_noti)
+            Blynk.logEvent("error", String("Bơm 2 lỗi: ") + Irms2 + String(" A"));
         }
+      }
     }
   }
   //Blynk.virtualWrite(V24, Irms2);
@@ -806,9 +806,11 @@ BLYNK_WRITE(V3)  // Chọn chế độ Cấp 2
           break;
         }
       case 1:
-        data.mode_cap2 = 1;
-        hidden_auto();
-        break;
+        {
+          data.mode_cap2 = 1;
+          hidden_auto();
+          break;
+        }
     }
   } else Blynk.virtualWrite(V3, data.mode_cap2);
 }
@@ -1111,24 +1113,7 @@ BLYNK_WRITE(V29)  // Info
     terminal.clear();
     if (data.mode_cap2 == 0) {
       Blynk.virtualWrite(V10, "Chế độ bơm: Vận hành THỦ CÔNG");
-    } /* else if ((data.mode_cap2 == 1) || (data.mode_cap2 == 2)) {
-      int hour_start = data.bom_chanle_start / 3600;
-      int minute_start = (data.bom_chanle_start - (hour_start * 3600)) / 60;
-      int hour_stop = data.bom_chanle_stop / 3600;
-      int minute_stop = (data.bom_chanle_stop - (hour_stop * 3600)) / 60;
-      if (data.mode_cap2 == 1) {
-        if (data.cap2_chanle == 0)
-          Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 1 tự động\nTắt máy vào: NGÀY CHẴN\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
-        else if (data.cap2_chanle == 1)
-          Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 1 tự động\nTắt máy vào: NGÀY LẺ\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
-      } else if (data.mode_cap2 == 2) {
-        if (data.cap2_chanle == 0)
-          Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 2 tự động\nTắt máy vào: NGÀY CHẴN\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
-        else if (data.cap2_chanle == 1)
-          Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 2 tự động\nTắt máy vào: NGÀY LẺ\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
-      }
-    } */
-    else if (data.mode_cap2 == 1) {
+    } else if (data.mode_cap2 == 1) {
       int hour_start_b1_1 = data.b1_1_start / 3600;
       int minute_start_b1_1 = (data.b1_1_start - (hour_start_b1_1 * 3600)) / 60;
       int hour_stop_b1_1 = data.b1_1_stop / 3600;
@@ -1171,7 +1156,23 @@ BLYNK_WRITE(V29)  // Info
 
       Blynk.virtualWrite(V10, "Mode: Auto\nPump 1: ", hour_start_b1_1, "h", minute_start_b1_1, " -> ", hour_stop_b1_1, "h", minute_stop_b1_1, "\nPump 2: ", hour_start_b2_1, "h", minute_start_b2_1, " -> ", hour_stop_b2_1, "h", minute_stop_b2_1, "\nPump 1: ", hour_start_b1_2, "h", minute_start_b1_2, " -> ", hour_stop_b1_2, "h", minute_stop_b1_2, "\nPump 2: ", hour_start_b2_2, "h", minute_start_b2_2, " -> ", hour_stop_b2_2, "h", minute_stop_b2_2);
       Blynk.virtualWrite(V10, "\nPump 1: ", hour_start_b1_3, "h", minute_start_b1_3, " -> ", hour_stop_b1_3, "h", minute_stop_b1_3, "\nPump 2: ", hour_start_b2_3, "h", minute_start_b2_3, " -> ", hour_stop_b2_3, "h", minute_stop_b2_3, "\nPump 1: ", hour_start_b1_4, "h", minute_start_b1_4, " -> ", hour_stop_b1_4, "h", minute_stop_b1_4, "\nPump 2: ", hour_start_b2_4, "h", minute_start_b2_4, " -> ", hour_stop_b2_4, "h", minute_stop_b2_4);
-    }
+    } /* else if ((data.mode_cap2 == 1) || (data.mode_cap2 == 2)) {
+      int hour_start = data.bom_chanle_start / 3600;
+      int minute_start = (data.bom_chanle_start - (hour_start * 3600)) / 60;
+      int hour_stop = data.bom_chanle_stop / 3600;
+      int minute_stop = (data.bom_chanle_stop - (hour_stop * 3600)) / 60;
+      if (data.mode_cap2 == 1) {
+        if (data.cap2_chanle == 0)
+          Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 1 tự động\nTắt máy vào: NGÀY CHẴN\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
+        else if (data.cap2_chanle == 1)
+          Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 1 tự động\nTắt máy vào: NGÀY LẺ\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
+      } else if (data.mode_cap2 == 2) {
+        if (data.cap2_chanle == 0)
+          Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 2 tự động\nTắt máy vào: NGÀY CHẴN\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
+        else if (data.cap2_chanle == 1)
+          Blynk.virtualWrite(V10, "Chế độ bơm: Bơm 2 tự động\nTắt máy vào: NGÀY LẺ\nThời gian: ", hour_start, ":", minute_start, " - ", hour_stop, ":", minute_stop);
+      }
+    } */
   } else terminal.clear();
   timer.restartTimer(timer_1);
   timer.restartTimer(timer_2);
@@ -1317,7 +1318,6 @@ void setup() {
     terminal.clear();
   });
 }
-
 void loop() {
   Blynk.run();
   timer.run();
