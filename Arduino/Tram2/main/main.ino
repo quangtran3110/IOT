@@ -178,7 +178,7 @@ bool timer_updata_status, timer_I_status;
 bool kdata15 = true, kdata16 = true, kdata20 = true, kdata21 = true, kdata22 = true, kdata23 = true, kdata24 = true, kdata25 = true, kdata26 = true, kdata27 = true, kdata28 = true, kdata29 = true, kdata30 = true, kdata31 = true;
 bool event30p = true;
 bool blynk_first_connect = false;
-byte menu_gieng_luuluong;
+byte menu_gieng_luuluong, reboot_num;
 unsigned long ll_g1_cache = 0, ll_g2_cache = 0;
 float clo_cache = 0;
 uint32_t timestamp;
@@ -204,7 +204,7 @@ struct Data {
   byte man;
   int save_num;
   byte time_run_nk1, time_stop_nk1, time_run_nk2, time_stop_nk2;
-  byte reboot_num, status_rualoc;
+  byte status_rualoc;
   unsigned long ll_g1, ll_g2;
   float clo;
   int time_clo, LLG2_RL, LLG1_RL;
@@ -212,7 +212,7 @@ struct Data {
   byte reset_day;
   int timerun_G1, timerun_G2, timerun_G3, timerun_B1, timerun_B2, timerun_B3, timerun_B4;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal keyterminal(V5);
 WidgetTerminal terminal_luuluong(V50);
@@ -1124,18 +1124,17 @@ void readcurrent()  // C3 - 18.5 KW
         } else B1_save = false;
       }
       if ((Irms0 > data.SetAmpemax) || (Irms0 < data.SetAmpemin)) {
-          xSetAmpe = xSetAmpe + 1;
-          if ((xSetAmpe >= 3) && (data.protect)) {
-            Blynk.logEvent("error", String("Máy 18.5KW lỗi: ") + Irms0 + String(" A"));
-            pcf8575_1.digitalWrite(pin_off_Bom1, LOW);
-            trip0 = true;
-            xSetAmpe = 0;
-            timer1.setTimeout(600000L, []() {
-              pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
-            });
-          }
+        xSetAmpe = xSetAmpe + 1;
+        if ((xSetAmpe >= 3) && (data.protect)) {
+          Blynk.logEvent("error", String("Máy 18.5KW lỗi: ") + Irms0 + String(" A"));
+          pcf8575_1.digitalWrite(pin_off_Bom1, LOW);
+          trip0 = true;
+          xSetAmpe = 0;
+          timer1.setTimeout(600000L, []() {
+            pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
+          });
         }
-      else xSetAmpe = 0;
+      } else xSetAmpe = 0;
     }
   }
 }
@@ -1173,18 +1172,17 @@ void readcurrent1()  // C1 - Gieng 2
         } else G2_save = false;
       }
       if ((Irms1 > data.SetAmpe1max) || (Irms1 < data.SetAmpe1min)) {
-          xSetAmpe1 = xSetAmpe1 + 1;
-          if ((xSetAmpe1 >= 3) && (data.protect)) {
-            Blynk.logEvent("error", String("Giếng II lỗi: ") + Irms1 + String(" A"));
-            trip1 = true;
-            xSetAmpe1 = 0;
-            pcf8575_1.digitalWrite(pin_off_G2, LOW);
-            timer.setTimeout(600000L, []() {
-              pcf8575_1.digitalWrite(pin_off_G2, HIGH);
-            });
-          }
+        xSetAmpe1 = xSetAmpe1 + 1;
+        if ((xSetAmpe1 >= 3) && (data.protect)) {
+          Blynk.logEvent("error", String("Giếng II lỗi: ") + Irms1 + String(" A"));
+          trip1 = true;
+          xSetAmpe1 = 0;
+          pcf8575_1.digitalWrite(pin_off_G2, LOW);
+          timer.setTimeout(600000L, []() {
+            pcf8575_1.digitalWrite(pin_off_G2, HIGH);
+          });
         }
-      else xSetAmpe1 = 0;
+      } else xSetAmpe1 = 0;
     }
   }
 }
@@ -1215,18 +1213,17 @@ void readcurrent2()  // C6 - 11 KW
         } else B4_save = false;
       }
       if ((Irms2 > data.SetAmpe2max) || (Irms2 < data.SetAmpe2min)) {
-          xSetAmpe2 = xSetAmpe2 + 1;
-          if ((xSetAmpe2 >= 3) && (data.protect)) {
-            Blynk.logEvent("error", String("Máy 11KW lỗi: ") + Irms2 + String(" A"));
-            trip2 = true;
-            xSetAmpe2 = 0;
-            pcf8575_1.digitalWrite(pin_off_Bom4, LOW);
-            timer.setTimeout(600000L, []() {
-              pcf8575_1.digitalWrite(pin_off_Bom4, HIGH);
-            });
-          }
+        xSetAmpe2 = xSetAmpe2 + 1;
+        if ((xSetAmpe2 >= 3) && (data.protect)) {
+          Blynk.logEvent("error", String("Máy 11KW lỗi: ") + Irms2 + String(" A"));
+          trip2 = true;
+          xSetAmpe2 = 0;
+          pcf8575_1.digitalWrite(pin_off_Bom4, LOW);
+          timer.setTimeout(600000L, []() {
+            pcf8575_1.digitalWrite(pin_off_Bom4, HIGH);
+          });
         }
-      else xSetAmpe2 = 0;
+      } else xSetAmpe2 = 0;
     }
   }
 }
@@ -1264,18 +1261,17 @@ void readcurrent3()  // C0 - Gieng 1
         } else G1_save = false;
       }
       if ((Irms3 > data.SetAmpe3max) || (Irms3 < data.SetAmpe3min)) {
-          xSetAmpe3 = xSetAmpe3 + 1;
-          if ((xSetAmpe3 >= 3) && (data.protect)) {
-            Blynk.logEvent("error", String("Giếng I lỗi: ") + Irms3 + String(" A"));
-            trip3 = true;
-            xSetAmpe3 = 0;
-            pcf8575_1.digitalWrite(pin_off_G1, LOW);
-            timer.setTimeout(600000L, []() {
-              pcf8575_1.digitalWrite(pin_off_G1, HIGH);
-            });
-          }
+        xSetAmpe3 = xSetAmpe3 + 1;
+        if ((xSetAmpe3 >= 3) && (data.protect)) {
+          Blynk.logEvent("error", String("Giếng I lỗi: ") + Irms3 + String(" A"));
+          trip3 = true;
+          xSetAmpe3 = 0;
+          pcf8575_1.digitalWrite(pin_off_G1, LOW);
+          timer.setTimeout(600000L, []() {
+            pcf8575_1.digitalWrite(pin_off_G1, HIGH);
+          });
         }
-      else xSetAmpe3 = 0;
+      } else xSetAmpe3 = 0;
     }
   }
 }
@@ -1307,18 +1303,17 @@ void readcurrent4()  // C5 - 7.5 KW
       }
 
       if ((Irms4 > data.SetAmpe4max) || (Irms4 < data.SetAmpe4min)) {
-          xSetAmpe4 = xSetAmpe4 + 1;
-          if ((xSetAmpe4 >= 3) && (data.protect)) {
-            Blynk.logEvent("error", String("Máy 7.5KW lỗi: ") + Irms4 + String(" A"));
-            trip4 = true;
-            xSetAmpe4 = 0;
-            pcf8575_1.digitalWrite(pin_off_Bom3, LOW);
-            timer.setTimeout(300000L, []() {
-              pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
-            });
-          }
+        xSetAmpe4 = xSetAmpe4 + 1;
+        if ((xSetAmpe4 >= 3) && (data.protect)) {
+          Blynk.logEvent("error", String("Máy 7.5KW lỗi: ") + Irms4 + String(" A"));
+          trip4 = true;
+          xSetAmpe4 = 0;
+          pcf8575_1.digitalWrite(pin_off_Bom3, LOW);
+          timer.setTimeout(300000L, []() {
+            pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
+          });
         }
-      else xSetAmpe4 = 0;
+      } else xSetAmpe4 = 0;
     }
   }
 }
@@ -1356,18 +1351,17 @@ void readcurrent5()  // C2 - Gieng 3
         } else G3_save = false;
       }
       if ((Irms5 > data.SetAmpe5max) || (Irms5 < data.SetAmpe5min)) {
-          xSetAmpe5 = xSetAmpe5 + 1;
-          if ((xSetAmpe5 >= 3) && (data.protect)) {
-            Blynk.logEvent("error", String("Giếng III lỗi: ") + Irms5 + String(" A"));
-            trip5 = true;
-            xSetAmpe5 = 0;
-            pcf8575_1.digitalWrite(pin_off_G3, LOW);
-            timer.setTimeout(300000L, []() {
-              pcf8575_1.digitalWrite(pin_off_G3, HIGH);
-            });
-          }
+        xSetAmpe5 = xSetAmpe5 + 1;
+        if ((xSetAmpe5 >= 3) && (data.protect)) {
+          Blynk.logEvent("error", String("Giếng III lỗi: ") + Irms5 + String(" A"));
+          trip5 = true;
+          xSetAmpe5 = 0;
+          pcf8575_1.digitalWrite(pin_off_G3, LOW);
+          timer.setTimeout(300000L, []() {
+            pcf8575_1.digitalWrite(pin_off_G3, HIGH);
+          });
         }
-      else xSetAmpe5 = 0;
+      } else xSetAmpe5 = 0;
     }
   }
 }
@@ -1398,18 +1392,17 @@ void readcurrent6()  // C4 - 30kw
         } else B2_save = false;
       }
       if ((Irms6 >= data.SetAmpe6max) || (Irms6 < data.SetAmpe6min)) {
-          xSetAmpe6 = xSetAmpe6 + 1;
-          if ((xSetAmpe6 >= 3) && (data.protect)) {
-            Blynk.logEvent("error", String("Máy 30KW lỗi: ") + Irms6 + String(" A"));
-            trip6 = true;
-            xSetAmpe6 = 0;
-            pcf8575_1.digitalWrite(pin_off_Bom2, LOW);
-            timer.setTimeout(3000L, []() {
-              pcf8575_1.digitalWrite(pin_off_Bom2, HIGH);
-            });
-          }
+        xSetAmpe6 = xSetAmpe6 + 1;
+        if ((xSetAmpe6 >= 3) && (data.protect)) {
+          Blynk.logEvent("error", String("Máy 30KW lỗi: ") + Irms6 + String(" A"));
+          trip6 = true;
+          xSetAmpe6 = 0;
+          pcf8575_1.digitalWrite(pin_off_Bom2, LOW);
+          timer.setTimeout(3000L, []() {
+            pcf8575_1.digitalWrite(pin_off_Bom2, HIGH);
+          });
         }
-      else xSetAmpe6 = 0;
+      } else xSetAmpe6 = 0;
     }
   }
 }
@@ -1641,24 +1634,26 @@ BLYNK_WRITE(V52) {
 //----------------------------------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    //Serial.println("Khong ket noi WIFI");
+    Serial.println("Khong ket noi WIFI");
+    WiFi.begin(ssid, password);
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
-    data.reboot_num = data.reboot_num + 1;
-    savedata();
-    if ((data.reboot_num == 1) || (data.reboot_num == 2)) {
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
-    if (data.reboot_num % 5 == 0) {
+    if (reboot_num % 5 == 0) {
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
   }
   if (Blynk.connected()) {
-    if (data.reboot_num != 0) {
-      data.reboot_num = 0;
-      savedata();
+    if (reboot_num != 0) {
+      reboot_num = 0;
     }
   }
 }
