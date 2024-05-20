@@ -50,6 +50,11 @@
    V63-statusVLG1
    V64-LLG1_RL
    V65-LLG2_RL
+
+   V70 - TIMERUN_G1
+   V71 - TIMERUN_G1_24H
+   ...
+   V83 - TIMERUN_B4_24H
 */
 /*
 #define BLYNK_TEMPLATE_ID "TMPLK0N90h0w"
@@ -60,7 +65,7 @@
 #define BLYNK_TEMPLATE_NAME "TRẠM SỐ 2"
 #define BLYNK_AUTH_TOKEN "BDm1LNQi_LhtaKAQU8RWUaGbiOyKIcd3"
 
-#define BLYNK_FIRMWARE_VERSION "240503"
+#define BLYNK_FIRMWARE_VERSION "240520"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -182,6 +187,9 @@ int g = 1, h, z, i, j, n, m;
 int startt, stopt;
 
 int LLG2_1m3, LLG1_1m3;
+
+int G1_start, G2_start, G3_start, B1_start, B2_start, B3_start, B4_start;
+bool G1_save = false, G2_save = false, G3_save = false, B1_save = false, B2_save = false, B3_save = false, B4_save = false;
 //----------------------------------
 struct Data {
   byte SetAmpemax, SetAmpemin;
@@ -193,8 +201,6 @@ struct Data {
   byte SetAmpe6max, SetAmpe6min;
   byte SetAmpe7max, SetAmpe7min;
   byte SetAmpe8max, SetAmpe8min;
-  //int startH, startM;
-  //int stopH, stopM;
   byte man;
   int save_num;
   byte time_run_nk1, time_stop_nk1, time_run_nk2, time_stop_nk2;
@@ -203,6 +209,8 @@ struct Data {
   float clo;
   int time_clo, LLG2_RL, LLG1_RL;
   byte protect;
+  byte reset_day;
+  int timerun_G1, timerun_G2, timerun_G3, timerun_B1, timerun_B2, timerun_B3, timerun_B4;
 } data, dataCheck;
 const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -1100,25 +1108,36 @@ void readcurrent()  // C3 - 18.5 KW
   if (rms0 < 3) {
     Irms0 = 0;
     yIrms0 = 0;
+    if (B1_start != 0) {
+      data.timerun_B1 = data.timerun_B1 + (millis() - B1_start);
+      savedata();
+      B1_start = 0;
+    }
   } else if (rms0 > 3) {
     Irms0 = rms0;
     yIrms0 = yIrms0 + 1;
-    if ((yIrms0 > 2) && ((Irms0 > data.SetAmpemax) || (Irms0 < data.SetAmpemin))) {
-      xSetAmpe = xSetAmpe + 1;
-      if ((xSetAmpe >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Máy 18.5KW lỗi: ") + Irms0 + String(" A"));
-        pcf8575_1.digitalWrite(pin_off_Bom1, LOW);
-        trip0 = true;
-        xSetAmpe = 0;
-        timer1.setTimeout(600000L, []() {
-          pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
-        });
+    if (yIrms0 > 2) {
+      if (B1_start >= 0) {
+        if (B1_start == 0) B1_start = millis();
+        else if (millis() - B1_start > 60000) {
+          B1_save = true;
+        } else B1_save = false;
       }
-    } else {
-      xSetAmpe = 0;
+      if ((Irms0 > data.SetAmpemax) || (Irms0 < data.SetAmpemin)) {
+          xSetAmpe = xSetAmpe + 1;
+          if ((xSetAmpe >= 3) && (data.protect)) {
+            Blynk.logEvent("error", String("Máy 18.5KW lỗi: ") + Irms0 + String(" A"));
+            pcf8575_1.digitalWrite(pin_off_Bom1, LOW);
+            trip0 = true;
+            xSetAmpe = 0;
+            timer1.setTimeout(600000L, []() {
+              pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
+            });
+          }
+        }
+      else xSetAmpe = 0;
     }
   }
-  //Blynk.virtualWrite(V40, Irms0);
 }
 void readcurrent1()  // C1 - Gieng 2
 {
@@ -1131,6 +1150,11 @@ void readcurrent1()  // C1 - Gieng 2
   if (rms1 < 3) {
     Irms1 = 0;
     yIrms1 = 0;
+    if (G2_start != 0) {
+      data.timerun_G2 = data.timerun_G2 + (millis() - G2_start);
+      savedata();
+      G2_start = 0;
+    }
     if ((unsigned long)(millis() - dem2) > 1800000) {
       dem2 = millis();
       event_30p();
@@ -1141,22 +1165,28 @@ void readcurrent1()  // C1 - Gieng 2
     if (yIrms1 > 3) {
       dem2 = millis();
     }
-    if ((yIrms1 > 2) && ((Irms1 > data.SetAmpe1max) || (Irms1 < data.SetAmpe1min))) {
-      xSetAmpe1 = xSetAmpe1 + 1;
-      if ((xSetAmpe1 >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Giếng II lỗi: ") + Irms1 + String(" A"));
-        trip1 = true;
-        xSetAmpe1 = 0;
-        pcf8575_1.digitalWrite(pin_off_G2, LOW);
-        timer.setTimeout(600000L, []() {
-          pcf8575_1.digitalWrite(pin_off_G2, HIGH);
-        });
+    if (yIrms1 > 2) {
+      if (G2_start >= 0) {
+        if (G2_start == 0) G2_start = millis();
+        else if (millis() - G2_start > 60000) {
+          G2_save = true;
+        } else G2_save = false;
       }
-    } else {
-      xSetAmpe1 = 0;
+      if ((Irms1 > data.SetAmpe1max) || (Irms1 < data.SetAmpe1min)) {
+          xSetAmpe1 = xSetAmpe1 + 1;
+          if ((xSetAmpe1 >= 3) && (data.protect)) {
+            Blynk.logEvent("error", String("Giếng II lỗi: ") + Irms1 + String(" A"));
+            trip1 = true;
+            xSetAmpe1 = 0;
+            pcf8575_1.digitalWrite(pin_off_G2, LOW);
+            timer.setTimeout(600000L, []() {
+              pcf8575_1.digitalWrite(pin_off_G2, HIGH);
+            });
+          }
+        }
+      else xSetAmpe1 = 0;
     }
   }
-  //Blynk.virtualWrite(V41, Irms1);
 }
 void readcurrent2()  // C6 - 11 KW
 {
@@ -1169,25 +1199,36 @@ void readcurrent2()  // C6 - 11 KW
   if (rms2 < 3) {
     Irms2 = 0;
     yIrms2 = 0;
+    if (B4_start != 0) {
+      data.timerun_B4 = data.timerun_B4 + (millis() - B4_start);
+      savedata();
+      B4_start = 0;
+    }
   } else if (rms2 > 3) {
     Irms2 = rms2;
     yIrms2 = yIrms2 + 1;
-    if ((yIrms2 > 2) && ((Irms2 > data.SetAmpe2max) || (Irms2 < data.SetAmpe2min))) {
-      xSetAmpe2 = xSetAmpe2 + 1;
-      if ((xSetAmpe2 >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Máy 11KW lỗi: ") + Irms2 + String(" A"));
-        trip2 = true;
-        xSetAmpe2 = 0;
-        pcf8575_1.digitalWrite(pin_off_Bom4, LOW);
-        timer.setTimeout(600000L, []() {
-          pcf8575_1.digitalWrite(pin_off_Bom4, HIGH);
-        });
+    if (yIrms2 > 2) {
+      if (B4_start >= 0) {
+        if (B4_start == 0) B4_start = millis();
+        else if (millis() - B4_start > 60000) {
+          B4_save = true;
+        } else B4_save = false;
       }
-    } else {
-      xSetAmpe2 = 0;
+      if ((Irms2 > data.SetAmpe2max) || (Irms2 < data.SetAmpe2min)) {
+          xSetAmpe2 = xSetAmpe2 + 1;
+          if ((xSetAmpe2 >= 3) && (data.protect)) {
+            Blynk.logEvent("error", String("Máy 11KW lỗi: ") + Irms2 + String(" A"));
+            trip2 = true;
+            xSetAmpe2 = 0;
+            pcf8575_1.digitalWrite(pin_off_Bom4, LOW);
+            timer.setTimeout(600000L, []() {
+              pcf8575_1.digitalWrite(pin_off_Bom4, HIGH);
+            });
+          }
+        }
+      else xSetAmpe2 = 0;
     }
   }
-  //Blynk.virtualWrite(V42, Irms2);  // Irms2 - 11
 }
 void readcurrent3()  // C0 - Gieng 1
 {
@@ -1200,6 +1241,11 @@ void readcurrent3()  // C0 - Gieng 1
   if (rms3 < 3) {
     Irms3 = 0;
     yIrms3 = 0;
+    if (G1_start != 0) {
+      data.timerun_G1 = data.timerun_G1 + (millis() - G1_start);
+      savedata();
+      G1_start = 0;
+    }
     if ((unsigned long)(millis() - dem1) > 1800000) {
       dem1 = millis();
       event_30p();
@@ -1210,22 +1256,28 @@ void readcurrent3()  // C0 - Gieng 1
     if (yIrms3 > 3) {
       dem1 = millis();
     }
-    if ((yIrms3 > 2) && ((Irms3 > data.SetAmpe3max) || (Irms3 < data.SetAmpe3min))) {
-      xSetAmpe3 = xSetAmpe3 + 1;
-      if ((xSetAmpe3 >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Giếng I lỗi: ") + Irms3 + String(" A"));
-        trip3 = true;
-        xSetAmpe3 = 0;
-        pcf8575_1.digitalWrite(pin_off_G1, LOW);
-        timer.setTimeout(600000L, []() {
-          pcf8575_1.digitalWrite(pin_off_G1, HIGH);
-        });
+    if (yIrms3 > 2) {
+      if (G1_start >= 0) {
+        if (G1_start == 0) G1_start = millis();
+        else if (millis() - G1_start > 60000) {
+          G1_save = true;
+        } else G1_save = false;
       }
-    } else {
-      xSetAmpe3 = 0;
+      if ((Irms3 > data.SetAmpe3max) || (Irms3 < data.SetAmpe3min)) {
+          xSetAmpe3 = xSetAmpe3 + 1;
+          if ((xSetAmpe3 >= 3) && (data.protect)) {
+            Blynk.logEvent("error", String("Giếng I lỗi: ") + Irms3 + String(" A"));
+            trip3 = true;
+            xSetAmpe3 = 0;
+            pcf8575_1.digitalWrite(pin_off_G1, LOW);
+            timer.setTimeout(600000L, []() {
+              pcf8575_1.digitalWrite(pin_off_G1, HIGH);
+            });
+          }
+        }
+      else xSetAmpe3 = 0;
     }
   }
-  //Blynk.virtualWrite(V43, Irms3);  // Irms3 - G1
 }
 void readcurrent4()  // C5 - 7.5 KW
 {
@@ -1238,25 +1290,37 @@ void readcurrent4()  // C5 - 7.5 KW
   if (rms4 < 3) {
     Irms4 = 0;
     yIrms4 = 0;
+    if (B3_start != 0) {
+      data.timerun_B3 = data.timerun_B3 + (millis() - B3_start);
+      savedata();
+      B3_start = 0;
+    }
   } else if (rms4 > 3) {
     Irms4 = rms4;
     yIrms4 = yIrms4 + 1;
-    if ((yIrms4 > 2) && ((Irms4 > data.SetAmpe4max) || (Irms4 < data.SetAmpe4min))) {
-      xSetAmpe4 = xSetAmpe4 + 1;
-      if ((xSetAmpe4 >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Máy 7.5KW lỗi: ") + Irms4 + String(" A"));
-        trip4 = true;
-        xSetAmpe4 = 0;
-        pcf8575_1.digitalWrite(pin_off_Bom3, LOW);
-        timer.setTimeout(300000L, []() {
-          pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
-        });
+    if (yIrms4 > 2) {
+      if (B3_start >= 0) {
+        if (B3_start == 0) B3_start = millis();
+        else if (millis() - B3_start > 60000) {
+          B3_save = true;
+        } else B3_save = false;
       }
-    } else {
-      xSetAmpe4 = 0;
+
+      if ((Irms4 > data.SetAmpe4max) || (Irms4 < data.SetAmpe4min)) {
+          xSetAmpe4 = xSetAmpe4 + 1;
+          if ((xSetAmpe4 >= 3) && (data.protect)) {
+            Blynk.logEvent("error", String("Máy 7.5KW lỗi: ") + Irms4 + String(" A"));
+            trip4 = true;
+            xSetAmpe4 = 0;
+            pcf8575_1.digitalWrite(pin_off_Bom3, LOW);
+            timer.setTimeout(300000L, []() {
+              pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
+            });
+          }
+        }
+      else xSetAmpe4 = 0;
     }
   }
-  //Blynk.virtualWrite(V44, Irms4);  // Irms4 - 7.5
 }
 void readcurrent5()  // C2 - Gieng 3
 {
@@ -1269,6 +1333,11 @@ void readcurrent5()  // C2 - Gieng 3
   if (rms5 < 3) {
     Irms5 = 0;
     yIrms5 = 0;
+    if (G3_start != 0) {
+      data.timerun_G3 = data.timerun_G3 + (millis() - G3_start);
+      savedata();
+      G3_start = 0;
+    }
     if ((unsigned long)(millis() - dem3) > 1800000) {
       dem3 = millis();
       //event_30p();
@@ -1279,22 +1348,28 @@ void readcurrent5()  // C2 - Gieng 3
     if (yIrms5 > 3) {
       dem3 = millis();
     }
-    if ((yIrms5 > 2) && ((Irms5 > data.SetAmpe5max) || (Irms5 < data.SetAmpe5min))) {
-      xSetAmpe5 = xSetAmpe5 + 1;
-      if ((xSetAmpe5 >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Giếng III lỗi: ") + Irms5 + String(" A"));
-        trip5 = true;
-        xSetAmpe5 = 0;
-        pcf8575_1.digitalWrite(pin_off_G3, LOW);
-        timer.setTimeout(300000L, []() {
-          pcf8575_1.digitalWrite(pin_off_G3, HIGH);
-        });
+    if (yIrms5 > 2) {
+      if (G3_start >= 0) {
+        if (G3_start == 0) G3_start = millis();
+        else if (millis() - G3_start > 60000) {
+          G3_save = true;
+        } else G3_save = false;
       }
-    } else {
-      xSetAmpe5 = 0;
+      if ((Irms5 > data.SetAmpe5max) || (Irms5 < data.SetAmpe5min)) {
+          xSetAmpe5 = xSetAmpe5 + 1;
+          if ((xSetAmpe5 >= 3) && (data.protect)) {
+            Blynk.logEvent("error", String("Giếng III lỗi: ") + Irms5 + String(" A"));
+            trip5 = true;
+            xSetAmpe5 = 0;
+            pcf8575_1.digitalWrite(pin_off_G3, LOW);
+            timer.setTimeout(300000L, []() {
+              pcf8575_1.digitalWrite(pin_off_G3, HIGH);
+            });
+          }
+        }
+      else xSetAmpe5 = 0;
     }
   }
-  //Blynk.virtualWrite(V45, Irms5);  // Irms5 - G3
 }
 void readcurrent6()  // C4 - 30kw
 {
@@ -1307,25 +1382,36 @@ void readcurrent6()  // C4 - 30kw
   if (rms6 < 3) {
     Irms6 = 0;
     yIrms6 = 0;
+    if (B2_start != 0) {
+      data.timerun_B2 = data.timerun_B2 + (millis() - B2_start);
+      savedata();
+      B2_start = 0;
+    }
   } else if (rms6 >= 3) {
     Irms6 = rms6;
     yIrms6 = yIrms6 + 1;
-    if ((yIrms6 > 2) && ((Irms6 >= data.SetAmpe6max) || (Irms6 < data.SetAmpe6min))) {
-      xSetAmpe6 = xSetAmpe6 + 1;
-      if ((xSetAmpe6 >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Máy 30KW lỗi: ") + Irms6 + String(" A"));
-        trip6 = true;
-        xSetAmpe6 = 0;
-        pcf8575_1.digitalWrite(pin_off_Bom2, LOW);
-        timer.setTimeout(3000L, []() {
-          pcf8575_1.digitalWrite(pin_off_Bom2, HIGH);
-        });
+    if (yIrms6 > 2) {
+      if (B2_start >= 0) {
+        if (B2_start == 0) B2_start = millis();
+        else if (millis() - B2_start > 60000) {
+          B2_save = true;
+        } else B2_save = false;
       }
-    } else {
-      xSetAmpe6 = 0;
+      if ((Irms6 >= data.SetAmpe6max) || (Irms6 < data.SetAmpe6min)) {
+          xSetAmpe6 = xSetAmpe6 + 1;
+          if ((xSetAmpe6 >= 3) && (data.protect)) {
+            Blynk.logEvent("error", String("Máy 30KW lỗi: ") + Irms6 + String(" A"));
+            trip6 = true;
+            xSetAmpe6 = 0;
+            pcf8575_1.digitalWrite(pin_off_Bom2, LOW);
+            timer.setTimeout(3000L, []() {
+              pcf8575_1.digitalWrite(pin_off_Bom2, HIGH);
+            });
+          }
+        }
+      else xSetAmpe6 = 0;
     }
   }
-  //Blynk.virtualWrite(V46, Irms6);  // Irms6 - 30kw
 }
 void readcurrent7()  // C7 - NK1
 {
@@ -1449,6 +1535,62 @@ void rtctime()  // Irms0 :18.5Kw    Imrs2:11Kw    Imrs4:7.5Kw
   */
   timer.restartTimer(timer_I);
 }
+void time_run_motor() {
+  if (blynk_first_connect) {
+    if (data.reset_day != day()) {
+      if (Blynk.connected()) {
+        up_timerun_motor();
+        data.timerun_G1 = 0;
+        data.timerun_G2 = 0;
+        data.timerun_G3 = 0;
+        data.timerun_B1 = 0;
+        data.timerun_B2 = 0;
+        data.timerun_B3 = 0;
+        data.timerun_B4 = 0;
+        data.reset_day = day();
+        savedata();
+      }
+    }
+  }
+  if (G1_save || G2_save || G3_save || B1_save || B2_save || B3_save || B4_save) {
+    if (G1_start != 0) {
+      data.timerun_G1 = data.timerun_G1 + (millis() - G1_start);
+      G1_start = millis();
+      G1_save = false;
+    }
+    if (G2_start != 0) {
+      data.timerun_G2 = data.timerun_G2 + (millis() - G2_start);
+      G2_start = millis();
+      G2_save = false;
+    }
+    if (G3_start != 0) {
+      data.timerun_G3 = data.timerun_G3 + (millis() - G3_start);
+      G3_start = millis();
+      G3_save = false;
+    }
+    if (B1_start != 0) {
+      data.timerun_B1 = data.timerun_B1 + (millis() - B1_start);
+      B1_start = millis();
+      B1_save = false;
+    }
+    if (B2_start != 0) {
+      data.timerun_B2 = data.timerun_B2 + (millis() - B2_start);
+      B2_start = millis();
+      B2_save = false;
+    }
+    if (B3_start != 0) {
+      data.timerun_B3 = data.timerun_B3 + (millis() - B3_start);
+      B3_start = millis();
+      B3_save = false;
+    }
+    if (B4_start != 0) {
+      data.timerun_B4 = data.timerun_B4 + (millis() - B4_start);
+      B4_start = millis();
+      B4_save = false;
+    }
+    savedata();
+  }
+}
 //----------------------------------------------------
 void MeasureCmForSmoothing()  //C14
 {
@@ -1559,7 +1701,27 @@ void updata() {
                        + "&V43=" + Irms3
                        + "&V44=" + Irms4
                        + "&V45=" + Irms5
-                       + "&V46=" + Irms6;
+                       + "&V46=" + Irms6
+                       + "&V70=" + float(data.timerun_G1) / 1000 / 60 / 60
+                       + "&V72=" + float(data.timerun_G2) / 1000 / 60 / 60
+                       + "&V74=" + float(data.timerun_G3) / 1000 / 60 / 60
+                       + "&V76=" + float(data.timerun_B1) / 1000 / 60 / 60
+                       + "&V78=" + float(data.timerun_B2) / 1000 / 60 / 60
+                       + "&V80=" + float(data.timerun_B3) / 1000 / 60 / 60
+                       + "&V82=" + float(data.timerun_B4) / 1000 / 60 / 60;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+}
+void up_timerun_motor() {
+  String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
+                       + "&V71=" + float(data.timerun_G1) / 1000 / 60 / 60
+                       + "&V73=" + float(data.timerun_G2) / 1000 / 60 / 60
+                       + "&V75=" + float(data.timerun_G3) / 1000 / 60 / 60
+                       + "&V77=" + float(data.timerun_B1) / 1000 / 60 / 60
+                       + "&V79=" + float(data.timerun_B2) / 1000 / 60 / 60
+                       + "&V81=" + float(data.timerun_B3) / 1000 / 60 / 60
+                       + "&V83=" + float(data.timerun_B4) / 1000 / 60 / 60;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
@@ -1645,6 +1807,7 @@ void setup() {
     timer_tank = timer.setInterval(230L, MeasureCmForSmoothing);
     timer.setInterval(15005L, []() {
       rtctime();
+      time_run_motor();
       timer.restartTimer(timer_I);
       timer.restartTimer(timer_tank);
     });
