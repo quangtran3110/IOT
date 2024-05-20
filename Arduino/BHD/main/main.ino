@@ -200,7 +200,9 @@ void updata() {
                        + "&V24=" + Irms0
                        + "&V25=" + Irms1
                        + "&V19=" + volume1
-                       + "&V20=" + smoothDistance;
+                       + "&V20=" + smoothDistance
+                       + "&V40=" + float(data.timerun_G1) / 1000 / 60 / 60
+                       + "&V42=" + float(data.timerun_B1) / 1000 / 60 / 60;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
