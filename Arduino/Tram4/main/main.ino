@@ -253,7 +253,7 @@ void savedata() {
     // Serial.println("\nWrite bytes to EEPROM memory...");
     data.save_num = data.save_num + 1;
     eeprom.writeBytes(address, sizeof(dataDefault), (byte*)&data);
-    Blynk.setProperty(V10, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
+    Blynk.setProperty(V10, "label", data.save_num);
   }
 }
 void time_run_motor() {
