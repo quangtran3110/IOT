@@ -407,7 +407,7 @@ void readPower1()  // C3 - Bơm 1    - I1
   pcf8575_1.digitalWrite(S2pin, LOW);
   pcf8575_1.digitalWrite(S3pin, LOW);
   float rms1 = emon1.calcIrms(1480);
-  if (rms1 < 1) {
+  if (rms1 < 2) {
     Irms1 = 0;
     yIrms1 = 0;
     if (B1_start != 0) {
@@ -415,7 +415,7 @@ void readPower1()  // C3 - Bơm 1    - I1
       savedata();
       B1_start = 0;
     }
-  } else if (rms1 >= 1) {
+  } else if (rms1 >= 2) {
     Irms1 = rms1;
     yIrms1 = yIrms1 + 1;
     if (yIrms1 > 3) {
@@ -446,7 +446,7 @@ void readPower2()  // C4 - Bơm 2    - I2
   pcf8575_1.digitalWrite(S2pin, HIGH);
   pcf8575_1.digitalWrite(S3pin, LOW);
   float rms2 = emon2.calcIrms(1480);
-  if (rms2 < 1) {
+  if (rms2 < 2) {
     Irms2 = 0;
     yIrms2 = 0;
     if (B2_start != 0) {
@@ -454,7 +454,7 @@ void readPower2()  // C4 - Bơm 2    - I2
       savedata();
       B2_start = 0;
     }
-  } else if (rms2 >= 1) {
+  } else if (rms2 >= 2) {
     Irms2 = rms2;
     yIrms2 = yIrms2 + 1;
     if (yIrms2 > 3) {

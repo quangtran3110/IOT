@@ -327,7 +327,7 @@ void readPower1()  // C4 - Bơm 1   - I1
         if (B1_start == 0) B1_start = millis();
         else if (millis() - B1_start > 60000) {
           B1_save = true;
-        }
+        } else B1_save = false;
       }
       if ((Irms1 >= data.SetAmpe1max) || (Irms1 <= data.SetAmpe1min)) {
         xSetAmpe1 = xSetAmpe1 + 1;
@@ -1071,6 +1071,7 @@ void setup() {
   });
   timer_5 = timer.setInterval(15006L, []() {
     rtctime();
+    time_run_motor();
     timer.restartTimer(timer_1);
     timer.restartTimer(timer_2);
   });
