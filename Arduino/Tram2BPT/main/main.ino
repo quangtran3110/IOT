@@ -21,6 +21,10 @@ V18- Set ref
 V19- Nhiệt độ biên tần
 V20- date/time
 V21- Nhiệt độ động cơ
+V40- thời gian chạy G1
+V41- thời gian chạy G1-24h
+V42- thời gian chạy B1
+V43- thời gian chạy B1 - 24h
 */
 /*
 #define BLYNK_TEMPLATE_ID "TMPL6sp_uYXmC"
@@ -36,7 +40,7 @@ V21- Nhiệt độ động cơ
 #define BLYNK_TEMPLATE_NAME "TRẠM 2 BPT"
 #define BLYNK_AUTH_TOKEN "YZXkYAgH44t-kjJPKapydw5vMlR7MGAC"
 
-#define BLYNK_FIRMWARE_VERSION "240503"
+#define BLYNK_FIRMWARE_VERSION "240520"
 
 const char* ssid = "BPT2";
 const char* password = "0919126757";
@@ -122,7 +126,10 @@ float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
 bool key = false, blynk_first_connect = false, status_fan = HIGH;
 byte c;
+byte reboot_num;
 int temp_vdf;
+int G1_start, B1_start;
+bool G1_save = false, B1_save = false;
 //-----------------------------
 #define filterSamples 121
 int dai = 510;
@@ -180,11 +187,13 @@ struct Data {
   int stopH, stopM;
   byte mode_run;
   int save_num;
-  byte reboot_num, keyp;
+  byte keyp;
   byte status_b1, status_b2, status_cap1, status_nenkhi;
   float pre_set;
+  byte reset_day;
+  int timerun_G1, timerun_B1;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 //-----------------------------
 WidgetRTC rtc_widget;
 BlynkTimer timer, timer1;
@@ -204,11 +213,47 @@ void up() {
                        + "&V14=" + pre
                        + "&V15=" + smoothDistance
                        + "&V16=" + volume
-                       + "&V19=" + temp_vdf;
+                       + "&V19=" + temp_vdf
+                       + "&V40=" + float(data.timerun_G1) / 1000 / 60 / 60
+                       + "&V42=" + float(data.timerun_B1) / 1000 / 60 / 60;
   //+ "&V21=" + temp[0]
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   http.end();
+}
+void up_timerun_motor() {
+  String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
+                       + "&V41=" + float(data.timerun_G1) / 1000 / 60 / 60
+                       + "&V43=" + float(data.timerun_B1) / 1000 / 60 / 60;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+}
+void time_run_motor() {
+  if (blynk_first_connect) {
+    if (data.reset_day != day()) {
+      if (Blynk.connected()) {
+        up_timerun_motor();
+        data.timerun_G1 = 0;
+        data.timerun_B1 = 0;
+        data.reset_day = day();
+        savedata();
+      }
+    }
+  }
+  if (G1_save || B1_save) {
+    if (G1_start != 0) {
+      data.timerun_G1 = data.timerun_G1 + (millis() - G1_start);
+      G1_start = millis();
+      G1_save = false;
+    }
+    if (B1_start != 0) {
+      data.timerun_B1 = data.timerun_B1 + (millis() - B1_start);
+      B1_start = millis();
+      B1_save = false;
+    }
+    savedata();
+  }
 }
 //----------------------------------------------------------------
 void savedata() {
@@ -331,10 +376,21 @@ void readcurrent()  // C2 - Cấp 1   - I0
   if (rms0 < 2) {
     Irms0 = 0;
     yIrms0 = 0;
+    if (G1_start != 0) {
+      data.timerun_G1 = data.timerun_G1 + (millis() - G1_start);
+      savedata();
+      G1_start = 0;
+    }
   } else if (rms0 >= 2) {
     yIrms0 = yIrms0 + 1;
     Irms0 = rms0;
     if (yIrms0 > 3) {
+      if (G1_start >= 0) {
+        if (G1_start == 0) G1_start = millis();
+        else if (millis() - G1_start > 60000) {
+          G1_save = true;
+        } else G1_save = false;
+      }
       if ((Irms0 >= data.SetAmpemax) || (Irms0 <= data.SetAmpemin)) {
         xSetAmpe = xSetAmpe + 1;
         if ((xSetAmpe > 3) && (data.keyp)) {
@@ -348,7 +404,6 @@ void readcurrent()  // C2 - Cấp 1   - I0
       }
     }
   }
-  //Blynk.virtualWrite(V5, Irms0);
 }
 void readcurrent1()  // C3 - Bơm 1   - I1
 {
@@ -377,7 +432,6 @@ void readcurrent1()  // C3 - Bơm 1   - I1
       }
     }
   }
-  //Blynk.virtualWrite(V6, Irms1);
 }
 void readcurrent2()  // C4 - Bơm 2   - I2
 {
@@ -434,6 +488,22 @@ void readcurrent3()  // C5 - NenKhi  - I3
     }
   }
   //Blynk.virtualWrite(V8, Irms3);
+}
+void read_timerun_b1() {
+  if (I_vdf <= 0) {
+    if (B1_start != 0) {
+      data.timerun_B1 = data.timerun_B1 + (millis() - B1_start);
+      savedata();
+      B1_start = 0;
+    }
+  } else {
+    if (B1_start >= 0) {
+      if (B1_start == 0) B1_start = millis();
+      else if (millis() - B1_start > 60000) {
+        B1_save = true;
+      } else B1_save = false;
+    }
+  }
 }
 //-------------------------------------------------------------------
 void rtctime() {
@@ -858,24 +928,26 @@ void read_modbus() {
 //-------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    //Serial.println("Khong ket noi WIFI");
+    Serial.println("Khong ket noi WIFI");
+    WiFi.begin(ssid, password);
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
-    data.reboot_num = data.reboot_num + 1;
-    savedata();
-    if ((data.reboot_num == 1) || (data.reboot_num == 2)) {
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
-    if (data.reboot_num % 5 == 0) {
+    if (reboot_num % 5 == 0) {
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
   }
   if (Blynk.connected()) {
-    if (data.reboot_num != 0) {
-      data.reboot_num = 0;
-      savedata();
+    if (reboot_num != 0) {
+      reboot_num = 0;
     }
   }
 }
@@ -954,6 +1026,7 @@ void setup() {
   timer1.setTimeout(5000L, []() {
     timer_I = timer.setInterval(1589, []() {
       readcurrent();
+      read_timerun_b1();
       //readcurrent1();
       //readcurrent2();
       readcurrent3();
@@ -968,6 +1041,7 @@ void setup() {
     timer.setInterval(230L, MeasureCmForSmoothing);
     timer.setInterval(15005L, []() {
       rtctime();
+      time_run_motor();
       timer.restartTimer(timer_I);
     });
     timer.setInterval(900005L, []() {
