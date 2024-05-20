@@ -395,7 +395,7 @@ void readPower()  // C2 - Giếng    - I0
           if (data.key_noti)
             Blynk.logEvent("error", String("Bơm GIẾNG lỗi: ") + Irms0 + String(" A"));
         }
-      }
+      } else xSetAmpe = 0;
     }
   }
   //Blynk.virtualWrite(V27, Irms0);
@@ -434,7 +434,7 @@ void readPower1()  // C3 - Bơm 1    - I1
           if (data.key_noti)
             Blynk.logEvent("error", String("Bơm 1 lỗi: ") + Irms1 + String(" A"));
         }
-      }
+      } else xSetAmpe1 = 0;
     }
   }
   //Blynk.virtualWrite(V26, Irms1);
