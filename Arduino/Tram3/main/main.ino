@@ -103,7 +103,7 @@ bool noti_cap1 = true, maxtank = false, blynk_first_connect = false;
 int c, b, i = 0;
 int timer_I;
 int LLG1_1m3, reboot_num = 0;
-;
+
 float conlai, clo_cache = 0;
 unsigned long int xIrms0 = 0, xIrms1 = 0, xIrms2 = 0;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0;

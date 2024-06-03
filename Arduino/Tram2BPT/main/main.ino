@@ -21,6 +21,12 @@ V18- Set ref
 V19- Nhiệt độ biên tần
 V20- date/time
 V21- Nhiệt độ động cơ
+V22- Nhiệt độ tủ điện
+V23- Status volume
+V24- LLG1_1m3
+V25- LLG1_24H
+V26- LLG1_RL
+V27- RỬA LỌC
 V40- thời gian chạy G1
 V41- thời gian chạy G1-24h
 V42- thời gian chạy B1
@@ -127,6 +133,7 @@ bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
 bool key = false, blynk_first_connect = false, status_fan = HIGH;
 byte c;
 byte reboot_num;
+int LLG1_1m3;
 int temp_vdf;
 int G1_start, B1_start;
 bool G1_save = false, B1_save = false;
@@ -192,8 +199,10 @@ struct Data {
   float pre_set;
   byte reset_day;
   int timerun_G1, timerun_B1;
+  int LLG1_RL;
+  byte rualoc;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 //-----------------------------
 WidgetRTC rtc_widget;
 BlynkTimer timer, timer1;
@@ -632,7 +641,6 @@ BLYNK_WRITE(V3)  // Nen Khi
     }
   } else Blynk.virtualWrite(V3, data.status_nenkhi);
 }
-
 BLYNK_WRITE(V9)  // Chon máy cài đặt bảo vệ
 {
   switch (param.asInt()) {
@@ -791,6 +799,38 @@ BLYNK_WRITE(V18)  // Cai ap luc bien tan
     data.pre_set = param.asFloat();
     savedata();
   } else Blynk.virtualWrite(V18, data.pre_set);
+}
+BLYNK_WRITE(V24)  // Lưu lượng G1_1m3
+{
+  LLG1_1m3 = param.asInt();
+}
+BLYNK_WRITE(V27)  // Rửa lọc
+{
+  if (key) {
+    switch (param.asInt()) {
+      case 0:
+        {  //Tắt
+          data.rualoc = 0;
+          if (data.LLG1_RL != 0) {
+            Blynk.virtualWrite(V26, LLG1_1m3 - data.LLG1_RL);
+            data.LLG1_RL = 0;
+            savedata();
+          }
+          break;
+        }
+      case 1:
+        {  //RL 1
+          data.rualoc = 1;
+          if (data.LLG1_RL == 0) {
+            data.LLG1_RL = LLG1_1m3;
+          }
+          break;
+        }
+    }
+    savedata();
+  } else {
+    Blynk.virtualWrite(V27, data.rualoc);
+  }
 }
 //-------------------------------------------------------------------
 uint16_t nhietdo_bientan[1];

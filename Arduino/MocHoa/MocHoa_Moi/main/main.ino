@@ -14,7 +14,7 @@
  *V12 - Hide/visible
  *V13 - Bảo vệ
  *V14 - Ap luc
- *V15 - 
+ *V15 - Rửa lọc
  *V16 - 
  *V17 - Thông báo
  *V18 - time input
@@ -28,11 +28,11 @@
  *V25 - Thể tích
  *V26 - Còn lại
  *V27 - Độ sâu
- *V28 -
- *V29 -
- *V30 -
- *V31 -
- *V32 -
+ *V28 - status_volume
+ *V29 - LL1m3
+ *V30 - RAW AG1
+ *V31 - LL24h
+ *V32 - LLG1_RL
  *V33 -
  *V34 -
  *V35 -
@@ -135,6 +135,7 @@ int status_g1 = HIGH, status_g2 = HIGH;
 int timer_1, timer_2;
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
 int G1_start, G2_start, B1_start, B2_start;
+int LLG1_1m3;
 bool G1_save = false, G2_save = false, B1_save = false, B2_save = false;
 float Irms0, Irms1, Irms2, Irms3, value, Result1;
 unsigned long int xIrms0 = 0, xIrms1 = 0, xIrms2 = 0, xIrms3 = 0;
@@ -197,8 +198,10 @@ struct Data {
   byte status_direct;
   byte reset_day;
   int timerun_G1, timerun_G2, timerun_B1, timerun_B2;
+  int LLG1_RL;
+  byte rualoc;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V10);
 WidgetRTC rtc;
@@ -890,6 +893,34 @@ BLYNK_WRITE(V13)  // Bảo vệ
   } else
     Blynk.virtualWrite(V13, keyp);
 }
+BLYNK_WRITE(V15)  // Rửa lọc
+{
+  if (key) {
+    switch (param.asInt()) {
+      case 0:
+        {  //Tắt
+          data.rualoc = 0;
+          if (data.LLG1_RL != 0) {
+            Blynk.virtualWrite(V31, LLG1_1m3 - data.LLG1_RL);
+            data.LLG1_RL = 0;
+            savedata();
+          }
+          break;
+        }
+      case 1:
+        {  //RL 1
+          data.rualoc = 1;
+          if (data.LLG1_RL == 0) {
+            data.LLG1_RL = LLG1_1m3;
+          }
+          break;
+        }
+    }
+    savedata();
+  } else {
+    Blynk.virtualWrite(V15, data.rualoc);
+  }
+}
 BLYNK_WRITE(V17)  // Thông báo
 {
   if (key) {
@@ -918,6 +949,10 @@ BLYNK_WRITE(V18)  // Time input
     }
   } else
     Blynk.virtualWrite(V18, 0);
+}
+BLYNK_WRITE(V29)  // Lưu lượng G1_1m3
+{
+  LLG1_1m3 = param.asInt();
 }
 //-------------------------------------------------------------------
 void connectionstatus() {
