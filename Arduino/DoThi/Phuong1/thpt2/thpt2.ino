@@ -196,8 +196,8 @@ void rtctime() {
   //-------------------------
   temp = (rtc_module.getTemperature());
   Serial.println(temp);
-  if (temp > 37 && sta_rl3 == LOW) on_fan();
-  else if (temp < 35 && sta_rl3 == HIGH) off_fan();
+  if (temp > 40 && sta_rl3 == LOW) on_fan();
+  else if (temp < 38 && sta_rl3 == HIGH) off_fan();
   //-------------------------
   if (blynk_first_connect == true) {
     if ((now.day() != day()) || (now.hour() != hour()) || ((now.minute() - minute() > 2) || (minute() - now.minute() > 2))) {
