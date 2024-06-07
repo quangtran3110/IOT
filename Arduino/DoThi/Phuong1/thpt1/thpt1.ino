@@ -195,13 +195,8 @@ void rtctime() {
   //-------------------------
   temp = (rtc_module.getTemperature());
   Serial.println(temp);
-  if (temp > 37 && sta_rl3 == LOW) on_fan();
-  else if (temp < 35 && sta_rl3 == HIGH) off_fan();
-  String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                       + "&V0=" + "%0A" + temp;
-  http.begin(client, server_path.c_str());
-  int httpResponseCode = http.GET();
-  http.end();
+  if (temp > 34 && sta_rl3 == LOW) on_fan();
+  else if (temp < 33 && sta_rl3 == HIGH) off_fan();
   //-------------------------
   if (blynk_first_connect == true) {
     if ((now.day() != day()) || (now.hour() != hour()) || ((now.minute() - minute() > 2) || (minute() - now.minute() > 2))) {

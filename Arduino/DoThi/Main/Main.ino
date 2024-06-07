@@ -69,10 +69,10 @@ V38 - Btn van 1
 #define APP_DEBUG
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
-//const char* ssid = "Wifi_Modem";
-//const char* password = "Password";
-const char* ssid = "tram bom so 4";
-const char* password = "0943950555";
+const char* ssid = "Wifi_Modem";
+const char* password = "Password";
+//const char* ssid = "tram bom so 4";
+//const char* password = "0943950555";
 
 #include <WidgetRTC.h>
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };

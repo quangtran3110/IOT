@@ -1,10 +1,6 @@
 #define BLYNK_TEMPLATE_ID "TMPL6WyEmVeSK"
 #define BLYNK_TEMPLATE_NAME "DHVuong"
 #define BLYNK_AUTH_TOKEN "eBeqi9ZJhRK3r66cUzgdD1gp2xGxG7kS"
-#define pin_status "&V27="
-#define pin_G "&V28="
-#define pin_mode "&V29="
-
 
 #define BLYNK_FIRMWARE_VERSION "240508"
 
@@ -60,12 +56,20 @@ HTTPClient http;
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong3/DHVuong/build/esp8266.esp8266.nodemcuv2/DHVuong.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
+#define pin_terminal "&V27="
+#define pin_G "&V28="
+#define pin_mode "&V29="
+String location = urlEncode("Phường 2 - Cầu Cửa Đông\n");
+//-----------------------------
 int timer_I;
 int dayadjustment = -1;
 bool key = false, blynk_first_connect = false, dayOfTheWeek_ = false;
 bool sta_rl1 = LOW, sta_rl3 = LOW;
 String num_van;
+char s_day[50] = "";
 char B[50] = "";
+String s_timer_van_1;
+String s_weekday;
 //-----------------------------
 struct Data {
   byte mode;
@@ -75,8 +79,8 @@ struct Data {
   byte MonWeekDay, TuesWeekDay, WedWeekDay, ThuWeekDay, FriWeekDay, SatWeekend, SunWeekend;
 } data, dataCheck;
 const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-WidgetTerminal terminal(V0);
+//-----------------------------
+WidgetTerminal DATAS(V0);
 WidgetRTC rtc_widget;
 //-------------------------------------------------------------------
 BlynkTimer timer;
@@ -85,17 +89,6 @@ BLYNK_CONNECTED() {
   blynk_first_connect = true;
 }
 //-------------------------------------------------------------------
-void up() {
-  byte g;
-  bitWrite(g, 0, data.mode);
-  bitWrite(g, 1, sta_rl1);
-  String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                       + pin_status + 1
-                       + pin_G + g;
-  http.begin(client, server_path.c_str());
-  int httpResponseCode = http.GET();
-  http.end();
-}
 void savedata() {
   if (memcmp(&data, &dataCheck, sizeof(dataDefault)) == 0) {
     // Serial.println("structures same no need to write to EEPROM");
@@ -105,6 +98,84 @@ void savedata() {
     eeprom.writeBytes(address, sizeof(dataDefault), (byte*)&data);
     //Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
+}
+//-----------------------------
+void up() {
+  byte g;
+  bitWrite(g, 0, data.mode);
+  bitWrite(g, 1, sta_rl1);
+  String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                       + pin_G + g;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+}
+void weekday_() {
+  //---------------------Day
+  int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
+  memset(s_day, '\0', sizeof(s_day));
+  strcat(s_day, "Lịch chạy: ");
+  memset(B, '\0', sizeof(B));
+  for (int i = 0; i < 7; i++) {
+    // Nếu ngày i được chọn
+    if (A[i] == 1) {
+      // Thêm giá trị i vào mảng A
+      strcat(B, String(i + 1).c_str());
+      strcat(B, ",");
+      if (i == 6) {
+        strcat(s_day, "CN");
+        strcat(s_day, ",");
+      } else {
+        strcat(s_day, "T");
+        strcat(s_day, String(i + 2).c_str());
+        strcat(s_day, ",");
+      }
+    }
+  }
+  B[strlen(B) - 1] = '\0';  // Xóa ký tự cuối cùng là dấu phẩy
+  s_day[strlen(s_day) - 1] = '\0';
+  strcat(s_day, "\n");  // Xuống dòng cuối câu
+  s_weekday = urlEncode(s_day);
+  //---------------------Time RL 1
+  if ((hour_start_rl1 == 0) && (minute_start_rl1 == 0) && (hour_stop_rl1 == 0) && (minute_stop_rl1 == 0)) {
+    hour_start_rl1 = data.rl1_r / 3600;
+    minute_start_rl1 = (data.rl1_r - (hour_start_rl1 * 3600)) / 60;
+    hour_stop_rl1 = data.rl1_s / 3600;
+    minute_stop_rl1 = (data.rl1_s - (hour_stop_rl1 * 3600)) / 60;
+  }
+  char s_timer_van_1_[30];  // Tạo một mảng ký tự để lưu trữ chuỗi định dạng
+  sprintf(s_timer_van_1_, "Van 1: %02d:%02d - %02d:%02d\n", hour_start_rl1, minute_start_rl1, hour_stop_rl1, minute_stop_rl1);
+  s_timer_van_1 = urlEncode(s_timer_van_1_);
+}
+void print_terminal() {
+  String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                       + pin_terminal + "clr";
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+
+  server_path = server_name + "batch/update?token=" + Main_TOKEN
+                + pin_terminal + location
+                + pin_terminal + s_weekday
+                + pin_terminal + s_timer_van_1;
+  http.begin(client, server_path.c_str());
+  httpResponseCode = http.GET();
+  http.end();
+  Serial.println(server_path);
+}
+void print_terminal_main() {
+  String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                       + "&V0=" + "clr";
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+  server_path = server_name + "batch/update?token=" + Main_TOKEN
+                + "&V0=" + location
+                + "&V0=" + s_weekday
+                + "&V0=" + s_timer_van_1;
+  http.begin(client, server_path.c_str());
+  httpResponseCode = http.GET();
+  http.end();
 }
 void on_van1() {
   sta_rl1 = HIGH;

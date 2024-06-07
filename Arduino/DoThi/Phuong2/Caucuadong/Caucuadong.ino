@@ -4,10 +4,10 @@
 #define BLYNK_FIRMWARE_VERSION "240508"
 
 #define Main_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
-//const char* ssid = "net";
-//const char* password = "Abcd@1234";
-const char* ssid = "Wifi";
-const char* password = "Password";
+const char* ssid = "net";
+const char* password = "Abcd@1234";
+//const char* ssid = "Wifi";
+//const char* password = "Password";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -95,6 +95,16 @@ void savedata() {
   }
 }
 //-------------------------------------------------------------------
+void up() {
+  byte g;
+  bitWrite(g, 0, data.mode);
+  bitWrite(g, 1, sta_rl1);
+  String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                       + pin_G + g;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+}
 void weekday_() {
   //---------------------Day
   int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
@@ -162,16 +172,7 @@ void print_terminal_main() {
   httpResponseCode = http.GET();
   http.end();
 }
-void up() {
-  byte g;
-  bitWrite(g, 0, data.mode);
-  bitWrite(g, 1, sta_rl1);
-  String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                       + pin_G + g;
-  http.begin(client, server_path.c_str());
-  int httpResponseCode = http.GET();
-  http.end();
-}
+
 //-------------------------
 void on_van1() {
   sta_rl1 = HIGH;
