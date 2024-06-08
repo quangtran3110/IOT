@@ -156,7 +156,7 @@ WidgetTerminal terminal(V0);
 WidgetTerminal terminal_ccd(V6);
 WidgetTerminal terminal_ubndp2(V10);
 WidgetTerminal terminal_alb(V14);
-WidgetTerminal terminal_boke(V19);
+WidgetTerminal terminal_boke1(V39);
 WidgetTerminal terminal_ntbinh(V23);
 WidgetTerminal terminal_dhvuong(V27);
 WidgetTerminal terminal_thpt1(V31);
@@ -1168,12 +1168,12 @@ void visible_boke1() {
 BLYNK_WRITE(V39) {
   String dataS = param.asStr();
   if ((dataS == "dothi") || (dataS == "dothi ") || (dataS == " dothi ") || (dataS == " dothi")) {  //man
-    terminal_ccd.clear();
+    terminal_boke1.clear();
     key = true;
-    Blynk.virtualWrite(V42, "OK!\nKích hoạt trong 10s");
+    Blynk.virtualWrite(V39, "OK!\nKích hoạt trong 10s");
     timer.setTimeout(10000, []() {
       key = false;
-      terminal_ccd.clear();
+      terminal_boke1.clear();
     });
   } else if ((dataS == "1") || (dataS == " 1") || (dataS == "1 ") || (dataS == " 1 ")) {
     terminal_ccd.clear();
@@ -1193,13 +1193,13 @@ BLYNK_WRITE(V40) {  //data
       case 0:
         if (mode_boke1 != bit) {
           mode_boke1 = bit;
-          Blynk.virtualWrite(V21, mode_boke1);
+          Blynk.virtualWrite(V41, mode_boke1);
         }
         break;
       case 1:
         if (sta_v1_boke1 != bit) {
           sta_v1_boke1 = bit;
-          Blynk.virtualWrite(V22, sta_v1_boke1);
+          Blynk.virtualWrite(V42, sta_v1_boke1);
         }
         break;
     }
@@ -1227,17 +1227,10 @@ BLYNK_WRITE(V41) {  //mode
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();
-  } else {
-    dataX = "mode";
-    String server_path = main_sever + "batch/update?token=" + boke1_TOKEN
-                         + "&V0=" + dataX;
-    http.begin(client, server_path.c_str());
-    int httpResponseCode = http.GET();
-    http.end();
-  }
+  } else Blynk.virtualWrite(V41, mode_boke1);
 }
 BLYNK_WRITE(V42) {  //Btn Van 1
-  if (key) {
+  if ((key) && (mode_boke1 == 0)) {
     String dataX;
     if (param.asInt() == HIGH) {
       dataX = "van1_on";
@@ -1247,7 +1240,7 @@ BLYNK_WRITE(V42) {  //Btn Van 1
     http.begin(client, server_path.c_str());
     int httpResponseCode = http.GET();
     http.end();
-  } else Blynk.virtualWrite(V22, sta_v1_boke1);
+  } else Blynk.virtualWrite(V42, sta_v1_boke1);
 }
 //------------------- Nguyễn Thái Bình
 void hidden_ntbinh() {
