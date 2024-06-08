@@ -58,7 +58,7 @@ V38 - Btn van 1
 #define ubndp2_TOKEN "gvfnRXv14oMohtqMWTPQXbduFKww1zfu"
 #define alb_TOKEN "1v4Fr0n4m4-GaYP26MMZ3bHbTi5k68nP"
 #define ntbinh_TOKEN "5xw1AG7yoX1e7sphhfL2jgc-dPnW9_l2"
-#define boke1_TOKEN "Ip_LElKywC_tQiM7uChCt_5QKd_RfjWG"
+#define boke1_TOKEN "egMiTa83bEFFC_YXyMaKNJ0a5dtSNpD0"
 #define boke2_TOKEN "I"
 #define boke3_TOKEN "I"
 #define dhvuong_TOKEN "eBeqi9ZJhRK3r66cUzgdD1gp2xGxG7kS"

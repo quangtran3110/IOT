@@ -65,6 +65,7 @@ struct Data {
 } data, dataCheck;
 const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 //-----------------------------
+byte reboot_num;
 int hour_start_rl1 = 0, minute_start_rl1 = 0, hour_stop_rl1 = 0, minute_stop_rl1 = 0;
 int timer_I;
 int dayadjustment = -1;
@@ -194,7 +195,7 @@ void rtctime() {
   DateTime now = rtc_module.now();
   //-------------------------
   temp = (rtc_module.getTemperature());
-  Serial.println(temp);
+  //Serial.println(temp);
   if (temp > 34 && sta_rl3 == LOW) on_fan();
   else if (temp < 33 && sta_rl3 == HIGH) off_fan();
   //-------------------------
@@ -267,6 +268,7 @@ BLYNK_WRITE(V0) {
 }
 BLYNK_WRITE(V1) {
   TimeInputParam t(param);
+  //-------------------------
   data.MonWeekDay = t.isWeekdaySelected(1);
   data.TuesWeekDay = t.isWeekdaySelected(2);
   data.WedWeekDay = t.isWeekdaySelected(3);
@@ -304,24 +306,26 @@ BLYNK_WRITE(V1) {
 //-------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    //Serial.println("Khong ket noi WIFI");
+    Serial.println("Khong ket noi WIFI");
+    WiFi.begin(ssid, password);
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
-    data.reboot_num = data.reboot_num + 1;
-    savedata();
-    if ((data.reboot_num == 1) || (data.reboot_num == 2)) {
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
-    if (data.reboot_num % 5 == 0) {
+    if (reboot_num % 5 == 0) {
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
   }
   if (Blynk.connected()) {
-    if (data.reboot_num != 0) {
-      data.reboot_num = 0;
-      savedata();
+    if (reboot_num != 0) {
+      reboot_num = 0;
     }
   }
 }
