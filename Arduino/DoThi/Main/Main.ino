@@ -21,11 +21,11 @@ V15 - G
 V16 - mode
 V17 - Btn van 1
 V18 - Btn van 2
-/////////// Bờ kè 1
-V19 - DATAS boke1
-V20 - G
-V21 - mode
-V22 - Btn van 1
+/////////// 
+V19 - 
+V20 - 
+V21 - 
+V22 - 
 /////////// Nguyễn Thái Bình
 V23 - DATAS ntbinh
 V24 - G
@@ -46,6 +46,12 @@ V35 - DATAS thpt2
 V36 - G
 V37 - mode
 V38 - Btn van 1
+/////////// Bờ kè 1
+V39 - DATAS thpt2
+V40 - G
+V41 - mode
+V42 - Btn van 1
+V43 - Irms
 
 */
 
@@ -1149,19 +1155,36 @@ BLYNK_WRITE(V18) {  //Btn Van 2
 //------------------- Bờ kè 1
 void hidden_boke1() {
   if (hidden_key_boke1 != true) {
-    Blynk.setProperty(V21, V22, "isDisabled", "true");
+    Blynk.setProperty(V39, V41, V42, V43, "isDisabled", "true");
     hidden_key_boke1 = true;
   }
 }
 void visible_boke1() {
   if (hidden_key_boke1 != false) {
-    Blynk.setProperty(V21, V22, "isDisabled", "false");
+    Blynk.setProperty(V39, V41, V42, V43, "isDisabled", "false");
     hidden_key_boke1 = false;
   }
 }
-BLYNK_WRITE(V19) {  //
+BLYNK_WRITE(V39) {
+  String dataS = param.asStr();
+  if ((dataS == "dothi") || (dataS == "dothi ") || (dataS == " dothi ") || (dataS == " dothi")) {  //man
+    terminal_ccd.clear();
+    key = true;
+    Blynk.virtualWrite(V42, "OK!\nKích hoạt trong 10s");
+    timer.setTimeout(10000, []() {
+      key = false;
+      terminal_ccd.clear();
+    });
+  } else if ((dataS == "1") || (dataS == " 1") || (dataS == "1 ") || (dataS == " 1 ")) {
+    terminal_ccd.clear();
+    String server_path = main_sever + "batch/update?token=" + boke1_TOKEN
+                         + "&V0=" + "info";
+    http.begin(client, server_path.c_str());
+    int httpResponseCode = http.GET();
+    http.end();
+  }
 }
-BLYNK_WRITE(V20) {  //data
+BLYNK_WRITE(V40) {  //data
   byte G = param.asInt();
   for (byte i = 0; i < 2; i++) {
     byte bit = G % 2;
@@ -1182,7 +1205,7 @@ BLYNK_WRITE(V20) {  //data
     }
   }
 }
-BLYNK_WRITE(V21) {  //mode
+BLYNK_WRITE(V41) {  //mode
   String dataX;
   if (key) {
     switch (param.asInt()) {
@@ -1213,7 +1236,7 @@ BLYNK_WRITE(V21) {  //mode
     http.end();
   }
 }
-BLYNK_WRITE(V22) {  //Btn Van 1
+BLYNK_WRITE(V42) {  //Btn Van 1
   if (key) {
     String dataX;
     if (param.asInt() == HIGH) {
