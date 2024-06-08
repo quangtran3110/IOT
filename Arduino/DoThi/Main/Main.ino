@@ -58,7 +58,7 @@ V43 - Irms
 #define BLYNK_TEMPLATE_ID "TMPL67uSt4c-z"
 #define BLYNK_TEMPLATE_NAME "ĐÔ THỊ"
 #define BLYNK_AUTH_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
-#define BLYNK_FIRMWARE_VERSION "280508"
+#define BLYNK_FIRMWARE_VERSION "280608"
 
 #define ccd_TOKEN "jaQFoaOgdcZcKbyI_ME_oi6tThEf4FR5"
 #define ubndp2_TOKEN "gvfnRXv14oMohtqMWTPQXbduFKww1zfu"
