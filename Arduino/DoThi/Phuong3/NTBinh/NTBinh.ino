@@ -1,9 +1,6 @@
 #define BLYNK_TEMPLATE_ID "TMPL60xJFuCEB"
 #define BLYNK_TEMPLATE_NAME "NTBinh"
 #define BLYNK_AUTH_TOKEN "5xw1AG7yoX1e7sphhfL2jgc-dPnW9_l2"
-#define pin_mode "&V25="
-#define pin_status "&V23="
-#define pin_G "&V24="
 
 #define BLYNK_FIRMWARE_VERSION "240508"
 #define Main_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
