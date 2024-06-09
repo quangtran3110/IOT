@@ -4,10 +4,10 @@
 #define BLYNK_FIRMWARE_VERSION "240610"
 
 #define Main_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
-//const char* ssid = "net";
-//const char* password = "Abcd@1234";
-const char* ssid = "tram bom so 4";
-const char* password = "0943950555";
+const char* ssid = "net";
+const char* password = "Abcd@1234";
+//const char* ssid = "tram bom so 4";
+//const char* password = "0943950555";
 //-------------------------------------------------------------------
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
@@ -29,26 +29,31 @@ const int S1 = P14;
 const int S2 = P13;
 const int S3 = P12;
 
-const int pin_RL1 = P7;
-const int pin_RL2 = P6;
-const int pin_RL3 = P5;
+const int pin_RL1 = P1;
+const int pin_RL2 = P2;
+const int pin_RL3 = P3;
 const int pin_RL4 = P4;
-const int pin_RL5 = P3;
-const int pin_RL6 = P2;
-const int pin_RL7 = P1;
+const int pin_RL5 = P5;
+const int pin_RL6 = P6;
+const int pin_RL7 = P7;
 //-----------------------------
 #include <WidgetRTC.h>
 #include "RTClib.h"
 RTC_DS3231 rtc_module;
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 char tz[] = "Asia/Ho_Chi_Minh";
-float temp;
 //-----------------------------
 #include <Wire.h>
 #include <Eeprom24C32_64.h>
 #define EEPROM_ADDRESS 0x57
 static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
 const word address = 0;
+//-----------------------------
+#include <DallasTemperature.h>
+#include <OneWire.h>
+OneWire oneWire(D3);
+DallasTemperature sensors(&oneWire);
+float temp[1];
 //-----------------------------
 #include <UrlEncode.h>
 #include <ESP8266httpUpdate.h>
@@ -201,57 +206,7 @@ void off_fan() {
   sta_rl3 = LOW;
   pcf8575_1.digitalWrite(pin_RL3, !sta_rl3);
 }
-void rtctime() {
-  DateTime now = rtc_module.now();
-  //-------------------------
-  temp = (rtc_module.getTemperature());
-  //Serial.println(temp);
-  if (temp > 34 && sta_rl3 == LOW) on_fan();
-  else if (temp < 33 && sta_rl3 == HIGH) off_fan();
-  //-------------------------
-  if (blynk_first_connect == true) {
-    if ((now.day() != day()) || (now.hour() != hour()) || ((now.minute() - minute() > 2) || (minute() - now.minute() > 2))) {
-      rtc_module.adjust(DateTime(year(), month(), day(), hour(), minute(), second()));
-      DateTime now = rtc_module.now();
-    }
-  }
-  float nowtime = (now.hour() * 3600 + now.minute() * 60);
 
-  if (weekday() == 1) {
-    dayadjustment = 6;  // needed for Sunday, Time library is day 1 and Blynk is day 7
-  }
-  if ((((weekday() + dayadjustment) == 1) && (data.MonWeekDay))
-      || (((weekday() + dayadjustment) == 2) && (data.TuesWeekDay))
-      || (((weekday() + dayadjustment) == 3) && (data.WedWeekDay))
-      || (((weekday() + dayadjustment) == 4) && (data.ThuWeekDay))
-      || (((weekday() + dayadjustment) == 5) && (data.FriWeekDay))
-      || (((weekday() + dayadjustment) == 6) && (data.SatWeekend))
-      || (((weekday() + dayadjustment) == 7) && (data.SunWeekend))) {
-    dayOfTheWeek_ = true;
-  } else dayOfTheWeek_ = false;
-  if (data.mode == 1) {  // Auto
-    if (dayOfTheWeek_) {
-      if (data.rl1_r > data.rl1_s) {
-        if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
-          off_van1();
-        }
-        if ((nowtime < data.rl1_s) || (nowtime > data.rl1_r)) {
-          if (!trip0) on_van1();
-        }
-      }
-      if (data.rl1_r < data.rl1_s) {
-        if ((nowtime > data.rl1_s) || (nowtime < data.rl1_r)) {
-          off_van1();
-        }
-        if ((nowtime < data.rl1_s) && (nowtime > data.rl1_r)) {
-          if (!trip0) on_van1();
-        }
-      }
-    } else {
-      if (sta_rl1 == HIGH) off_van1();
-    }
-  }
-}
 BLYNK_WRITE(V0) {
   String dataS = param.asStr();
   if (dataS == "update") {
@@ -338,6 +293,65 @@ void readcurrent()  // C2
     }
   }
 }
+void temperature() {  // Nhiệt độ
+  sensors.requestTemperatures();
+  //Serial.println(sensors.getDeviceCount());
+  for (byte i = 0; i < sensors.getDeviceCount(); i++) {
+    temp[i] = sensors.getTempCByIndex(i);
+    //Serial.println(temp[i]);
+    if (temp[i] > 37 && sta_rl3 == LOW) on_fan();
+    else if (temp[i] < 35 && sta_rl3 == HIGH) off_fan();
+  }
+  //Blynk.virtualWrite(V15, temp[1]);
+  //Blynk.virtualWrite(V23, temp[0]);
+}
+//-------------------------
+void rtctime() {
+  DateTime now = rtc_module.now();
+  //-------------------------
+  if (blynk_first_connect == true) {
+    if ((now.day() != day()) || (now.hour() != hour()) || ((now.minute() - minute() > 2) || (minute() - now.minute() > 2))) {
+      rtc_module.adjust(DateTime(year(), month(), day(), hour(), minute(), second()));
+      DateTime now = rtc_module.now();
+    }
+  }
+  float nowtime = (now.hour() * 3600 + now.minute() * 60);
+
+  if (weekday() == 1) {
+    dayadjustment = 6;  // needed for Sunday, Time library is day 1 and Blynk is day 7
+  }
+  if ((((weekday() + dayadjustment) == 1) && (data.MonWeekDay))
+      || (((weekday() + dayadjustment) == 2) && (data.TuesWeekDay))
+      || (((weekday() + dayadjustment) == 3) && (data.WedWeekDay))
+      || (((weekday() + dayadjustment) == 4) && (data.ThuWeekDay))
+      || (((weekday() + dayadjustment) == 5) && (data.FriWeekDay))
+      || (((weekday() + dayadjustment) == 6) && (data.SatWeekend))
+      || (((weekday() + dayadjustment) == 7) && (data.SunWeekend))) {
+    dayOfTheWeek_ = true;
+  } else dayOfTheWeek_ = false;
+  if (data.mode == 1) {  // Auto
+    if (dayOfTheWeek_) {
+      if (data.rl1_r > data.rl1_s) {
+        if ((nowtime > data.rl1_s) && (nowtime < data.rl1_r)) {
+          off_van1();
+        }
+        if ((nowtime < data.rl1_s) || (nowtime > data.rl1_r)) {
+          if (!trip0) on_van1();
+        }
+      }
+      if (data.rl1_r < data.rl1_s) {
+        if ((nowtime > data.rl1_s) || (nowtime < data.rl1_r)) {
+          off_van1();
+        }
+        if ((nowtime < data.rl1_s) && (nowtime > data.rl1_r)) {
+          if (!trip0) on_van1();
+        }
+      }
+    } else {
+      if (sta_rl1 == HIGH) off_van1();
+    }
+  }
+}
 //-------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
@@ -405,6 +419,7 @@ void setup() {
   eeprom.readBytes(address, sizeof(dataDefault), (byte*)&data);
   //-----------------------
   Wire.begin();
+  sensors.begin();
   pcf8575_1.begin();
   delay(10000);
 
@@ -434,6 +449,7 @@ void setup() {
     });
     timer.setInterval(5089, []() {
       up();
+      temperature();
       timer.restartTimer(timer_I);
     });
     timer.setInterval(15005L, []() {

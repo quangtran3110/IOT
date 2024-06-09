@@ -3,7 +3,6 @@
 #define BLYNK_AUTH_TOKEN "1v4Fr0n4m4-GaYP26MMZ3bHbTi5k68nP"
 #define BLYNK_FIRMWARE_VERSION "240508"
 
-//#define Main_TOKEN "Oyy7F8HDxVurrNg0QOSS6gjsCSQTsDqZ"
 #define Main_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
 const char* ssid = "net";
 const char* password = "Abcd@1234";
@@ -42,6 +41,7 @@ char tz[] = "Asia/Ho_Chi_Minh";
 static Eeprom24C32_64 eeprom(EEPROM_ADDRESS);
 const word address = 0;
 //-----------------------------
+#include <UrlEncode.h>
 #include <ESP8266httpUpdate.h>
 #include <WiFiClientSecure.h>
 #include <ESP8266HTTPClient.h>
@@ -50,12 +50,23 @@ HTTPClient http;
 #define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/Aolucbinh/build/esp8266.esp8266.nodemcuv2/Aolucbinh.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
+#define pin_terminal "&V14="
+#define pin_G "&V15="
+#define pin_mode "&V16="
+String location = urlEncode("Phường 2 - Ao Lục Bình\n");
+//-----------------------------
+byte reboot_num;
+int hour_start_rl1 = 0, minute_start_rl1 = 0, hour_stop_rl1 = 0, minute_stop_rl1 = 0;
+int hour_start_rl2 = 0, minute_start_rl2 = 0, hour_stop_rl2 = 0, minute_stop_rl2 = 0;
 int timer_I;
 int dayadjustment = -1;
 bool key = false, blynk_first_connect = false, dayOfTheWeek_ = false;
 bool sta_rl1 = LOW, sta_rl2 = LOW;
 String num_van;
+char s_day[50] = "";
 char B[50] = "";
+String s_timer_van_1, s_timer_van_2;
+String s_weekday;
 //-----------------------------
 struct Data {
   byte mode;
@@ -66,8 +77,8 @@ struct Data {
   byte MonWeekDay, TuesWeekDay, WedWeekDay, ThuWeekDay, FriWeekDay, SatWeekend, SunWeekend;
 } data, dataCheck;
 const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-WidgetTerminal terminal(V0);
+//-----------------------------
+WidgetTerminal DATAS(V0);
 WidgetRTC rtc_widget;
 //-------------------------------------------------------------------
 BlynkTimer timer;
@@ -76,18 +87,6 @@ BLYNK_CONNECTED() {
   blynk_first_connect = true;
 }
 //-------------------------------------------------------------------
-void up() {
-  byte g;
-  bitWrite(g, 0, data.mode);
-  bitWrite(g, 1, sta_rl1);
-  bitWrite(g, 2, sta_rl2);
-  String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                       + "&V14=" + 1
-                       + "&V15=" + g;
-  http.begin(client, server_path.c_str());
-  int httpResponseCode = http.GET();
-  http.end();
-}
 void savedata() {
   if (memcmp(&data, &dataCheck, sizeof(dataDefault)) == 0) {
     // Serial.println("structures same no need to write to EEPROM");
@@ -98,6 +97,96 @@ void savedata() {
     //Blynk.setProperty(V0, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
   }
 }
+//-----------------------------
+void weekday_() {
+  //---------------------Day
+  int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
+  memset(s_day, '\0', sizeof(s_day));
+  strcat(s_day, "Lịch chạy: ");
+  memset(B, '\0', sizeof(B));
+  for (int i = 0; i < 7; i++) {
+    // Nếu ngày i được chọn
+    if (A[i] == 1) {
+      // Thêm giá trị i vào mảng A
+      strcat(B, String(i + 1).c_str());
+      strcat(B, ",");
+      if (i == 6) {
+        strcat(s_day, "CN");
+        strcat(s_day, ",");
+      } else {
+        strcat(s_day, "T");
+        strcat(s_day, String(i + 2).c_str());
+        strcat(s_day, ",");
+      }
+    }
+  }
+  B[strlen(B) - 1] = '\0';  // Xóa ký tự cuối cùng là dấu phẩy
+  s_day[strlen(s_day) - 1] = '\0';
+  strcat(s_day, "\n");  // Xuống dòng cuối câu
+  s_weekday = urlEncode(s_day);
+  //---------------------Time RL 1
+  if ((hour_start_rl1 == 0) && (minute_start_rl1 == 0) && (hour_stop_rl1 == 0) && (minute_stop_rl1 == 0)) {
+    hour_start_rl1 = data.rl1_r / 3600;
+    minute_start_rl1 = (data.rl1_r - (hour_start_rl1 * 3600)) / 60;
+    hour_stop_rl1 = data.rl1_s / 3600;
+    minute_stop_rl1 = (data.rl1_s - (hour_stop_rl1 * 3600)) / 60;
+  }
+  if ((hour_start_rl2 == 0) && (minute_start_rl2 == 0) && (hour_stop_rl2 == 0) && (minute_stop_rl2 == 0)) {
+    hour_start_rl2 = data.rl2_r / 3600;
+    minute_start_rl2 = (data.rl2_r - (hour_start_rl2 * 3600)) / 60;
+    hour_stop_rl2 = data.rl2_s / 3600;
+    minute_stop_rl2 = (data.rl2_s - (hour_stop_rl2 * 3600)) / 60;
+  }
+  char s_timer_van_1_[30];  // Tạo một mảng ký tự để lưu trữ chuỗi định dạng
+  sprintf(s_timer_van_1_, "Van 1: %02d:%02d - %02d:%02d\n", hour_start_rl1, minute_start_rl1, hour_stop_rl1, minute_stop_rl1);
+  s_timer_van_1 = urlEncode(s_timer_van_1_);
+  char s_timer_van_2_[30];  // Tạo một mảng ký tự để lưu trữ chuỗi định dạng
+  sprintf(s_timer_van_2_, "Van 2: %02d:%02d - %02d:%02d\n", hour_start_rl2, minute_start_rl2, hour_stop_rl2, minute_stop_rl2);
+  s_timer_van_2 = urlEncode(s_timer_van_2_);
+}
+void print_terminal() {
+  String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                       + pin_terminal + "clr";
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+
+  server_path = server_name + "batch/update?token=" + Main_TOKEN
+                + pin_terminal + location
+                + pin_terminal + s_weekday
+                + pin_terminal + s_timer_van_1
+                + pin_terminal + s_timer_van_2;
+  http.begin(client, server_path.c_str());
+  httpResponseCode = http.GET();
+  http.end();
+  //Serial.println(server_path);
+}
+void print_terminal_main() {
+  String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                       + "&V0=" + "clr";
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+  server_path = server_name + "batch/update?token=" + Main_TOKEN
+                + "&V0=" + location
+                + "&V0=" + s_weekday
+                + "&V0=" + s_timer_van_1
+                + "&V0=" + s_timer_van_2;
+  http.begin(client, server_path.c_str());
+  httpResponseCode = http.GET();
+  http.end();
+}
+void up() {
+  byte g;
+  bitWrite(g, 0, data.mode);
+  bitWrite(g, 1, sta_rl1);
+  String server_path = server_name + "batch/update?token=" + Main_TOKEN
+                       + pin_G + g;
+  http.begin(client, server_path.c_str());
+  int httpResponseCode = http.GET();
+  http.end();
+}
+//-----------------------------
 void on_van1() {
   sta_rl1 = HIGH;
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
@@ -114,20 +203,7 @@ void off_van2() {
   sta_rl2 = LOW;
   pcf8575_1.digitalWrite(pin_RL2, !sta_rl2);
 }
-void weekday_() {
-  int A[7] = { data.MonWeekDay, data.TuesWeekDay, data.WedWeekDay, data.ThuWeekDay, data.FriWeekDay, data.SatWeekend, data.SunWeekend };
-  memset(B, '\0', sizeof(B));
-  for (int i = 0; i < 7; i++) {
-    // Nếu ngày i được chọn
-    if (A[i] == 1) {
-      // Thêm giá trị i vào mảng A
-      strcat(B, String(i + 1).c_str());
-      strcat(B, ",");
-    }
-  }
-  // Xóa ký tự cuối cùng là dấu phẩy
-  B[strlen(B) - 1] = '\0';
-}
+//-----------------------------
 void rtctime() {
   DateTime now = rtc_module.now();
   if (blynk_first_connect == true) {
@@ -136,9 +212,6 @@ void rtctime() {
       DateTime now = rtc_module.now();
     }
   }
-  terminal.clear();
-  //Blynk.virtualWrite(V0, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
-  //Blynk.virtualWrite(V0, "run:", data.rl1_r, ", stop:", data.rl1_s);
   float nowtime = (now.hour() * 3600 + now.minute() * 60);
 
   if (weekday() == 1) {
@@ -194,6 +267,7 @@ void rtctime() {
     }
   }
 }
+//-----------------------------
 BLYNK_WRITE(V0) {
   String dataS = param.asStr();
   if (dataS == "update") {
@@ -204,36 +278,18 @@ BLYNK_WRITE(V0) {
   } else if (dataS == "a") {  //auto
     data.mode = 1;
     savedata();
-  } else if (dataS == "mode") {  //mode?
-    String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                         + "&V16=" + data.mode;
-    http.begin(client, server_path.c_str());
-    int httpResponseCode = http.GET();
-    http.end();
+  } else if (dataS == "info") {  //mode?
+    print_terminal();
   } else if (dataS == "van1") {  //Time Van 1
     num_van = "van1";
-    String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                         + "&V4=" + data.rl1_r
-                         + "&V4=" + data.rl1_s
-                         + "&V4=" + tz
-                         + "&V4=" + String(B);
-    http.begin(client, server_path.c_str());
-    int httpResponseCode = http.GET();
-    http.end();
+    print_terminal_main();
   } else if (dataS == "van1_on") {  //RL1 on
     if (data.mode == 0) on_van1();
   } else if (dataS == "van1_off") {  //RL1 off
     if (data.mode == 0) off_van1();
   } else if (dataS == "van2") {  //Time Van 2
     num_van = "van2";
-    String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                         + "&V4=" + data.rl2_r
-                         + "&V4=" + data.rl2_s
-                         + "&V4=" + tz
-                         + "&V4=" + String(B);
-    http.begin(client, server_path.c_str());
-    int httpResponseCode = http.GET();
-    http.end();
+    print_terminal_main();
   } else if (dataS == "van2_on") {  //RL2 on
     if (data.mode == 0) on_van2();
   } else if (dataS == "van2_off") {  //RL2 off
@@ -242,14 +298,7 @@ BLYNK_WRITE(V0) {
 }
 BLYNK_WRITE(V1) {
   TimeInputParam t(param);
-  if (t.hasStartTime()) {
-    if (num_van == "van1") data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
-    else if (num_van == "van2") data.rl2_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
-  }
-  if (t.hasStopTime()) {
-    if (num_van == "van1") data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
-    else if (num_van == "van2") data.rl2_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
-  }
+  //-------------------------
   data.MonWeekDay = t.isWeekdaySelected(1);
   data.TuesWeekDay = t.isWeekdaySelected(2);
   data.WedWeekDay = t.isWeekdaySelected(3);
@@ -266,30 +315,43 @@ BLYNK_WRITE(V1) {
     dataCheck.SatWeekend = data.SatWeekend;
     dataCheck.SunWeekend = data.SunWeekend;
   }
+  //-------------------------
+  if (t.hasStartTime()) {
+    if (num_van == "van1") data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
+    else if (num_van == "van2") data.rl2_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
+  }
+  if (t.hasStopTime()) {
+    if (num_van == "van1") data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
+    else if (num_van == "van2") data.rl2_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
+  }
+  //-------------------------
   savedata();
   weekday_();
+  print_terminal_main();
 }
 //-------------------------
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    //Serial.println("Khong ket noi WIFI");
+    Serial.println("Khong ket noi WIFI");
+    WiFi.begin(ssid, password);
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
-    data.reboot_num = data.reboot_num + 1;
-    savedata();
-    if ((data.reboot_num == 1) || (data.reboot_num == 2)) {
+    reboot_num = reboot_num + 1;
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
-    if (data.reboot_num % 5 == 0) {
+    if (reboot_num % 5 == 0) {
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
   }
   if (Blynk.connected()) {
-    if (data.reboot_num != 0) {
-      data.reboot_num = 0;
-      savedata();
+    if (reboot_num != 0) {
+      reboot_num = 0;
     }
   }
 }
@@ -326,7 +388,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
-  //-----------------------
+  delay(10000);
   //-----------------------
   rtc_module.begin();
   eeprom.initialize();
@@ -334,8 +396,6 @@ void setup() {
   //-----------------------
   Wire.begin();
   pcf8575_1.begin();
-  delay(10000);
-
   pcf8575_1.pinMode(S0, OUTPUT);
   pcf8575_1.pinMode(S1, OUTPUT);
   pcf8575_1.pinMode(S2, OUTPUT);

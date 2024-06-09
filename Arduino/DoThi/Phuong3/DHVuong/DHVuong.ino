@@ -205,8 +205,6 @@ void rtctime() {
       DateTime now = rtc_module.now();
     }
   }
-  //Blynk.virtualWrite(V0, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
-  //Blynk.virtualWrite(V0, "run:", data.rl1_r, ", stop:", data.rl1_s);
   float nowtime = (now.hour() * 3600 + now.minute() * 60);
 
   if (weekday() == 1) {
@@ -374,6 +372,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
+  delay(10000);
   //-----------------------
   rtc_module.begin();
   eeprom.initialize();
@@ -382,8 +381,7 @@ void setup() {
   Wire.begin();
   sensors.begin();
   pcf8575_1.begin();
-  delay(10000);
-
+  
   pcf8575_1.pinMode(S0, OUTPUT);
   pcf8575_1.pinMode(S1, OUTPUT);
   pcf8575_1.pinMode(S2, OUTPUT);
