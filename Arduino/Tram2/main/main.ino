@@ -1,7 +1,7 @@
 /* V0-chọn người vận hành
    V1-date/time
-   V2-
-   V3-
+   V2-Rua loc
+   V3-key_noti
    V4-on/off bao ve ampe
    V5-keyterminal
    V6-
@@ -65,7 +65,7 @@
 #define BLYNK_TEMPLATE_NAME "TRẠM SỐ 2"
 #define BLYNK_AUTH_TOKEN "BDm1LNQi_LhtaKAQU8RWUaGbiOyKIcd3"
 
-#define BLYNK_FIRMWARE_VERSION "240520"
+#define BLYNK_FIRMWARE_VERSION "240624"
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
@@ -80,6 +80,7 @@ const char* password = "Password";
 EnergyMonitor emon0, emon1, emon2, emon3, emon4, emon5, emon6, emon7, emon8;
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0, xSetAmpe4 = 0, xSetAmpe5 = 0, xSetAmpe6 = 0, xSetAmpe7 = 0, xSetAmpe8 = 0;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0, yIrms4 = 0, yIrms5 = 0, yIrms6 = 0, yIrms7 = 0, yIrms8 = 0, dem1 = 0, dem2 = 0, dem3 = 0;
+unsigned long int xIrms0 = 0, xIrms1 = 0, xIrms2 = 0, xIrms3 = 0, xIrms4 = 0, xIrms5 = 0, xIrms6 = 0, xIrms7 = 0, xIrms8 = 0;
 float Irms0, Irms1, Irms2, Irms3, Irms4, Irms5, Irms6, Irms7, Irms8, pre;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false, trip4 = false, trip5 = false, trip6 = false, trip7 = false, trip8 = false;
 //-----------------------------
@@ -185,7 +186,7 @@ uint32_t timestamp;
 int timer_rtc, timer_I, timer_tank;
 int g = 1, h, z, i, j, n, m;
 int startt, stopt;
-
+byte status_g1, status_g2, status_g3, status_b1, status_b2, status_b3, status_b4;
 int LLG2_1m3, LLG1_1m3;
 
 int G1_start, G2_start, G3_start, B1_start, B2_start, B3_start, B4_start;
@@ -211,8 +212,9 @@ struct Data {
   byte protect;
   byte reset_day;
   int timerun_G1, timerun_G2, timerun_G3, timerun_B1, timerun_B2, timerun_B3, timerun_B4;
+  byte key_noti;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal keyterminal(V5);
 WidgetTerminal terminal_luuluong(V50);
@@ -240,21 +242,21 @@ void event_30p() {
       event30p = true;
     });
     if (data.man == 1) {
-      Blynk.logEvent("D", String("Đã ngưng Giếng 30p.\nBể chứa còn: ") + volume1 + String(" m3 (") + smoothDistance + String(" cm)"));
+      if (data.key_noti) Blynk.logEvent("D", String("Đã ngưng Giếng 30p.\nBể chứa còn: ") + volume1 + String(" m3 (") + smoothDistance + String(" cm)"));
     } else if (data.man == 2) {
-      Blynk.logEvent("G", String("Đã ngưng Giếng 30p.\nBể chứa còn: ") + volume1 + String(" m3 (") + smoothDistance + String(" cm)"));
+      if (data.key_noti) Blynk.logEvent("G", String("Đã ngưng Giếng 30p.\nBể chứa còn: ") + volume1 + String(" m3 (") + smoothDistance + String(" cm)"));
     } else if (data.man == 3) {
-      Blynk.logEvent("Q", String("Đã ngưng Giếng 30p.\nBể chứa còn: ") + volume1 + String(" m3 (") + smoothDistance + String(" cm)"));
+      if (data.key_noti) Blynk.logEvent("Q", String("Đã ngưng Giếng 30p.\nBể chứa còn: ") + volume1 + String(" m3 (") + smoothDistance + String(" cm)"));
     }
   }
 }
 void event_pressure() {
   if (data.man == 1) {
-    Blynk.logEvent("1-al", String("Áp lực hiện tại là ") + pre + String(" bar"));
+    if (data.key_noti) Blynk.logEvent("1-al", String("Áp lực hiện tại là ") + pre + String(" bar"));
   } else if (data.man == 2) {
-    Blynk.logEvent("2-al", String("Áp lực hiện tại là ") + pre + String(" bar"));
+    if (data.key_noti) Blynk.logEvent("2-al", String("Áp lực hiện tại là ") + pre + String(" bar"));
   } else if (data.man == 3) {
-    Blynk.logEvent("q-al", String("Áp lực hiện tại là ") + pre + String(" bar"));
+    if (data.key_noti) Blynk.logEvent("q-al", String("Áp lực hiện tại là ") + pre + String(" bar"));
   }
 }
 void savedata() {
@@ -269,72 +271,86 @@ void savedata() {
 }
 //----------------------------------
 void onG1() {
+  status_g1 = HIGH;
   pcf8575_1.digitalWrite(pin_on_G1, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_on_G1, HIGH);
 }
 void offG1() {
+  status_g1 = LOW;
   pcf8575_1.digitalWrite(pin_off_G1, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_off_G1, HIGH);
 }
 void onG2() {
+  status_g2 = HIGH;
   pcf8575_1.digitalWrite(pin_on_G2, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_on_G2, HIGH);
 }
 void offG2() {
+  status_g2 = LOW;
   pcf8575_1.digitalWrite(pin_off_G2, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_off_G2, HIGH);
 }
 void onG3() {
+  status_g3 = HIGH;
   pcf8575_1.digitalWrite(pin_on_G3, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_on_G3, HIGH);
 }
 void offG3() {
+  status_g3 = LOW;
   pcf8575_1.digitalWrite(pin_off_G3, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_off_G3, HIGH);
 }
 //----------------------------------
 void on_Bom1() {
+  status_b1 = HIGH;
   pcf8575_1.digitalWrite(pin_on_Bom1, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_on_Bom1, HIGH);
 }
 void off_Bom1() {
+  status_b1 = LOW;
   pcf8575_1.digitalWrite(pin_off_Bom1, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
 }
 void on_Bom2() {
+  status_b2 = HIGH;
   pcf8575_1.digitalWrite(pin_on_Bom2, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_on_Bom2, HIGH);
 }
 void off_Bom2() {
+  status_b2 = LOW;
   pcf8575_1.digitalWrite(pin_off_Bom2, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_off_Bom2, HIGH);
 }
 void on_Bom3() {
+  status_b3 = HIGH;
   pcf8575_1.digitalWrite(pin_on_Bom3, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_on_Bom3, HIGH);
 }
 void off_Bom3() {
+  status_b3 = LOW;
   pcf8575_1.digitalWrite(pin_off_Bom3, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
 }
 void on_Bom4() {
+  status_b4 = HIGH;
   pcf8575_1.digitalWrite(pin_on_Bom4, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_on_Bom4, HIGH);
 }
 void off_Bom4() {
+  status_b4 = LOW;
   pcf8575_1.digitalWrite(pin_off_Bom4, LOW);
   delay(200);
   pcf8575_1.digitalWrite(pin_off_Bom4, HIGH);
@@ -437,6 +453,14 @@ BLYNK_WRITE(V2)  //Rua Loc
   } else {
     Blynk.virtualWrite(V2, data.status_rualoc);
   }
+}
+BLYNK_WRITE(V3)  // Thông báo
+{
+  if (keySet) {
+    if (param.asInt() == LOW) data.key_noti = false;
+    else data.key_noti = true;
+    savedata();
+  } else Blynk.virtualWrite(V3, data.key_noti);
 }
 /*
 BLYNK_WRITE(V3)  // Chon gio Start-Stop
@@ -735,11 +759,11 @@ BLYNK_WRITE(V15)  // On Bơm 2 - 30KW
         kdata15 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang mở Bơm 30Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang mở Bơm 30Kw"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức mở Bơm 30Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức mở Bơm 30Kw"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong mở Bơm 30Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong mở Bơm 30Kw"));
           }
           kdata15 = true;
         });
@@ -756,11 +780,11 @@ BLYNK_WRITE(V16)  // Off 30 KW
         kdata16 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang tắt Bơm 30Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang tắt Bơm 30Kw"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức tắt Bơm 30Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức tắt Bơm 30Kw"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong tắt Bơm 30Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong tắt Bơm 30Kw"));
           }
           kdata16 = true;
         });
@@ -788,11 +812,11 @@ BLYNK_WRITE(V20)  // On G3
         kdata20 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang mở Giếng 3"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang mở Giếng 3"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức mở Giếng 3"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức mở Giếng 3"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong mở Giếng 3"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong mở Giếng 3"));
           }
           kdata20 = true;
         });
@@ -809,11 +833,11 @@ BLYNK_WRITE(V21)  // Off G2
         kdata21 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang tắt Giếng 2"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang tắt Giếng 2"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức tắt Giếng 2"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức tắt Giếng 2"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong tắt Giếng 2"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong tắt Giếng 2"));
           }
           kdata21 = true;
         });
@@ -830,11 +854,11 @@ BLYNK_WRITE(V22)  // Off 11 Kw
         kdata22 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang tắt Bơm 11Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang tắt Bơm 11Kw"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức tắt Bơm 11Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức tắt Bơm 11Kw"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong tắt Bơm 11Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong tắt Bơm 11Kw"));
           }
           kdata22 = true;
         });
@@ -851,11 +875,11 @@ BLYNK_WRITE(V23)  // Off G1
         kdata23 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang tắt Giếng 1"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang tắt Giếng 1"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức tắt Giếng 1"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức tắt Giếng 1"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong tắt Giếng 1"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong tắt Giếng 1"));
           }
           kdata23 = true;
         });
@@ -872,11 +896,11 @@ BLYNK_WRITE(V24)  // Off 7.5 KW
         kdata24 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang tắt Bơm 7.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang tắt Bơm 7.5Kw"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức tắt Bơm 7.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức tắt Bơm 7.5Kw"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong tắt Bơm 7.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong tắt Bơm 7.5Kw"));
           }
           kdata24 = true;
         });
@@ -893,11 +917,11 @@ BLYNK_WRITE(V25)  // Off 18.5 KW
         kdata25 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang tắt Bơm 18.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang tắt Bơm 18.5Kw"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức tắt Bơm 18.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức tắt Bơm 18.5Kw"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong tắt Bơm 18.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong tắt Bơm 18.5Kw"));
           }
           kdata25 = true;
         });
@@ -914,11 +938,11 @@ BLYNK_WRITE(V26)  // Off G3
         kdata26 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang tắt Giếng 3"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang tắt Giếng 3"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức tắt Giếng 3"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức tắt Giếng 3"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong tắt Giếng 3"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong tắt Giếng 3"));
           }
           kdata26 = true;
         });
@@ -935,11 +959,11 @@ BLYNK_WRITE(V27)  // On 18.5 KW
         kdata27 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang mở Bơm 18.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang mở Bơm 18.5Kw"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức mở Bơm 18.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức mở Bơm 18.5Kw"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong mở Bơm 18.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong mở Bơm 18.5Kw"));
           }
           kdata27 = true;
         });
@@ -956,11 +980,11 @@ BLYNK_WRITE(V28)  // On 7.5 KW
         kdata28 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang mở Bơm 7.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang mở Bơm 7.5Kw"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức mở Bơm 7.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức mở Bơm 7.5Kw"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong mở Bơm 7.5Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong mở Bơm 7.5Kw"));
           }
           kdata28 = true;
         });
@@ -977,11 +1001,11 @@ BLYNK_WRITE(V29)  // On G1
         kdata29 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang mở Giếng 1"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang mở Giếng 1"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức mở Giếng 1"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức mở Giếng 1"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong mở Giếng 1"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong mở Giếng 1"));
           }
           kdata29 = true;
         });
@@ -998,11 +1022,11 @@ BLYNK_WRITE(V30)  // On 11 KW
         kdata30 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang mở Bơm 11Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang mở Bơm 11Kw"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức mở Bơm 11Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức mở Bơm 11Kw"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong mở Bơm 11Kw"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong mở Bơm 11Kw"));
           }
           kdata30 = true;
         });
@@ -1019,11 +1043,11 @@ BLYNK_WRITE(V31)  // On G2
         kdata31 = false;
         timer1.setTimeout(3000, []() {
           if (keySwitchQ) {
-            Blynk.logEvent("info", String("Quang mở Giếng 2"));
+            if (data.key_noti) Blynk.logEvent("info", String("Quang mở Giếng 2"));
           } else if (keySwitchD) {
-            Blynk.logEvent("info", String("Đức mở Giếng 2"));
+            if (data.key_noti) Blynk.logEvent("info", String("Đức mở Giếng 2"));
           } else if (keySwitchP) {
-            Blynk.logEvent("info", String("Phong mở Giếng 2"));
+            if (data.key_noti) Blynk.logEvent("info", String("Phong mở Giếng 2"));
           }
           kdata31 = true;
         });
@@ -1108,6 +1132,14 @@ void readcurrent()  // C3 - 18.5 KW
   if (rms0 < 3) {
     Irms0 = 0;
     yIrms0 = 0;
+    if (status_b1 == HIGH) {
+      xIrms0++;
+      if (xIrms0 > 2) {
+        off_Bom1();
+        trip0 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm 18.5Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (B1_start != 0) {
       data.timerun_B1 = data.timerun_B1 + (millis() - B1_start);
       savedata();
@@ -1116,6 +1148,7 @@ void readcurrent()  // C3 - 18.5 KW
   } else if (rms0 > 3) {
     Irms0 = rms0;
     yIrms0 = yIrms0 + 1;
+    xIrms0 = 0;
     if (yIrms0 > 2) {
       if (B1_start >= 0) {
         if (B1_start == 0) B1_start = millis();
@@ -1126,7 +1159,7 @@ void readcurrent()  // C3 - 18.5 KW
       if ((Irms0 > data.SetAmpemax) || (Irms0 < data.SetAmpemin)) {
         xSetAmpe = xSetAmpe + 1;
         if ((xSetAmpe >= 3) && (data.protect)) {
-          Blynk.logEvent("error", String("Máy 18.5KW lỗi: ") + Irms0 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Máy 18.5KW lỗi: ") + Irms0 + String(" A"));
           pcf8575_1.digitalWrite(pin_off_Bom1, LOW);
           trip0 = true;
           xSetAmpe = 0;
@@ -1149,6 +1182,14 @@ void readcurrent1()  // C1 - Gieng 2
   if (rms1 < 3) {
     Irms1 = 0;
     yIrms1 = 0;
+    if (status_g2 == HIGH) {
+      xIrms1++;
+      if (xIrms1 > 2) {
+        offG2();
+        trip1 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Giếng 2 lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (G2_start != 0) {
       data.timerun_G2 = data.timerun_G2 + (millis() - G2_start);
       savedata();
@@ -1161,6 +1202,7 @@ void readcurrent1()  // C1 - Gieng 2
   } else if (rms1 > 3) {
     Irms1 = rms1;
     yIrms1 = yIrms1 + 1;
+    xIrms1 = 0;
     if (yIrms1 > 3) {
       dem2 = millis();
     }
@@ -1174,7 +1216,7 @@ void readcurrent1()  // C1 - Gieng 2
       if ((Irms1 > data.SetAmpe1max) || (Irms1 < data.SetAmpe1min)) {
         xSetAmpe1 = xSetAmpe1 + 1;
         if ((xSetAmpe1 >= 3) && (data.protect)) {
-          Blynk.logEvent("error", String("Giếng II lỗi: ") + Irms1 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Giếng II lỗi: ") + Irms1 + String(" A"));
           trip1 = true;
           xSetAmpe1 = 0;
           pcf8575_1.digitalWrite(pin_off_G2, LOW);
@@ -1197,6 +1239,14 @@ void readcurrent2()  // C6 - 11 KW
   if (rms2 < 3) {
     Irms2 = 0;
     yIrms2 = 0;
+    if (status_b4 == HIGH) {
+      xIrms2++;
+      if (xIrms2 > 2) {
+        off_Bom4();
+        trip2 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm 11Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (B4_start != 0) {
       data.timerun_B4 = data.timerun_B4 + (millis() - B4_start);
       savedata();
@@ -1205,6 +1255,7 @@ void readcurrent2()  // C6 - 11 KW
   } else if (rms2 > 3) {
     Irms2 = rms2;
     yIrms2 = yIrms2 + 1;
+    xIrms2 = 0;
     if (yIrms2 > 2) {
       if (B4_start >= 0) {
         if (B4_start == 0) B4_start = millis();
@@ -1215,7 +1266,7 @@ void readcurrent2()  // C6 - 11 KW
       if ((Irms2 > data.SetAmpe2max) || (Irms2 < data.SetAmpe2min)) {
         xSetAmpe2 = xSetAmpe2 + 1;
         if ((xSetAmpe2 >= 3) && (data.protect)) {
-          Blynk.logEvent("error", String("Máy 11KW lỗi: ") + Irms2 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Máy 11KW lỗi: ") + Irms2 + String(" A"));
           trip2 = true;
           xSetAmpe2 = 0;
           pcf8575_1.digitalWrite(pin_off_Bom4, LOW);
@@ -1238,6 +1289,14 @@ void readcurrent3()  // C0 - Gieng 1
   if (rms3 < 3) {
     Irms3 = 0;
     yIrms3 = 0;
+    if (status_g1 == HIGH) {
+      xIrms3++;
+      if (xIrms3 > 2) {
+        offG1();
+        trip3 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Giếng 1 lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (G1_start != 0) {
       data.timerun_G1 = data.timerun_G1 + (millis() - G1_start);
       savedata();
@@ -1250,6 +1309,7 @@ void readcurrent3()  // C0 - Gieng 1
   } else if (rms3 > 3) {
     Irms3 = rms3;
     yIrms3 = yIrms3 + 1;
+    xIrms3 = 0;
     if (yIrms3 > 3) {
       dem1 = millis();
     }
@@ -1263,7 +1323,7 @@ void readcurrent3()  // C0 - Gieng 1
       if ((Irms3 > data.SetAmpe3max) || (Irms3 < data.SetAmpe3min)) {
         xSetAmpe3 = xSetAmpe3 + 1;
         if ((xSetAmpe3 >= 3) && (data.protect)) {
-          Blynk.logEvent("error", String("Giếng I lỗi: ") + Irms3 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Giếng I lỗi: ") + Irms3 + String(" A"));
           trip3 = true;
           xSetAmpe3 = 0;
           pcf8575_1.digitalWrite(pin_off_G1, LOW);
@@ -1286,6 +1346,14 @@ void readcurrent4()  // C5 - 7.5 KW
   if (rms4 < 3) {
     Irms4 = 0;
     yIrms4 = 0;
+    if (status_b3 == HIGH) {
+      xIrms4++;
+      if (xIrms4 > 2) {
+        off_Bom3();
+        trip4 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm 7.5Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (B3_start != 0) {
       data.timerun_B3 = data.timerun_B3 + (millis() - B3_start);
       savedata();
@@ -1294,6 +1362,7 @@ void readcurrent4()  // C5 - 7.5 KW
   } else if (rms4 > 3) {
     Irms4 = rms4;
     yIrms4 = yIrms4 + 1;
+    xIrms4 = 0;
     if (yIrms4 > 2) {
       if (B3_start >= 0) {
         if (B3_start == 0) B3_start = millis();
@@ -1305,7 +1374,7 @@ void readcurrent4()  // C5 - 7.5 KW
       if ((Irms4 > data.SetAmpe4max) || (Irms4 < data.SetAmpe4min)) {
         xSetAmpe4 = xSetAmpe4 + 1;
         if ((xSetAmpe4 >= 3) && (data.protect)) {
-          Blynk.logEvent("error", String("Máy 7.5KW lỗi: ") + Irms4 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Máy 7.5KW lỗi: ") + Irms4 + String(" A"));
           trip4 = true;
           xSetAmpe4 = 0;
           pcf8575_1.digitalWrite(pin_off_Bom3, LOW);
@@ -1328,6 +1397,14 @@ void readcurrent5()  // C2 - Gieng 3
   if (rms5 < 3) {
     Irms5 = 0;
     yIrms5 = 0;
+    if (status_g3 == HIGH) {
+      xIrms5++;
+      if (xIrms5 > 2) {
+        offG3();
+        trip5 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Giếng 3 lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (G3_start != 0) {
       data.timerun_G3 = data.timerun_G3 + (millis() - G3_start);
       savedata();
@@ -1340,6 +1417,7 @@ void readcurrent5()  // C2 - Gieng 3
   } else if (rms5 >= 3) {
     Irms5 = rms5;
     yIrms5 = yIrms5 + 1;
+    xIrms5 = 0;
     if (yIrms5 > 3) {
       dem3 = millis();
     }
@@ -1353,7 +1431,7 @@ void readcurrent5()  // C2 - Gieng 3
       if ((Irms5 > data.SetAmpe5max) || (Irms5 < data.SetAmpe5min)) {
         xSetAmpe5 = xSetAmpe5 + 1;
         if ((xSetAmpe5 >= 3) && (data.protect)) {
-          Blynk.logEvent("error", String("Giếng III lỗi: ") + Irms5 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Giếng III lỗi: ") + Irms5 + String(" A"));
           trip5 = true;
           xSetAmpe5 = 0;
           pcf8575_1.digitalWrite(pin_off_G3, LOW);
@@ -1376,6 +1454,14 @@ void readcurrent6()  // C4 - 30kw
   if (rms6 < 3) {
     Irms6 = 0;
     yIrms6 = 0;
+    if (status_b1 == HIGH) {
+      xIrms6++;
+      if (xIrms6 > 2) {
+        off_Bom1();
+        trip6 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm 30Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (B2_start != 0) {
       data.timerun_B2 = data.timerun_B2 + (millis() - B2_start);
       savedata();
@@ -1384,6 +1470,7 @@ void readcurrent6()  // C4 - 30kw
   } else if (rms6 >= 3) {
     Irms6 = rms6;
     yIrms6 = yIrms6 + 1;
+    xIrms6 = 0;
     if (yIrms6 > 2) {
       if (B2_start >= 0) {
         if (B2_start == 0) B2_start = millis();
@@ -1394,7 +1481,7 @@ void readcurrent6()  // C4 - 30kw
       if ((Irms6 >= data.SetAmpe6max) || (Irms6 < data.SetAmpe6min)) {
         xSetAmpe6 = xSetAmpe6 + 1;
         if ((xSetAmpe6 >= 3) && (data.protect)) {
-          Blynk.logEvent("error", String("Máy 30KW lỗi: ") + Irms6 + String(" A"));
+          if (data.key_noti) Blynk.logEvent("error", String("Máy 30KW lỗi: ") + Irms6 + String(" A"));
           trip6 = true;
           xSetAmpe6 = 0;
           pcf8575_1.digitalWrite(pin_off_Bom2, LOW);
@@ -1423,7 +1510,7 @@ void readcurrent7()  // C7 - NK1
     if ((yIrms7 > 2) && ((Irms7 >= data.SetAmpe7max) || (Irms7 < data.SetAmpe7min))) {
       xSetAmpe7 = xSetAmpe7 + 1;
       if ((xSetAmpe7 >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Máy NÉN KHÍ 1 lỗi: ") + Irms7 + String(" A"));
+        if (data.key_noti) Blynk.logEvent("error", String("Máy NÉN KHÍ 1 lỗi: ") + Irms7 + String(" A"));
         trip7 = true;
         xSetAmpe7 = 0;
         pcf8575_1.digitalWrite(pin_NK1, HIGH);
@@ -1451,7 +1538,7 @@ void readcurrent8()  // C8 - NK2
     if ((yIrms8 > 2) && ((Irms8 >= data.SetAmpe8max) || (Irms8 < data.SetAmpe8min))) {
       xSetAmpe8 = xSetAmpe8 + 1;
       if ((xSetAmpe8 >= 3) && (data.protect)) {
-        Blynk.logEvent("error", String("Máy NÉN KHÍ 2 lỗi: ") + Irms8 + String(" A"));
+        if (data.key_noti) Blynk.logEvent("error", String("Máy NÉN KHÍ 2 lỗi: ") + Irms8 + String(" A"));
         trip8 = true;
         xSetAmpe8 = 0;
         pcf8575_1.digitalWrite(pin_NK2, HIGH);
