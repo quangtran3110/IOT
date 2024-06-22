@@ -186,7 +186,7 @@ int timer_2, timer_1, timer_3, timer_4, timer_5;
 int LLG1_1m3, reboot_num;
 int time_run_nenkhi = 5 * 60;
 int time_stop_nenkhi = 10 * 60;
-byte status_b1 = LOW, status_b2 = LOW, status_g1 = LOW;
+byte status_b1, status_b2, status_g1;
 int G1_start, B1_start, B2_start;
 bool G1_save = false, B1_save = false, B2_save = false;
 //-------------------
@@ -1297,9 +1297,9 @@ void setup() {
   pcf8575_1.pinMode(pin_G1, OUTPUT);
   pcf8575_1.digitalWrite(pin_G1, HIGH);
   pcf8575_1.pinMode(pin_B1, OUTPUT);
-  pcf8575_1.digitalWrite(pin_B1, status_b1);
+  pcf8575_1.digitalWrite(pin_B1, HIGH);
   pcf8575_1.pinMode(pin_B2, OUTPUT);
-  pcf8575_1.digitalWrite(pin_B2, status_b2);
+  pcf8575_1.digitalWrite(pin_B2, HIGH);
   pcf8575_1.pinMode(pin_Vandien, OUTPUT);
   pcf8575_1.digitalWrite(pin_Vandien, HIGH);
   pcf8575_1.pinMode(pin_rst, OUTPUT);
