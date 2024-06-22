@@ -1,7 +1,7 @@
 #define BLYNK_TEMPLATE_ID "TMPL7Z9cnaGi"
 #define BLYNK_TEMPLATE_NAME "Truong THPT"
 #define BLYNK_AUTH_TOKEN "H04PY3egc4KE3YnBQkOFEMNAGohM_oGo"
-#define BLYNK_FIRMWARE_VERSION "240602"
+#define BLYNK_FIRMWARE_VERSION "240610"
 
 #define Main_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
 const char* ssid = "net";
@@ -176,7 +176,6 @@ void up() {
 //-------------------------
 void on_van1() {
   sta_rl1 = HIGH;
-  Serial.println("..");
   pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
 }
 void off_van1() {

@@ -70,7 +70,7 @@
 #define BLYNK_TEMPLATE_NAME "TRẠM SỐ 4"
 #define BLYNK_AUTH_TOKEN "ra1gZtR0irrwiTH1L-L_nhXI6TMRH7M9"
 
-#define BLYNK_FIRMWARE_VERSION "240520"
+#define BLYNK_FIRMWARE_VERSION "240624"
 #define APP_DEBUG
 
 #include <BlynkSimpleEsp8266.h>
@@ -300,50 +300,43 @@ void oncap1() {
   if (status_g1 != HIGH) {
     status_g1 = HIGH;
     Blynk.virtualWrite(V2, status_g1);
-    savedata();
+    pcf8575_1.digitalWrite(pin_G1, status_g1);
   }
-  pcf8575_1.digitalWrite(pin_G1, status_g1);
 }
 void offcap1() {
   if (status_g1 != LOW) {
     status_g1 = LOW;
     Blynk.virtualWrite(V2, status_g1);
-    savedata();
+    pcf8575_1.digitalWrite(pin_G1, status_g1);
   }
-  pcf8575_1.digitalWrite(pin_G1, status_g1);
 }
 void onbom1() {
   if (status_b1 != HIGH) {
     status_b1 = HIGH;
     Blynk.virtualWrite(V0, status_b1);
-    savedata();
+    pcf8575_1.digitalWrite(pin_B1, !status_b1);
   }
-  pcf8575_1.digitalWrite(pin_B1, !status_b1);
 }
 void offbom1() {
   if (status_b1 != LOW) {
     status_b1 = LOW;
     Blynk.virtualWrite(V0, status_b1);
-    savedata();
+    pcf8575_1.digitalWrite(pin_B1, !status_b1);
   }
-  pcf8575_1.digitalWrite(pin_B1, !status_b1);
 }
 void onbom2() {
   if (status_b2 != HIGH) {
     status_b2 = HIGH;
     Blynk.virtualWrite(V1, status_b2);
-    savedata();
+    pcf8575_1.digitalWrite(pin_B2, !status_b2);
   }
-  pcf8575_1.digitalWrite(pin_B2, !status_b2);
 }
 void offbom2() {
   if (status_b2 != LOW) {
     status_b2 = LOW;
     Blynk.virtualWrite(V1, status_b2);
-    savedata();
+    pcf8575_1.digitalWrite(pin_B2, !status_b2);
   }
-  pcf8575_1.digitalWrite(pin_B2, !status_b2);
-  Blynk.virtualWrite(V1, status_b2);
 }
 void hidden_all() {
   Blynk.setProperty(V18, V11, V16, V13, V8, V5, V6, V7, "isHidden", true);
@@ -371,6 +364,14 @@ void readPower()  // C2 - Giếng    - I0
   if (rms0 < 2) {
     Irms0 = 0;
     yIrms0 = 0;
+    xIrms0++;
+    if (xIrms0 > 3) {
+      if (status_g1 == HIGH) {
+        offcap1();
+        trip0 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm GIẾNG lỗi không đo được DÒNG ĐIỆN!"));
+      }
+    }
     if (G1_start != 0) {
       data.timerun_G1 = data.timerun_G1 + (millis() - G1_start);
       savedata();
@@ -379,6 +380,7 @@ void readPower()  // C2 - Giếng    - I0
   } else if (rms0 >= 2) {
     Irms0 = rms0;
     yIrms0 = yIrms0 + 1;
+    xIrms0 = 0;
     if (yIrms0 > 3) {
       if (G1_start >= 0) {
         if (G1_start == 0) G1_start = millis();
@@ -410,6 +412,14 @@ void readPower1()  // C3 - Bơm 1    - I1
   if (rms1 < 2) {
     Irms1 = 0;
     yIrms1 = 0;
+    xIrms1++;
+    if (xIrms1 > 3) {
+      if (status_b1 == HIGH) {
+        offbom1();
+        trip1 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm 1 lỗi không đo được DÒNG ĐIỆN!"));
+      }
+    }
     if (B1_start != 0) {
       data.timerun_B1 = data.timerun_B1 + (millis() - B1_start);
       savedata();
@@ -418,6 +428,7 @@ void readPower1()  // C3 - Bơm 1    - I1
   } else if (rms1 >= 2) {
     Irms1 = rms1;
     yIrms1 = yIrms1 + 1;
+    xIrms1 = 0;
     if (yIrms1 > 3) {
       if (B1_start >= 0) {
         if (B1_start == 0) B1_start = millis();
@@ -449,6 +460,14 @@ void readPower2()  // C4 - Bơm 2    - I2
   if (rms2 < 2) {
     Irms2 = 0;
     yIrms2 = 0;
+    xIrms2++;
+    if (xIrms2 > 3) {
+      if (status_b2 == HIGH) {
+        offbom2();
+        trip2 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm 2 lỗi không đo được DÒNG ĐIỆN!"));
+      }
+    }
     if (B2_start != 0) {
       data.timerun_B2 = data.timerun_B2 + (millis() - B2_start);
       savedata();
@@ -457,6 +476,7 @@ void readPower2()  // C4 - Bơm 2    - I2
   } else if (rms2 >= 2) {
     Irms2 = rms2;
     yIrms2 = yIrms2 + 1;
+    xIrms2 = 0;
     if (yIrms2 > 3) {
       if (B2_start >= 0) {
         if (B2_start == 0) B2_start = millis();
@@ -1277,9 +1297,9 @@ void setup() {
   pcf8575_1.pinMode(pin_G1, OUTPUT);
   pcf8575_1.digitalWrite(pin_G1, HIGH);
   pcf8575_1.pinMode(pin_B1, OUTPUT);
-  //pcf8575_1.digitalWrite(pin_B1, status_b1);
+  pcf8575_1.digitalWrite(pin_B1, status_b1);
   pcf8575_1.pinMode(pin_B2, OUTPUT);
-  //pcf8575_1.digitalWrite(pin_B2, status_b2);
+  pcf8575_1.digitalWrite(pin_B2, status_b2);
   pcf8575_1.pinMode(pin_Vandien, OUTPUT);
   pcf8575_1.digitalWrite(pin_Vandien, HIGH);
   pcf8575_1.pinMode(pin_rst, OUTPUT);
