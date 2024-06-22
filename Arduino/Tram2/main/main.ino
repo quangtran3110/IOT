@@ -370,10 +370,10 @@ void off_NK2() {
 }
 //----------------------------------
 void hidden() {
-  Blynk.setProperty(V11, V12, V13, V4, V8, V9, "isHidden", true);
+  Blynk.setProperty(V3, V11, V12, V13, V4, V8, V9, "isHidden", true);
 }
 void visible() {
-  Blynk.setProperty(V11, V12, V13, V4, V8, V9, "isHidden", false);
+  Blynk.setProperty(V3, V11, V12, V13, V4, V8, V9, "isHidden", false);
 }
 //----------------------------------
 BLYNK_WRITE(V0)  // Nguoi truc
