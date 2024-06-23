@@ -1105,7 +1105,7 @@ BLYNK_WRITE(V10)  // Ap luc
 {
   pre = param.asFloat();
   //Blynk.virtualWrite(V5, "ok");
-  if (pre < 2.2) {
+  if (pre < 2) {
     n++;
     if ((n >= 5) && (keyPRE2)) {
       if (noti) {
@@ -1114,7 +1114,7 @@ BLYNK_WRITE(V10)  // Ap luc
       keyPRE2 = false;
       timer1.setTimeout(600000L, []() {  // 15p báo lại
         keyPRE2 = true;
-        if (pre >= 2.2) {
+        if (pre >= 2) {
           n = 0;
         }
       });
