@@ -276,6 +276,9 @@ void onG1() {
     pcf8575_1.digitalWrite(pin_on_G1, LOW);
     delay(200);
     pcf8575_1.digitalWrite(pin_on_G1, HIGH);
+  } else {
+    keyterminal.clear();
+    Blynk.virtualWrite(V5, "Giếng 1 lỗi!\nHãy 'reset' trước khi chạy!");
   }
 }
 void offG1() {
@@ -290,6 +293,9 @@ void onG2() {
     pcf8575_1.digitalWrite(pin_on_G2, LOW);
     delay(200);
     pcf8575_1.digitalWrite(pin_on_G2, HIGH);
+  } else {
+    keyterminal.clear();
+    Blynk.virtualWrite(V5, "Giếng 2 lỗi!\nHãy 'reset' trước khi chạy!");
   }
 }
 void offG2() {
@@ -304,6 +310,9 @@ void onG3() {
     pcf8575_1.digitalWrite(pin_on_G3, LOW);
     delay(200);
     pcf8575_1.digitalWrite(pin_on_G3, HIGH);
+  } else {
+    keyterminal.clear();
+    Blynk.virtualWrite(V5, "Giếng 3 lỗi!\nHãy 'reset' trước khi chạy!");
   }
 }
 void offG3() {
@@ -313,12 +322,15 @@ void offG3() {
   pcf8575_1.digitalWrite(pin_off_G3, HIGH);
 }
 //----------------------------------
-void on_Bom1() {
+void on_Bom1() {  //18.5Kw
   if (!trip0) {
     status_b1 = HIGH;
     pcf8575_1.digitalWrite(pin_on_Bom1, LOW);
     delay(200);
     pcf8575_1.digitalWrite(pin_on_Bom1, HIGH);
+  } else {
+    keyterminal.clear();
+    Blynk.virtualWrite(V5, "Bơm 1 lỗi!\nHãy 'reset' trước khi chạy!");
   }
 }
 void off_Bom1() {
@@ -333,6 +345,9 @@ void on_Bom2() {
     pcf8575_1.digitalWrite(pin_on_Bom2, LOW);
     delay(200);
     pcf8575_1.digitalWrite(pin_on_Bom2, HIGH);
+  } else {
+    keyterminal.clear();
+    Blynk.virtualWrite(V5, "Bơm 2 lỗi!\nHãy 'reset' trước khi chạy!");
   }
 }
 void off_Bom2() {
@@ -347,6 +362,9 @@ void on_Bom3() {
     pcf8575_1.digitalWrite(pin_on_Bom3, LOW);
     delay(200);
     pcf8575_1.digitalWrite(pin_on_Bom3, HIGH);
+  } else {
+    keyterminal.clear();
+    Blynk.virtualWrite(V5, "Bơm 3 lỗi!\nHãy 'reset' trước khi chạy!");
   }
 }
 void off_Bom3() {
@@ -361,6 +379,9 @@ void on_Bom4() {
     pcf8575_1.digitalWrite(pin_on_Bom4, LOW);
     delay(200);
     pcf8575_1.digitalWrite(pin_on_Bom4, HIGH);
+  } else {
+    keyterminal.clear();
+    Blynk.virtualWrite(V5, "Bơm 4 lỗi!\nHãy 'reset' trước khi chạy!");
   }
 }
 void off_Bom4() {
@@ -1474,11 +1495,11 @@ void readcurrent6()  // C4 - 30kw
   if (rms6 < 3) {
     Irms6 = 0;
     yIrms6 = 0;
-    if (status_b1 == HIGH) {
+    if (status_b2 == HIGH) {
       xIrms6++;
       if ((xIrms6 > 3) && (data.protect)) {
         xIrms6 = 0;
-        off_Bom1();
+        off_Bom2();
         trip6 = true;
         if (data.key_noti) Blynk.logEvent("error", String("Bơm 30Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
       }
