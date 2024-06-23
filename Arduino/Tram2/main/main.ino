@@ -271,7 +271,7 @@ void savedata() {
 }
 //----------------------------------
 void onG1() {
-  if (trip3) {
+  if (!trip3) {
     status_g1 = HIGH;
     pcf8575_1.digitalWrite(pin_on_G1, LOW);
     delay(200);
@@ -285,7 +285,7 @@ void offG1() {
   pcf8575_1.digitalWrite(pin_off_G1, HIGH);
 }
 void onG2() {
-  if (trip1) {
+  if (!trip1) {
     status_g2 = HIGH;
     pcf8575_1.digitalWrite(pin_on_G2, LOW);
     delay(200);
@@ -299,7 +299,7 @@ void offG2() {
   pcf8575_1.digitalWrite(pin_off_G2, HIGH);
 }
 void onG3() {
-  if (trip5) {
+  if (!trip5) {
     status_g3 = HIGH;
     pcf8575_1.digitalWrite(pin_on_G3, LOW);
     delay(200);
@@ -314,7 +314,7 @@ void offG3() {
 }
 //----------------------------------
 void on_Bom1() {
-  if (trip0) {
+  if (!trip0) {
     status_b1 = HIGH;
     pcf8575_1.digitalWrite(pin_on_Bom1, LOW);
     delay(200);
@@ -328,7 +328,7 @@ void off_Bom1() {
   pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
 }
 void on_Bom2() {
-  if (trip6) {
+  if (!trip6) {
     status_b2 = HIGH;
     pcf8575_1.digitalWrite(pin_on_Bom2, LOW);
     delay(200);
@@ -342,7 +342,7 @@ void off_Bom2() {
   pcf8575_1.digitalWrite(pin_off_Bom2, HIGH);
 }
 void on_Bom3() {
-  if (trip4) {
+  if (!trip4) {
     status_b3 = HIGH;
     pcf8575_1.digitalWrite(pin_on_Bom3, LOW);
     delay(200);
@@ -356,7 +356,7 @@ void off_Bom3() {
   pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
 }
 void on_Bom4() {
-  if (trip4) {
+  if (!trip4) {
     status_b4 = HIGH;
     pcf8575_1.digitalWrite(pin_on_Bom4, LOW);
     delay(200);
