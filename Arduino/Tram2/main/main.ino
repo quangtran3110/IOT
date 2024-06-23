@@ -271,10 +271,12 @@ void savedata() {
 }
 //----------------------------------
 void onG1() {
-  status_g1 = HIGH;
-  pcf8575_1.digitalWrite(pin_on_G1, LOW);
-  delay(200);
-  pcf8575_1.digitalWrite(pin_on_G1, HIGH);
+  if (trip3) {
+    status_g1 = HIGH;
+    pcf8575_1.digitalWrite(pin_on_G1, LOW);
+    delay(200);
+    pcf8575_1.digitalWrite(pin_on_G1, HIGH);
+  }
 }
 void offG1() {
   status_g1 = LOW;
@@ -283,10 +285,12 @@ void offG1() {
   pcf8575_1.digitalWrite(pin_off_G1, HIGH);
 }
 void onG2() {
-  status_g2 = HIGH;
-  pcf8575_1.digitalWrite(pin_on_G2, LOW);
-  delay(200);
-  pcf8575_1.digitalWrite(pin_on_G2, HIGH);
+  if (trip1) {
+    status_g2 = HIGH;
+    pcf8575_1.digitalWrite(pin_on_G2, LOW);
+    delay(200);
+    pcf8575_1.digitalWrite(pin_on_G2, HIGH);
+  }
 }
 void offG2() {
   status_g2 = LOW;
@@ -295,10 +299,12 @@ void offG2() {
   pcf8575_1.digitalWrite(pin_off_G2, HIGH);
 }
 void onG3() {
-  status_g3 = HIGH;
-  pcf8575_1.digitalWrite(pin_on_G3, LOW);
-  delay(200);
-  pcf8575_1.digitalWrite(pin_on_G3, HIGH);
+  if (trip5) {
+    status_g3 = HIGH;
+    pcf8575_1.digitalWrite(pin_on_G3, LOW);
+    delay(200);
+    pcf8575_1.digitalWrite(pin_on_G3, HIGH);
+  }
 }
 void offG3() {
   status_g3 = LOW;
@@ -308,10 +314,12 @@ void offG3() {
 }
 //----------------------------------
 void on_Bom1() {
-  status_b1 = HIGH;
-  pcf8575_1.digitalWrite(pin_on_Bom1, LOW);
-  delay(200);
-  pcf8575_1.digitalWrite(pin_on_Bom1, HIGH);
+  if (trip0) {
+    status_b1 = HIGH;
+    pcf8575_1.digitalWrite(pin_on_Bom1, LOW);
+    delay(200);
+    pcf8575_1.digitalWrite(pin_on_Bom1, HIGH);
+  }
 }
 void off_Bom1() {
   status_b1 = LOW;
@@ -320,10 +328,12 @@ void off_Bom1() {
   pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
 }
 void on_Bom2() {
-  status_b2 = HIGH;
-  pcf8575_1.digitalWrite(pin_on_Bom2, LOW);
-  delay(200);
-  pcf8575_1.digitalWrite(pin_on_Bom2, HIGH);
+  if (trip6) {
+    status_b2 = HIGH;
+    pcf8575_1.digitalWrite(pin_on_Bom2, LOW);
+    delay(200);
+    pcf8575_1.digitalWrite(pin_on_Bom2, HIGH);
+  }
 }
 void off_Bom2() {
   status_b2 = LOW;
@@ -332,10 +342,12 @@ void off_Bom2() {
   pcf8575_1.digitalWrite(pin_off_Bom2, HIGH);
 }
 void on_Bom3() {
-  status_b3 = HIGH;
-  pcf8575_1.digitalWrite(pin_on_Bom3, LOW);
-  delay(200);
-  pcf8575_1.digitalWrite(pin_on_Bom3, HIGH);
+  if (trip4) {
+    status_b3 = HIGH;
+    pcf8575_1.digitalWrite(pin_on_Bom3, LOW);
+    delay(200);
+    pcf8575_1.digitalWrite(pin_on_Bom3, HIGH);
+  }
 }
 void off_Bom3() {
   status_b3 = LOW;
@@ -344,10 +356,12 @@ void off_Bom3() {
   pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
 }
 void on_Bom4() {
-  status_b4 = HIGH;
-  pcf8575_1.digitalWrite(pin_on_Bom4, LOW);
-  delay(200);
-  pcf8575_1.digitalWrite(pin_on_Bom4, HIGH);
+  if (trip4) {
+    status_b4 = HIGH;
+    pcf8575_1.digitalWrite(pin_on_Bom4, LOW);
+    delay(200);
+    pcf8575_1.digitalWrite(pin_on_Bom4, HIGH);
+  }
 }
 void off_Bom4() {
   status_b4 = LOW;
@@ -1134,7 +1148,8 @@ void readcurrent()  // C3 - 18.5 KW
     yIrms0 = 0;
     if (status_b1 == HIGH) {
       xIrms0++;
-      if (xIrms0 > 2) {
+      if ((xIrms0 > 3) && (data.protect)) {
+        xIrms0 = 0;
         off_Bom1();
         trip0 = true;
         if (data.key_noti) Blynk.logEvent("error", String("Bơm 18.5Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
@@ -1163,7 +1178,7 @@ void readcurrent()  // C3 - 18.5 KW
           pcf8575_1.digitalWrite(pin_off_Bom1, LOW);
           trip0 = true;
           xSetAmpe = 0;
-          timer1.setTimeout(600000L, []() {
+          timer1.setTimeout(3000L, []() {
             pcf8575_1.digitalWrite(pin_off_Bom1, HIGH);
           });
         }
@@ -1184,7 +1199,8 @@ void readcurrent1()  // C1 - Gieng 2
     yIrms1 = 0;
     if (status_g2 == HIGH) {
       xIrms1++;
-      if (xIrms1 > 2) {
+      if ((xIrms1 > 3) && (data.protect)) {
+        xIrms1 = 0;
         offG2();
         trip1 = true;
         if (data.key_noti) Blynk.logEvent("error", String("Giếng 2 lỗi\nKhông đo được DÒNG ĐIỆN"));
@@ -1220,7 +1236,7 @@ void readcurrent1()  // C1 - Gieng 2
           trip1 = true;
           xSetAmpe1 = 0;
           pcf8575_1.digitalWrite(pin_off_G2, LOW);
-          timer.setTimeout(600000L, []() {
+          timer.setTimeout(3000L, []() {
             pcf8575_1.digitalWrite(pin_off_G2, HIGH);
           });
         }
@@ -1241,7 +1257,8 @@ void readcurrent2()  // C6 - 11 KW
     yIrms2 = 0;
     if (status_b4 == HIGH) {
       xIrms2++;
-      if (xIrms2 > 2) {
+      if ((xIrms2 > 3) && (data.protect)) {
+        xIrms2 = 0;
         off_Bom4();
         trip2 = true;
         if (data.key_noti) Blynk.logEvent("error", String("Bơm 11Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
@@ -1270,7 +1287,7 @@ void readcurrent2()  // C6 - 11 KW
           trip2 = true;
           xSetAmpe2 = 0;
           pcf8575_1.digitalWrite(pin_off_Bom4, LOW);
-          timer.setTimeout(600000L, []() {
+          timer.setTimeout(3000L, []() {
             pcf8575_1.digitalWrite(pin_off_Bom4, HIGH);
           });
         }
@@ -1291,7 +1308,8 @@ void readcurrent3()  // C0 - Gieng 1
     yIrms3 = 0;
     if (status_g1 == HIGH) {
       xIrms3++;
-      if (xIrms3 > 2) {
+      if ((xIrms3 > 3) && (data.protect)) {
+        xIrms3 = 0;
         offG1();
         trip3 = true;
         if (data.key_noti) Blynk.logEvent("error", String("Giếng 1 lỗi\nKhông đo được DÒNG ĐIỆN"));
@@ -1327,7 +1345,7 @@ void readcurrent3()  // C0 - Gieng 1
           trip3 = true;
           xSetAmpe3 = 0;
           pcf8575_1.digitalWrite(pin_off_G1, LOW);
-          timer.setTimeout(600000L, []() {
+          timer.setTimeout(3000L, []() {
             pcf8575_1.digitalWrite(pin_off_G1, HIGH);
           });
         }
@@ -1348,7 +1366,8 @@ void readcurrent4()  // C5 - 7.5 KW
     yIrms4 = 0;
     if (status_b3 == HIGH) {
       xIrms4++;
-      if (xIrms4 > 2) {
+      if ((xIrms4 > 3) && (data.protect)) {
+        xIrms4 = 0;
         off_Bom3();
         trip4 = true;
         if (data.key_noti) Blynk.logEvent("error", String("Bơm 7.5Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
@@ -1378,7 +1397,7 @@ void readcurrent4()  // C5 - 7.5 KW
           trip4 = true;
           xSetAmpe4 = 0;
           pcf8575_1.digitalWrite(pin_off_Bom3, LOW);
-          timer.setTimeout(300000L, []() {
+          timer.setTimeout(3000L, []() {
             pcf8575_1.digitalWrite(pin_off_Bom3, HIGH);
           });
         }
@@ -1399,7 +1418,8 @@ void readcurrent5()  // C2 - Gieng 3
     yIrms5 = 0;
     if (status_g3 == HIGH) {
       xIrms5++;
-      if (xIrms5 > 2) {
+      if ((xIrms5 > 3) && (data.protect)) {
+        xIrms5 = 0;
         offG3();
         trip5 = true;
         if (data.key_noti) Blynk.logEvent("error", String("Giếng 3 lỗi\nKhông đo được DÒNG ĐIỆN"));
@@ -1435,7 +1455,7 @@ void readcurrent5()  // C2 - Gieng 3
           trip5 = true;
           xSetAmpe5 = 0;
           pcf8575_1.digitalWrite(pin_off_G3, LOW);
-          timer.setTimeout(300000L, []() {
+          timer.setTimeout(3000L, []() {
             pcf8575_1.digitalWrite(pin_off_G3, HIGH);
           });
         }
@@ -1456,7 +1476,8 @@ void readcurrent6()  // C4 - 30kw
     yIrms6 = 0;
     if (status_b1 == HIGH) {
       xIrms6++;
-      if (xIrms6 > 2) {
+      if ((xIrms6 > 3) && (data.protect)) {
+        xIrms6 = 0;
         off_Bom1();
         trip6 = true;
         if (data.key_noti) Blynk.logEvent("error", String("Bơm 30Kw lỗi\nKhông đo được DÒNG ĐIỆN"));
@@ -1777,7 +1798,7 @@ void updata() {
                        + "&V34=" + smoothDistance
                        + "&V35=" + volume1
                        + "&V36=" + Irms8
-                       + "&V40=" + Irms0
+                       + "&V40=" + Irms0  //18.5kw
                        + "&V41=" + Irms1
                        + "&V42=" + Irms2
                        + "&V43=" + Irms3
