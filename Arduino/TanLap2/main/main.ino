@@ -2,31 +2,34 @@
 V0 - Btn Bom 1
 V1 - Btn Bom 2
 V2 - Btn Bom 3
-V3 - Btn Nen khi
-V4 - 
+V3 - MODE_CAP2
+V4 - Key notification
 V5 - Irms 0
-V6 - I_vdf
+V6 - Irms 1
 V7 - Irms 2
-V8 - Irms 3
-V3 - Chon máy cài đặt bảo vệ
+V8 - Key protect
+V9 - Chon máy cài đặt bảo vệ
 V10- Min
 V11- Max
 V12- String
-V13- Tan so Bom 1
+V13- Tan so
 V14- Ap luc
 V15- Con lai
 V16- The tich
-V17- Key protect
-V18- Set ref
-V19- Nhiệt độ biên tần
-V20- date/time
-V21- Nhiệt độ động cơ
+V17- Set ref
+V18- Nhiệt độ biên tần
+V19- Nhiệt độ B1
+V20- Nhiệt độ B2
+V21- Nhiệt độ B3
 V22- Nhiệt độ tủ điện
-V23- 
-V24- 
-V25- 
-V26- 
-V27- 
+V23- date/time
+V24- INFO
+V25- PRE_MIN
+V26- IN_VOLT
+V27- OUT_VOLT 
+V28- SPEED_MOTOR
+V29- POWER
+V30- I_vfd
 V40- thời gian chạy B1
 V41- thời gian chạy B1-24h
 V42- thời gian chạy B2
@@ -87,10 +90,10 @@ String server_name = "http://sgp1.blynk.cloud/external/api/";
 SoftwareSerial S(14, 12);
 ModbusRTU mb;
 //-----------------------------
-const int S0 = 14;
-const int S1 = 12;
-const int S2 = 13;
-const int S3 = 15;
+const int S0pin = P15;
+const int S1pin = P14;
+const int S2pin = P13;
+const int S3pin = P12;
 
 const int pin_B1 = P1;
 const int pin_B2 = P2;
@@ -102,18 +105,18 @@ const int pin_rst = P6;
 //-----------------------------
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 int xSetAmpe = 0, xSetAmpe1 = 0, xSetAmpe2 = 0, xSetAmpe3 = 0;
-int timer_I;
+int timer_I, timer_Measure, speed_motor;
 unsigned long int yIrms0 = 0, yIrms1 = 0, yIrms2 = 0, yIrms3 = 0;
-float Irms0, Irms1, Irms2, Irms3, I_vdf, pre, ref_percent, ref_blynk, hz;
+float Irms0, Irms1, Irms2, Irms3, temp_vfd, I_vfd, out_volt, in_volt, power, pre, pre_set, ref_percent, hz;
 bool trip0 = false, trip1 = false, trip2 = false, trip3 = false;
 bool key = false, blynk_first_connect = false, status_fan = HIGH;
 byte status_b1, status_b2, status_b3, time_run = false;
-byte c;
+byte c, j, i;
 byte reboot_num;
 int LLG1_1m3;
-int temp_vdf;
-int B1_start, B2_start;
-bool B1_save = false, B2_save = false;
+int temp_;
+int B1_start, B2_start, B3_start;
+bool B1_save = false, B2_save = false, B3_save = false;
 //-----------------------------
 #define filterSamples 121
 int dai = 510;
@@ -167,10 +170,27 @@ bool cbWrite(Modbus::ResultCode event, uint16_t transactionId, void* data) {
   }
   return true;
 }
+uint16_t data_vfd[13];
+bool cbWrite_data_vfd(Modbus::ResultCode event, uint16_t transactionId, void* data) {
+  if (event == Modbus::EX_SUCCESS) {
+    hz = data_vfd[0] / 100;
+    I_vfd = data_vfd[1] / 10;
+    in_volt = data_vfd[2] / 10;
+    out_volt = data_vfd[3] / 10;
+    speed_motor = data_vfd[4];
+    pre_set = data_vfd[7] / 10;
+    pre = data_vfd[8] / 10;
+    power = data_vfd[9] / 10;
+    temp_vfd = data_vfd[11] / 10;
+  }
+  return true;
+}
+/*
 uint16_t nhietdo_bientan[1];
 bool cbWrite_nhietdo(Modbus::ResultCode event, uint16_t transactionId, void* data) {
   if (event == Modbus::EX_SUCCESS) {
-    temp_vdf = (nhietdo_bientan[0]) / 10;
+    temp_ = (nhietdo_bientan[0]) / 10;
+    Serial.println(temp_);
   }
   return true;
 }
@@ -196,17 +216,11 @@ bool cbWrite_apluc(Modbus::ResultCode event, uint16_t transactionId, void* data)
   }
   return true;
 }
+*/
 uint16_t ref_percent_[1];
 bool cbWrite_aplucset(Modbus::ResultCode event, uint16_t transactionId, void* data) {
   if (event == Modbus::EX_SUCCESS) {
     ref_percent = float(ref_percent_[0]);  //Áp lực tham chiếu tổng dạng %
-  }
-  return true;
-}
-uint16_t ref_blynk_[1];
-bool cbWrite_ref_blynk_(Modbus::ResultCode event, uint16_t transactionId, void* data) {
-  if (event == Modbus::EX_SUCCESS) {
-    ref_blynk = ref_blynk_[0];  //Áp lực tham chiếu nhập từ Blynk (0-16384)
   }
   return true;
 }
@@ -220,11 +234,11 @@ struct Data {
   int save_num;
   float pre_set, pre_min;
   byte mode_cap2;
-  byte keyp;
+  byte keyp, keynoti;
   byte reset_day;
   int timerun_B1, timerun_B2, timerun_B3;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 //-----------------------------
 WidgetRTC rtc_widget;
 BlynkTimer timer, timer1;
@@ -238,15 +252,18 @@ BLYNK_CONNECTED() {
 void up() {
   String server_path = server_name + "batch/update?token=" + BLYNK_AUTH_TOKEN
                        + "&V5=" + Irms0
-                       + "&V6=" + I_vdf
-                       + "&V8=" + Irms3
+                       + "&V6=" + Irms1
+                       + "&V7=" + Irms2
                        + "&V13=" + hz
                        + "&V14=" + pre
                        + "&V15=" + smoothDistance
                        + "&V16=" + volume
-                       + "&V19=" + temp_vdf
-                       + "&V40=" + float(data.timerun_B1) / 1000 / 60 / 60
-                       + "&V42=" + float(data.timerun_B2) / 1000 / 60 / 60;
+                       + "&V18=" + temp_vfd
+                       + "&V26=" + in_volt
+                       + "&V27=" + out_volt
+                       + "&V28=" + speed_motor
+                       + "&V29=" + power
+                       + "&V30=" + I_vfd;
   //+ "&V21=" + temp[0]
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
@@ -298,14 +315,14 @@ void savedata() {
   Blynk.setProperty(V12, "label", BLYNK_FIRMWARE_VERSION, "-EEPROM ", data.save_num);
 }
 void on_vfd() {                        //0x3001
-  mb.writeHreg(1, 12296, 1, cbWrite);  //0x01: FWD run
+  mb.writeHreg(1, 12289, 1, cbWrite);  //0x01: FWD run
   while (mb.slave()) {
     mb.task();
     delay(20);
   }
 }
 void off_vfd() {
-  mb.writeHreg(1, 12296, 5, cbWrite);  //0x05: Stop command
+  mb.writeHreg(1, 12289, 5, cbWrite);  //0x05: Stop command
   while (mb.slave()) {
     mb.task();
     delay(20);
@@ -393,14 +410,14 @@ void visible() {
 //-------------------------------------------------------------------
 void MeasureCmForSmoothing()  //C1
 {
-  digitalWrite(S0, HIGH);
-  digitalWrite(S1, LOW);
-  digitalWrite(S2, LOW);
-  digitalWrite(S3, LOW);
+  pcf8575_1.digitalWrite(S0pin, HIGH);
+  pcf8575_1.digitalWrite(S1pin, LOW);
+  pcf8575_1.digitalWrite(S2pin, LOW);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float sensorValue = analogRead(A0);
   distance = (((sensorValue - zeropointTank) * 500) / (fullpointTank - zeropointTank));
-  Serial.print("sensorValue ");
-  Serial.println(distance);
+  //Serial.print("sensorValue ");
+  //Serial.println(distance);
   if (distance > 0) {
     smoothDistance = digitalSmooth(distance, sensSmoothArray1);
     volume = (dai * smoothDistance * rong) / 1000000;
@@ -421,10 +438,10 @@ void temperature() {  // Nhiệt độ
 //-------------------------------------------------------------------
 void readcurrent()  // C2 - Bơm 1   - I0
 {
-  digitalWrite(S0, LOW);
-  digitalWrite(S1, HIGH);
-  digitalWrite(S2, LOW);
-  digitalWrite(S3, LOW);
+  pcf8575_1.digitalWrite(S0pin, LOW);
+  pcf8575_1.digitalWrite(S1pin, HIGH);
+  pcf8575_1.digitalWrite(S2pin, LOW);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float rms0 = emon0.calcIrms(740);
   if (rms0 < 2) {
     Irms0 = 0;
@@ -458,10 +475,10 @@ void readcurrent()  // C2 - Bơm 1   - I0
 }
 void readcurrent1()  // C3 - Bơm 2   - I1
 {
-  digitalWrite(S0, HIGH);
-  digitalWrite(S1, HIGH);
-  digitalWrite(S2, LOW);
-  digitalWrite(S3, LOW);
+  pcf8575_1.digitalWrite(S0pin, HIGH);
+  pcf8575_1.digitalWrite(S1pin, HIGH);
+  pcf8575_1.digitalWrite(S2pin, LOW);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float rms1 = emon1.calcIrms(740);
   if (rms1 < 2) {
     Irms1 = 0;
@@ -484,7 +501,7 @@ void readcurrent1()  // C3 - Bơm 2   - I1
       if ((Irms1 >= data.SetAmpe1max) || (Irms1 <= data.SetAmpe1min)) {
         xSetAmpe1 = xSetAmpe1 + 1;
         if ((xSetAmpe1 > 3) & (data.keyp)) {
-          off_B2();
+          off_b2();
           xSetAmpe1 = 0;
           trip1 = true;
           Blynk.logEvent("error", String("Bơm 2 lỗi: ") + Irms1 + String(" A"));
@@ -496,10 +513,10 @@ void readcurrent1()  // C3 - Bơm 2   - I1
 void readcurrent2()  // C4 - Bơm 3   - I2
 {
   //Blynk.run();
-  digitalWrite(S0, LOW);
-  digitalWrite(S1, LOW);
-  digitalWrite(S2, HIGH);
-  digitalWrite(S3, LOW);
+  pcf8575_1.digitalWrite(S0pin, LOW);
+  pcf8575_1.digitalWrite(S1pin, LOW);
+  pcf8575_1.digitalWrite(S2pin, HIGH);
+  pcf8575_1.digitalWrite(S3pin, LOW);
   float rms2 = emon2.calcIrms(740);
   if (rms2 < 2) {
     Irms2 = 0;
@@ -522,7 +539,7 @@ void readcurrent2()  // C4 - Bơm 3   - I2
       if ((Irms2 >= data.SetAmpe2max) || (Irms2 <= data.SetAmpe2min)) {
         xSetAmpe2 = xSetAmpe2 + 1;
         if ((xSetAmpe2 > 3) & (data.keyp)) {
-          off_B3();
+          off_b3();
           xSetAmpe2 = 0;
           trip2 = true;
           Blynk.logEvent("error", String("Bơm 3 lỗi: ") + Irms2 + String(" A"));
@@ -535,10 +552,10 @@ void readcurrent2()  // C4 - Bơm 3   - I2
 void readcurrent3()  // C5 - NenKhi  - I3
 {
   //Blynk.run();
-  digitalWrite(S0, HIGH);
-  digitalWrite(S1, LOW);
-  digitalWrite(S2, HIGH);
-  digitalWrite(S3, LOW);
+  digitalWrite(S0pin, HIGH);
+  digitalWrite(S1pin, LOW);
+  digitalWrite(S2pin, HIGH);
+  digitalWrite(S3pin, LOW);
   float rms3 = emon3.calcIrms(740);
   if (rms3 < 2) {
     Irms3 = 0;
@@ -582,7 +599,7 @@ void rtctime() {
   }
   Blynk.virtualWrite(V20, daysOfTheWeek[now.dayOfTheWeek()], ", ", now.day(), "/", now.month(), "/", now.year(), " - ", now.hour(), ":", now.minute(), ":", now.second());
   int nowtime = (now.hour() * 3600 + now.minute() * 60);
-  if ((data.mode_cap2 == 1) && (mintank == false)) {  // Chạy Tu Dong
+  if (data.mode_cap2 == 1) {  // Chạy Tu Dong
     if ((nowtime > data.t1_start && nowtime < data.t1_stop) || (nowtime > data.t2_start && nowtime < data.t2_stop) || (nowtime > data.t3_start && nowtime < data.t3_stop) || (nowtime > data.t4_start && nowtime < data.t4_stop)) {
       time_run = true;
     }
@@ -663,6 +680,15 @@ BLYNK_WRITE(V2)  // Bơm 3
     }
   } else Blynk.virtualWrite(V2, status_b3);
 }
+BLYNK_WRITE(V4)  // Notification
+{
+  if (key) {
+    if (param.asInt() == LOW) data.keynoti = false;
+    else data.keynoti = true;
+    savedata();
+  } else
+    Blynk.virtualWrite(V4, data.keynoti);
+}
 /*
 BLYNK_WRITE(V3)  // Nen Khi
 {
@@ -675,6 +701,15 @@ BLYNK_WRITE(V3)  // Nen Khi
   } else Blynk.virtualWrite(V3, data.status_nenkhi);
 }
 */
+BLYNK_WRITE(V8)  // Bảo vệ
+{
+  if (key) {
+    if (param.asInt() == LOW) data.keyp = false;
+    else data.keyp = true;
+    savedata();
+  } else
+    Blynk.virtualWrite(V8, data.keyp);
+}
 BLYNK_WRITE(V9)  // Chon máy cài đặt bảo vệ
 {
   switch (param.asInt()) {
@@ -785,28 +820,52 @@ BLYNK_WRITE(V12)  // String
     terminal.clear();
     Blynk.virtualWrite(V12, "ESP UPDATE...");
     update_fw();
+  } else if (dataS == "run") {
+    terminal.clear();
+    on_vfd();
+  } else if (dataS == "stop") {
+    terminal.clear();
+    off_vfd();
   } else {
     Blynk.virtualWrite(V12, "Mật mã sai.\nVui lòng nhập lại!\n");
   }
 }
-BLYNK_WRITE(V17)  // Bảo vệ
-{
-  if (key) {
-    if (param.asInt() == LOW) data.keyp = false;
-    else data.keyp = true;
-    savedata();
-  } else
-    Blynk.virtualWrite(V17, data.keyp);
-}
-BLYNK_WRITE(V18)  // Cai ap luc bien tan
+BLYNK_WRITE(V17)  // Cai ap luc bien tan
 {
   if (key) {
     data.pre_set = param.asFloat();
     savedata();
-  } else Blynk.virtualWrite(V18, data.pre_set);
+  } else Blynk.virtualWrite(V17, data.pre_set);
 }
 //-------------------------------------------------------------------
 void read_modbus() {
+  {  // All
+    mb.readHreg(1, 8449, data_vfd, 12, cbWrite_data_vfd);
+    while (mb.slave()) {
+      mb.task();
+      delay(20);
+    }
+  }
+  //Áp lực set
+  /*
+  {
+    mb.readHreg(1, 12296, ref_percent_, 1, cbWrite_aplucset);
+    while (mb.slave()) {  // Check if transaction is active
+      mb.task();
+      delay(20);
+    }
+    float ref_bar = ref_percent / 100;  //Áp lực tham chiếu tổng dạng bar
+    if (ref_bar != data.pre_set) {
+      int send_ref = int(data.pre_set * 100);
+      mb.writeHreg(1, 12296, send_ref, cbWrite);
+      while (mb.slave()) {  // Check if transaction is active
+        mb.task();
+        delay(20);
+      }
+      Blynk.virtualWrite(V18, data.pre_set);
+    }
+  }
+  /*
   {  //Nhiệt độ biến tần
     mb.readHreg(1, 8460, nhietdo_bientan, 1, cbWrite_nhietdo);
     while (mb.slave()) {
@@ -847,24 +906,7 @@ void read_modbus() {
       delay(20);
     }
   }
-  //Áp lực set
-  {
-    mb.readHreg(1, 12296, ref_percent_, 2, cbWrite_aplucset);
-    while (mb.slave()) {  // Check if transaction is active
-      mb.task();
-      delay(20);
-    }
-    float ref_bar = ref_percent / 100;  //Áp lực tham chiếu tổng dạng bar
-    if (ref_bar != data.pre_set) {
-      int send_ref = int(data.pre_set * 100);
-      mb.writeHreg(1, 12296, send_ref, cbWrite);
-      while (mb.slave()) {  // Check if transaction is active
-        mb.task();
-        delay(20);
-      }
-      Blynk.virtualWrite(V18, data.pre_set);
-    }
-  }
+  */
 }
 //-------------------------
 void connectionstatus() {
@@ -923,10 +965,10 @@ void update_fw() {
 void setup() {
   pinMode(D4, OUTPUT);
   pinMode(D3, INPUT);
-  pinMode(S0, OUTPUT);
-  pinMode(S1, OUTPUT);
-  pinMode(S2, OUTPUT);
-  pinMode(S3, OUTPUT);
+  pinMode(S0pin, OUTPUT);
+  pinMode(S1pin, OUTPUT);
+  pinMode(S2pin, OUTPUT);
+  pinMode(S3pin, OUTPUT);
   //-----------------------
   Serial.begin(115200);
   WiFi.mode(WIFI_STA);
@@ -951,12 +993,13 @@ void setup() {
   emon3.current(A0, 110);
   //-----------------------
   pcf8575_1.begin();
-  pcf8575_1.pinMode(pin_G1, OUTPUT);
-  pcf8575_1.digitalWrite(pin_G1, HIGH);
+
   pcf8575_1.pinMode(pin_B1, OUTPUT);
   pcf8575_1.digitalWrite(pin_B1, HIGH);
   pcf8575_1.pinMode(pin_B2, OUTPUT);
   pcf8575_1.digitalWrite(pin_B2, HIGH);
+  pcf8575_1.pinMode(pin_B3, OUTPUT);
+  pcf8575_1.digitalWrite(pin_B3, HIGH);
   pcf8575_1.pinMode(pin_NK, OUTPUT);
   pcf8575_1.digitalWrite(pin_NK, HIGH);
   pcf8575_1.pinMode(pin_rst, OUTPUT);
@@ -965,32 +1008,30 @@ void setup() {
   pcf8575_1.digitalWrite(pin_Fan, HIGH);
 
   timer1.setTimeout(5000L, []() {
-    /*
     timer_I = timer.setInterval(1589, []() {
       readcurrent();
-      read_timerun_B2();
-      //readcurrent1();
-      //readcurrent2();
-      readcurrent3();
+      //read_timerun_B2();
+      readcurrent1();
+      readcurrent2();
+      //readcurrent3();
       //temperature();
       timer.restartTimer(timer_I);
-    });    
+    });
     timer.setInterval(230L, MeasureCmForSmoothing);
     timer.setInterval(15005L, []() {
       rtctime();
-      time_run_motor();
+      //time_run_motor();
       timer.restartTimer(timer_I);
     });
     timer.setInterval(900005L, []() {
       connectionstatus();
       timer.restartTimer(timer_I);
     });
-    timer.setInterval(230L, MeasureCmForSmoothing);
-    */
+    timer_Measure = timer.setInterval(230L, MeasureCmForSmoothing);
     timer.setInterval(1033L, []() {
       read_modbus();
-      //up();
-      //timer.restartTimer(timer_I);
+      up();
+      timer.restartTimer(timer_I);
     });
   });
 }

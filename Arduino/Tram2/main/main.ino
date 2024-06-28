@@ -392,13 +392,17 @@ void off_Bom4() {
 }
 //----------------------------------
 void on_NK1() {
-  pcf8575_1.digitalWrite(pin_NK1, HIGH);
+  if (!trip7) {
+    pcf8575_1.digitalWrite(pin_NK1, HIGH);
+  }
 }
 void off_NK1() {
   pcf8575_1.digitalWrite(pin_NK1, LOW);
 }
 void on_NK2() {
-  pcf8575_1.digitalWrite(pin_NK2, HIGH);
+  if (!trip8) {
+    pcf8575_1.digitalWrite(pin_NK2, HIGH);
+  }
 }
 void off_NK2() {
   pcf8575_1.digitalWrite(pin_NK2, LOW);
@@ -596,6 +600,8 @@ BLYNK_WRITE(V5)  // data string
     trip4 = false;
     trip5 = false;
     trip6 = false;
+    trip7 = false;
+    trip8 = false;
     pcf8575_1.digitalWrite(pin_off_G3, HIGH);    // G3
     pcf8575_1.digitalWrite(pin_off_G2, HIGH);    // G2
     pcf8575_1.digitalWrite(pin_off_G1, HIGH);    // G1
@@ -1555,7 +1561,7 @@ void readcurrent7()  // C7 - NK1
         if (data.key_noti) Blynk.logEvent("error", String("Máy NÉN KHÍ 1 lỗi: ") + Irms7 + String(" A"));
         trip7 = true;
         xSetAmpe7 = 0;
-        pcf8575_1.digitalWrite(pin_NK1, HIGH);
+        pcf8575_1.digitalWrite(pin_NK1, LOW);
       }
     } else {
       xSetAmpe7 = 0;
@@ -1583,7 +1589,7 @@ void readcurrent8()  // C8 - NK2
         if (data.key_noti) Blynk.logEvent("error", String("Máy NÉN KHÍ 2 lỗi: ") + Irms8 + String(" A"));
         trip8 = true;
         xSetAmpe8 = 0;
-        pcf8575_1.digitalWrite(pin_NK2, HIGH);
+        pcf8575_1.digitalWrite(pin_NK2, LOW);
       }
     } else {
       xSetAmpe8 = 0;
