@@ -78,7 +78,7 @@ int dai = 566;
 int rong = 297;
 int dosau = 130;
 long distance, distance1;
-float volume, volume1, percent, percent1, dungtich, smoothDistance;
+float volume, percent, percent1, dungtich, smoothDistance;
 int sensSmoothArray1[filterSamples];
 int digitalSmooth(int rawIn, int* sensSmoothArray) {
   int j, k, temp, top, bottom;
@@ -133,7 +133,7 @@ const int S2pin = 13;
 const int S3pin = 15;
 const int EN = 0;
 
-bool key = false, keyp = true, keytank = true;
+bool key = false, keytank = true;
 bool trip0 = false, trip1 = false, trip2 = false, trip_mcp = false;
 bool key_memory = true, timer_I_status;
 bool key_bom = true, key_gieng = true;
@@ -163,8 +163,9 @@ struct Data {
   byte key_noti, rualoc;
   float clo;
   int time_clo, LLG1_RL;
+  byte protect;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 WidgetTerminal terminal(V11);
 WidgetTerminal terminal_clo(V21);
@@ -181,7 +182,7 @@ void up() {
                        + "&V3=" + Irms1
                        + "&V4=" + float(Result1)
                        + "&V5=" + smoothDistance
-                       + "&V6=" + volume1
+                       + "&V6=" + volume
                        + "&V19=" + Irms2;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
@@ -198,7 +199,7 @@ void savedata() {
   }
 }
 void on_cap1() {
-  if (data.status_g1 != HIGH) {
+  if ((data.status_g1 != HIGH) && (!trip0)) {
     data.status_g1 = HIGH;
     savedata();
     Blynk.virtualWrite(V0, data.status_g1);
@@ -214,7 +215,7 @@ void off_cap1() {
   mcp.digitalWrite(pincap1, data.status_g1);
 }
 void on_bom() {
-  if (data.status_b1 != HIGH) {
+  if ((data.status_b1 != HIGH) && (!trip1)) {
     data.status_b1 = HIGH;
     savedata();
     Blynk.virtualWrite(V1, data.status_b1);
@@ -282,6 +283,15 @@ void readPower()  // C0 - Cấp 1  - I0
   if (rms0 < 2) {
     Irms0 = 0;
     yIrms0 = 0;
+    if ((data.status_g1 == HIGH) && (volume <= 17)) {
+      xIrms0++;
+      if ((xIrms0 > 3) && (data.protect)) {
+        xIrms0 = 0;
+        off_cap1();
+        trip0 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Giếng lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (rest_time == 0) {
       if (dem_cap1 == 0) {
         dem_cap1 = millis();
@@ -307,7 +317,7 @@ void readPower()  // C0 - Cấp 1  - I0
       }
       if ((Irms0 >= data.SetAmpemax) || (Irms0 <= data.SetAmpemin)) {
         xSetAmpe = xSetAmpe + 1;
-        if ((xSetAmpe >= 2) && (keyp)) {
+        if ((xSetAmpe >= 2) && (data.protect)) {
           off_cap1();
           xSetAmpe = 0;
           trip0 = true;
@@ -335,6 +345,15 @@ void readPower1()  // C1 - Bơm    - I1
   if (rms1 < 2) {
     Irms1 = 0;
     yIrms1 = 0;
+    if ((data.status_b1 == HIGH) && (volume > 8.5)) {
+      xIrms1++;
+      if ((xIrms1 > 3) && (data.protect)) {
+        xIrms1 = 0;
+        off_bom();
+        trip1 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if (rest_time == 0) {
       if (dem_bom == 0) {
         dem_bom = millis();
@@ -360,7 +379,7 @@ void readPower1()  // C1 - Bơm    - I1
       }
       if ((Irms1 >= data.SetAmpe1max) || (Irms1 <= data.SetAmpe1min)) {
         xSetAmpe1 = xSetAmpe1 + 1;
-        if ((xSetAmpe1 >= 2) && (keyp)) {
+        if ((xSetAmpe1 >= 2) && (data.protect)) {
           off_bom();
           xSetAmpe1 = 0;
           trip1 = true;
@@ -393,7 +412,7 @@ void readPower2()  // C2 - Nen khi- I2
     yIrms2 = yIrms2 + 1;
     if ((yIrms2 > 3) && ((Irms2 >= data.SetAmpe2max) || (Irms2 <= data.SetAmpe2min))) {
       xSetAmpe2 = xSetAmpe2 + 1;
-      if ((xSetAmpe2 >= 2) && (keyp)) {
+      if ((xSetAmpe2 >= 2) && (data.protect)) {
         off_nenkhi();
         xSetAmpe2 = 0;
         trip2 = true;
@@ -437,7 +456,7 @@ void MeasureCmForSmoothing()  //Muc Nuoc
   distance1 = (((sensorValue - 196.5) * 500) / (980 - 196.5));
   if (distance1 > 0) {
     smoothDistance = digitalSmooth(distance1, sensSmoothArray1);
-    volume1 = (dai * smoothDistance * rong) / 1000000;
+    volume = (dai * smoothDistance * rong) / 1000000;
     if ((smoothDistance - dosau >= 20) && (data.key_noti) && (keytank)) {
       Blynk.logEvent("info", String("Nước trong bể cao vượt mức ") + (smoothDistance - dosau) + String(" cm"));
       keytank = false;
@@ -756,12 +775,12 @@ BLYNK_WRITE(V14)  // Bảo vệ
   if (key) {
     int data13 = param.asInt();
     if (data13 == LOW) {
-      keyp = false;
+      data.protect = false;
     } else {
-      keyp = true;
+      data.protect = true;
     }
   } else
-    Blynk.virtualWrite(V14, keyp);
+    Blynk.virtualWrite(V14, data.protect);
 }
 BLYNK_WRITE(V15)  // Thông báo
 {
