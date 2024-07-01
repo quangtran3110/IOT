@@ -154,7 +154,7 @@ void savedata() {
   }
 }
 void on_cap1() {
-  if (data.status_g1 == LOW) {
+  if (data.status_g1 != HIGH) {
     data.status_g1 = HIGH;
     savedata();
     Blynk.virtualWrite(V0, data.status_g1);
@@ -162,8 +162,7 @@ void on_cap1() {
   mcp.digitalWrite(pincap1, data.status_g1);
 }
 void off_cap1() {
-  if (data.status_g1 == HIGH) {
-    Serial.println(data.status_g1);
+  if (data.status_g1 != LOW) {
     data.status_g1 = LOW;
     savedata();
     Blynk.virtualWrite(V0, data.status_g1);
@@ -171,7 +170,7 @@ void off_cap1() {
   mcp.digitalWrite(pincap1, data.status_g1);
 }
 void on_bom() {
-  if (data.status_b1 == LOW) {
+  if (data.status_b1 != HIGH) {
     data.status_b1 = HIGH;
     savedata();
     Blynk.virtualWrite(V1, data.status_b1);
@@ -179,7 +178,7 @@ void on_bom() {
   mcp.digitalWrite(pinbom, !data.status_b1);
 }
 void off_bom() {
-  if (data.status_b1 == HIGH) {
+  if (data.status_b1 != LOW) {
     data.status_b1 = LOW;
     savedata();
     Blynk.virtualWrite(V1, !data.status_b1);
@@ -187,7 +186,7 @@ void off_bom() {
   mcp.digitalWrite(pinbom, !data.status_b1);
 }
 void on_nenkhi() {
-  if (data.status_nk1 == LOW) {
+  if (data.status_nk1 != HIGH) {
     data.status_nk1 = HIGH;
     savedata();
     Blynk.virtualWrite(V18, data.status_nk1);
@@ -195,7 +194,7 @@ void on_nenkhi() {
   on_cap1();
 }
 void off_nenkhi() {
-  if (data.status_nk1 == HIGH) {
+  if (data.status_nk1 != LOW) {
     data.status_nk1 = LOW;
     savedata();
     Blynk.virtualWrite(V18, data.status_nk1);
@@ -240,6 +239,15 @@ void readPower()  // C2 - Cấp 1  - I0
   if (rms0 < 2) {
     Irms0 = 0;
     yIrms0 = 0;
+    if ((data.status_g1 == HIGH) && (conlai <= 195) && (status_pre)) {
+      xIrms0++;
+      if ((xIrms0 > 3) && (data.protect)) {
+        xIrms0 = 0;
+        off_cap1();
+        trip0 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Giếng lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
     if ((noti_cap1) && (status_pre) && (conlai <= 80) && (!time_off_c1)) {
       if (data.key_noti) {
         noti_cap1 = false;
@@ -278,6 +286,15 @@ void readPower1()  // C3 - Bơm    - I1
   if (rms1 < 2) {
     Irms1 = 0;
     yIrms1 = 0;
+    if ((data.status_b1 == HIGH) && (conlai > 180)) {
+      xIrms1++;
+      if ((xIrms1 > 3) && (data.protect)) {
+        xIrms1 = 0;
+        off_bom();
+        trip1 = true;
+        if (data.key_noti) Blynk.logEvent("error", String("Bơm lỗi\nKhông đo được DÒNG ĐIỆN"));
+      }
+    }
   } else if (rms1 >= 2) {
     Irms1 = rms1;
     yIrms1 = yIrms1 + 1;

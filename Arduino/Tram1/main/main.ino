@@ -164,8 +164,9 @@ struct Data {
   float clo;
   int time_clo, LLG1_RL;
   byte protect;
+  int phao_max, phao_min;
 } data, dataCheck;
-const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+const struct Data dataDefault = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 WidgetTerminal terminal(V11);
 WidgetTerminal terminal_clo(V21);
@@ -199,12 +200,14 @@ void savedata() {
   }
 }
 void on_cap1() {
-  if ((data.status_g1 != HIGH) && (!trip0)) {
+  if (data.status_g1 != HIGH) {
     data.status_g1 = HIGH;
     savedata();
     Blynk.virtualWrite(V0, data.status_g1);
   }
-  mcp.digitalWrite(pincap1, data.status_g1);
+  if (!trip0) {
+    mcp.digitalWrite(pincap1, data.status_g1);
+  }
 }
 void off_cap1() {
   if (data.status_g1 != LOW) {
@@ -212,15 +215,18 @@ void off_cap1() {
     savedata();
     Blynk.virtualWrite(V0, data.status_g1);
   }
+  yIrms0 = 0;
   mcp.digitalWrite(pincap1, data.status_g1);
 }
 void on_bom() {
-  if ((data.status_b1 != HIGH) && (!trip1)) {
+  if (data.status_b1 != HIGH) {
     data.status_b1 = HIGH;
     savedata();
     Blynk.virtualWrite(V1, data.status_b1);
   }
-  mcp.digitalWrite(pinbom, data.status_b1);
+  if (!trip1) {
+    mcp.digitalWrite(pinbom, data.status_b1);
+  }
 }
 void off_bom() {
   if (data.status_b1 != LOW) {
@@ -228,6 +234,7 @@ void off_bom() {
     savedata();
     Blynk.virtualWrite(V1, data.status_b1);
   }
+  yIrms1 = 0;
   mcp.digitalWrite(pinbom, data.status_b1);
 }
 void on_nenkhi() {
@@ -282,14 +289,17 @@ void readPower()  // C0 - Cấp 1  - I0
   digitalWrite(EN, HIGH);
   if (rms0 < 2) {
     Irms0 = 0;
-    yIrms0 = 0;
-    if ((data.status_g1 == HIGH) && (volume <= 17)) {
-      xIrms0++;
-      if ((xIrms0 > 3) && (data.protect)) {
-        xIrms0 = 0;
-        off_cap1();
-        trip0 = true;
-        if (data.key_noti) Blynk.logEvent("error", String("Giếng lỗi\nKhông đo được DÒNG ĐIỆN"));
+    if ((data.status_g1 == HIGH) && (yIrms0 > 3)) {
+      if (smoothDistance > data.phao_max) {
+        yIrms0 = 0;
+      } else if (smoothDistance < data.phao_max) {
+        xIrms0++;
+        if ((xIrms0 > 3) && (data.protect)) {
+          off_cap1();
+          trip0 = true;
+          xIrms0 = 0;
+          if (data.key_noti) Blynk.logEvent("error", String("Giếng lỗi\nKhông đo được DÒNG ĐIỆN"));
+        }
       }
     }
     if (rest_time == 0) {
@@ -344,14 +354,17 @@ void readPower1()  // C1 - Bơm    - I1
   digitalWrite(EN, HIGH);
   if (rms1 < 2) {
     Irms1 = 0;
-    yIrms1 = 0;
-    if ((data.status_b1 == HIGH) && (volume > 8.5)) {
-      xIrms1++;
-      if ((xIrms1 > 3) && (data.protect)) {
-        xIrms1 = 0;
-        off_bom();
-        trip1 = true;
-        if (data.key_noti) Blynk.logEvent("error", String("Bơm lỗi\nKhông đo được DÒNG ĐIỆN"));
+    if ((data.status_b1 == HIGH) && (yIrms1 > 3)) {
+      if (smoothDistance < data.phao_min) {
+        yIrms1 = 0;
+      } else if (smoothDistance > data.phao_min) {
+        xIrms1++;
+        if ((xIrms1 > 3) && (data.protect)) {
+          off_bom();
+          trip1 = true;
+          xIrms1 = 0;
+          if (data.key_noti) Blynk.logEvent("error", String("Bơm lỗi\nKhông đo được DÒNG ĐIỆN"));
+        }
       }
     }
     if (rest_time == 0) {
@@ -603,7 +616,7 @@ BLYNK_WRITE(V8)  // Chon máy cài đặt bảo vệ
 {
   switch (param.asInt()) {
     case 0:
-      {  // Gieng
+      {  // ....
         c = 0;
         Blynk.virtualWrite(V9, 0);
         Blynk.virtualWrite(V10, 0);
@@ -630,6 +643,13 @@ BLYNK_WRITE(V8)  // Chon máy cài đặt bảo vệ
         Blynk.virtualWrite(V10, data.SetAmpe2max);
         break;
       }
+    case 4:
+      {  // Phao
+        c = 4;
+        Blynk.virtualWrite(V9, data.phao_min);
+        Blynk.virtualWrite(V10, data.phao_max);
+        break;
+      }
   }
 }
 BLYNK_WRITE(V9)  // min
@@ -641,6 +661,8 @@ BLYNK_WRITE(V9)  // min
       data.SetAmpe1min = param.asInt();
     } else if (c == 3) {
       data.SetAmpe2min = param.asInt();
+    } else if (c == 4) {
+      data.phao_min = param.asInt();
     }
   } else {
     Blynk.virtualWrite(V9, 0);
@@ -655,6 +677,8 @@ BLYNK_WRITE(V10)  // max
       data.SetAmpe1max = param.asInt();
     } else if (c == 3) {
       data.SetAmpe2max = param.asInt();
+    } else if (c == 4) {
+      data.phao_max = param.asInt();
     }
   } else {
     Blynk.virtualWrite(V10, 0);
