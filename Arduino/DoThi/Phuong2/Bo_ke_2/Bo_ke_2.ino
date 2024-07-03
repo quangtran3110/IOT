@@ -447,7 +447,7 @@ void setup() {
     timer_I = timer.setInterval(589, []() {
       readcurrent();
     });
-    timer.setInterval(5089, []() {
+    timer.setInterval(2509, []() {
       up();
       temperature();
       timer.restartTimer(timer_I);
