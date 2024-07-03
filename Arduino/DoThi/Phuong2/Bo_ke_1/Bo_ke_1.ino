@@ -192,11 +192,11 @@ void up() {
 //-------------------------
 void on_van1() {
   sta_rl1 = HIGH;
-  pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
+  pcf8575_1.digitalWrite(pin_RL2, !sta_rl1);
 }
 void off_van1() {
   sta_rl1 = LOW;
-  pcf8575_1.digitalWrite(pin_RL1, !sta_rl1);
+  pcf8575_1.digitalWrite(pin_RL2, !sta_rl1);
 }
 void on_fan() {
   sta_rl3 = HIGH;
@@ -447,7 +447,7 @@ void setup() {
     timer_I = timer.setInterval(589, []() {
       readcurrent();
     });
-    timer.setInterval(5089, []() {
+    timer.setInterval(2589, []() {
       up();
       temperature();
       timer.restartTimer(timer_I);

@@ -94,6 +94,9 @@ const char* password = "Password";
 #include <WidgetRTC.h>
 char daysOfTheWeek[7][12] = { "CN", "T2", "T3", "T4", "T5", "T6", "T7" };
 char tz[] = "Asia/Ho_Chi_Minh";
+byte time_on = 19;
+byte time_off = 5;
+bool time_run = false;
 //-----------------------------
 #include <UrlEncode.h>
 #include <ESP8266httpUpdate.h>
@@ -111,40 +114,50 @@ char A[50] = "";
 byte reboot_num;
 bool blynk_first_connect = false, key_set = false, key = false;
 //------------------- Cầu Cửa Đông
+int i_ccd = 0;
 byte sta_v1_ccd, mode_ccd;
 byte hidden_key_ccd = 3;
 //------------------- UBND P2
+int i_ubndp2 = 0;
 byte sta_v1_ubndp2, mode_ubndp2;
 byte hidden_key_ubndp2 = 3;
 //------------------- Ao lục bình
+int i_alb = 0;
 byte sta_v1_alb, sta_v2_alb;
 byte mode_alb;
 byte hidden_key_alb = 3;
 //------------------- N.T.Bình
+int i_ntbinh = 0;
 byte sta_v1_ntbinh;
 byte mode_ntbinh;
 byte hidden_key_ntbinh = 3;
 //------------------- D.H.Vuong
+int i_dhvuong = 0;
 byte sta_v1_dhvuong;
 byte mode_dhvuong;
 byte hidden_key_dhvuong = 3;
 //------------------- THPT 1
+int i_thpt1 = 0;
 byte sta_v1_thpt1;
 byte mode_thpt1;
 byte hidden_key_thpt1 = 3;
 //------------------- THPT 2
+int i_thpt2 = 0;
 byte sta_v1_thpt2;
 byte mode_thpt2;
 byte hidden_key_thpt2 = 3;
 //------------------- Bờ kè 1
+int i_boke1 = 0;
 byte sta_v1_boke1;
 byte mode_boke1;
 byte hidden_key_boke1 = 3;
 //------------------- Bờ kè 2
+int i_boke2 = 0;
 byte sta_v1_boke2;
 byte mode_boke2;
 byte hidden_key_boke2 = 3;
 //------------------- Bờ kè 3
+int i_boke3 = 0;
 byte sta_v1_boke3;
 byte mode_boke3;
 byte hidden_key_boke3 = 3;
@@ -170,6 +183,10 @@ BLYNK_CONNECTED() {
 void check_status() {
   String payload;
   String server_path;
+
+  if (((hour() >= time_on) || (hour() < time_off)) && (blynk_first_connect)) {
+    time_run = true;
+  } else time_run = false;
   //-------- Cầu cửa đông
   {
     server_path = main_sever + "isHardwareConnected?token=" + ccd_TOKEN;
@@ -181,8 +198,13 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_ccd();
+      i_ccd = 0;
     } else {
       hidden_ccd();
+      if (time_run) {
+        i_ccd++;
+        if (i_ccd == 60) Blynk.logEvent("error", "Module ccd offline!");
+      }
     }
   }
   //-------- UBND P2
@@ -196,8 +218,13 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_ubndp2();
+      i_ubndp2 = 0;
     } else {
       hidden_ubndp2();
+      if (time_run) {
+        i_ubndp2++;
+        if (i_ubndp2 == 60) Blynk.logEvent("error", "Module ubndp2 offline!");
+      }
     }
   }
   //-------- Ao lục bình
@@ -211,8 +238,13 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_alb();
+      i_alb = 0;
     } else {
       hidden_alb();
+      if (time_run) {
+        i_alb++;
+        if (i_alb == 60) Blynk.logEvent("error", "Module alb offline!");
+      }
     }
   }
   //-------- N.T.Bình
@@ -226,8 +258,13 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_ntbinh();
+      i_ntbinh = 0;
     } else {
       hidden_ntbinh();
+      if (time_run) {
+        i_ntbinh++;
+        if (i_ntbinh == 60) Blynk.logEvent("error", "Module ntbinh offline!");
+      }
     }
   }
   //-------- Bờ kè 1
@@ -241,8 +278,11 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_boke1();
+      i_boke1 = 0;
     } else {
       hidden_boke1();
+      i_boke1++;
+      if (i_boke1 == 60) Blynk.logEvent("error", "Module boke1 offline!");
     }
   }
   //-------- Bờ kè 2
@@ -256,8 +296,11 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_boke2();
+      i_boke2 = 0;
     } else {
       hidden_boke2();
+      i_boke2++;
+      if (i_boke2 == 60) Blynk.logEvent("error", "Module boke2 offline!");
     }
   }
   //-------- Bờ kè 3
@@ -271,8 +314,11 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_boke3();
+      i_boke3 = 0;
     } else {
       hidden_boke3();
+      i_boke3++;
+      if (i_boke3 == 60) Blynk.logEvent("error", "Module boke3 offline!");
     }
   }
   //-------- Đường Hùng Vương
@@ -301,8 +347,13 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_thpt1();
+      i_thpt1 = 0;
     } else {
       hidden_thpt1();
+      if (time_run) {
+        i_thpt1++;
+        if (i_thpt1 == 60) Blynk.logEvent("error", "Module thpt1 offline!");
+      }
     }
   }
   //-------- THPT 2
@@ -316,8 +367,13 @@ void check_status() {
     http.end();
     if (payload == "true") {
       visible_thpt2();
+      i_thpt2 = 0;
     } else {
       hidden_thpt2();
+      if (time_run) {
+        i_thpt2++;
+        if (i_thpt2 == 60) Blynk.logEvent("error", "Module thpt2 offline!");
+      }
     }
   }
 }
