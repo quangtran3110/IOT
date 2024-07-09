@@ -18,7 +18,7 @@ const char* password = "Abcd@1234";
 EnergyMonitor emon0;
 bool trip0 = false;
 int xSetAmpe = 0;
-float Irms0, SetAmpemax = 15, SetAmpemin = 0;
+float Irms0, SetAmpemax = 6, SetAmpemin = 2;
 unsigned long int xIrms0 = 0;
 unsigned long int yIrms0 = 0;
 //-----------------------------
@@ -53,7 +53,7 @@ const word address = 0;
 #include <OneWire.h>
 OneWire oneWire(D3);
 DallasTemperature sensors(&oneWire);
-float temp[1];
+float temp;
 //-----------------------------
 #include <UrlEncode.h>
 #include <ESP8266httpUpdate.h>
@@ -88,7 +88,7 @@ bool sta_rl1 = LOW, sta_rl3 = LOW;
 String num_van;
 char s_day[50] = "";
 char B[50] = "";
-String s_timer_van_1;
+String s_timer_van_1, s_temp;
 String s_weekday;
 //-----------------------------
 WidgetTerminal DATAS(V0);
@@ -158,7 +158,8 @@ void print_terminal() {
   server_path = server_name + "batch/update?token=" + Main_TOKEN
                 + pin_terminal + location
                 + pin_terminal + s_weekday
-                + pin_terminal + s_timer_van_1;
+                + pin_terminal + s_timer_van_1
+                + pin_terminal + urlEncode(s_temp);
   http.begin(client, server_path.c_str());
   httpResponseCode = http.GET();
   http.end();
@@ -285,7 +286,7 @@ void readcurrent()  // C2
         trip0 = true;
         String dataS = "Bơm bờ kè 1 lỗi! " + String(Irms0) + "A";
         String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                             + "&V100=" + dataS;
+                             + "&V100=" + urlEncode(dataS);
         http.begin(client, server_path.c_str());
         int httpResponseCode = http.GET();
         http.end();
@@ -296,14 +297,12 @@ void readcurrent()  // C2
 void temperature() {  // Nhiệt độ
   sensors.requestTemperatures();
   //Serial.println(sensors.getDeviceCount());
-  for (byte i = 0; i < sensors.getDeviceCount(); i++) {
-    temp[i] = sensors.getTempCByIndex(i);
-    //Serial.println(temp[i]);
-    if (temp[i] > 37 && sta_rl3 == LOW) on_fan();
-    else if (temp[i] < 35 && sta_rl3 == HIGH) off_fan();
+  if (sensors.getDeviceCount() > 0) {
+    temp = sensors.getTempCByIndex(0);
+    s_temp = "Temp: " + String(temp) + "°C\n";
+    if (temp > 38 && sta_rl3 == LOW) on_fan();
+    else if (temp < 36 && sta_rl3 == HIGH) off_fan();
   }
-  //Blynk.virtualWrite(V15, temp[1]);
-  //Blynk.virtualWrite(V23, temp[0]);
 }
 //-------------------------
 void rtctime() {
