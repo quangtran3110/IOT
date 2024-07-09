@@ -18,7 +18,7 @@ const char* password = "Abcd@1234";
 EnergyMonitor emon0;
 bool trip0 = false;
 int xSetAmpe = 0;
-float Irms0, SetAmpemax = 15, SetAmpemin = 0;
+float Irms0, SetAmpemax = 17, SetAmpemin = 12;
 unsigned long int xIrms0 = 0;
 unsigned long int yIrms0 = 0;
 //-----------------------------
@@ -61,14 +61,14 @@ float temp[1];
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/Bo_ke_1/build/esp8266.esp8266.nodemcuv2/Bo_ke_1.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong2/Bo_ke_3/build/esp8266.esp8266.nodemcuv2/Bo_ke_3.ino.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
-#define pin_terminal "&V39="
-#define pin_G "&V40="
-#define pin_mode "&V41="
-#define pin_Irms "&V43="
-String location = urlEncode("Phường 2 - Bờ kè 1\n");
+#define pin_terminal "&V49="
+#define pin_G "&V50="
+#define pin_mode "&V51="
+#define pin_Irms "&V53="
+String location = urlEncode("Phường 2 - Bờ kè 3\n");
 //-----------------------------
 struct Data {
   byte mode;
@@ -283,9 +283,9 @@ void readcurrent()  // C2
         off_van1();
         xSetAmpe = 0;
         trip0 = true;
-        String dataS = "Bơm bờ kè 1 lỗi! " + String(Irms0) + "A";
+        String dataS = "Bơm bờ kè 3 lỗi! " + String(Irms0) + "A";
         String server_path = server_name + "batch/update?token=" + Main_TOKEN
-                             + "&V100=" + dataS;
+                             + "&V100=" + urlEncode(dataS);
         http.begin(client, server_path.c_str());
         int httpResponseCode = http.GET();
         http.end();
@@ -298,7 +298,7 @@ void temperature() {  // Nhiệt độ
   //Serial.println(sensors.getDeviceCount());
   for (byte i = 0; i < sensors.getDeviceCount(); i++) {
     temp[i] = sensors.getTempCByIndex(i);
-    //Serial.println(temp[i]);
+    Serial.println(temp[i]);
     if (temp[i] > 37 && sta_rl3 == LOW) on_fan();
     else if (temp[i] < 35 && sta_rl3 == HIGH) off_fan();
   }
@@ -411,6 +411,7 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   Blynk.config(BLYNK_AUTH_TOKEN);
+  delay(10000);
   //-----------------------
   emon0.current(A0, 105);
   //-----------------------
@@ -447,7 +448,7 @@ void setup() {
     timer_I = timer.setInterval(589, []() {
       readcurrent();
     });
-    timer.setInterval(5089, []() {
+    timer.setInterval(2589, []() {
       up();
       temperature();
       timer.restartTimer(timer_I);
