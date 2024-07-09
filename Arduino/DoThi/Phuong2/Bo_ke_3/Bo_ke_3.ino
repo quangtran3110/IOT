@@ -18,7 +18,7 @@ const char* password = "Abcd@1234";
 EnergyMonitor emon0;
 bool trip0 = false;
 int xSetAmpe = 0;
-float Irms0, SetAmpemax = 17, SetAmpemin = 12;
+float Irms0, SetAmpemax = 18, SetAmpemin = 12;
 unsigned long int xIrms0 = 0;
 unsigned long int yIrms0 = 0;
 //-----------------------------
