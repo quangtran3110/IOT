@@ -46,7 +46,7 @@ const word address = 0;
 #include <OneWire.h>
 OneWire oneWire(D3);
 DallasTemperature sensors(&oneWire);
-float temp[1];
+float temp;
 //-----------------------------
 #include <UrlEncode.h>
 #include <ESP8266httpUpdate.h>
@@ -71,7 +71,7 @@ bool sta_rl1 = LOW, sta_rl3 = LOW;
 String num_van;
 char s_day[50] = "";
 char B[50] = "";
-String s_timer_van_1;
+String s_timer_van_1,s_temp;
 String s_weekday;
 //-----------------------------
 struct Data {
@@ -160,7 +160,8 @@ void print_terminal() {
   server_path = server_name + "batch/update?token=" + Main_TOKEN
                 + pin_terminal + location
                 + pin_terminal + s_weekday
-                + pin_terminal + s_timer_van_1;
+                + pin_terminal + s_timer_van_1
+                + pin_terminal + urlEncode(s_temp);
   http.begin(client, server_path.c_str());
   httpResponseCode = http.GET();
   http.end();
@@ -245,14 +246,12 @@ void rtctime() {
 void temperature() {  // Nhiệt độ
   sensors.requestTemperatures();
   //Serial.println(sensors.getDeviceCount());
-  for (byte i = 0; i < sensors.getDeviceCount(); i++) {
-    temp[i] = sensors.getTempCByIndex(i);
-    Serial.println(temp[i]);
-    if (temp[i] > 35 && sta_rl3 == LOW) on_fan();
-    else if (temp[i] < 33 && sta_rl3 == HIGH) off_fan();
+  if (sensors.getDeviceCount() > 0) {
+    temp = sensors.getTempCByIndex(0);
+    s_temp = "Temp: " + String(temp) + "°C\n";
+    if (temp > 37 && sta_rl3 == LOW) on_fan();
+    else if (temp < 35 && sta_rl3 == HIGH) off_fan();
   }
-  //Blynk.virtualWrite(V15, temp[1]);
-  //Blynk.virtualWrite(V23, temp[0]);
 }
 BLYNK_WRITE(V0) {
   String dataS = param.asStr();
@@ -381,7 +380,7 @@ void setup() {
   Wire.begin();
   sensors.begin();
   pcf8575_1.begin();
-  
+
   pcf8575_1.pinMode(S0, OUTPUT);
   pcf8575_1.pinMode(S1, OUTPUT);
   pcf8575_1.pinMode(S2, OUTPUT);
