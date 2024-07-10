@@ -253,10 +253,14 @@ BLYNK_WRITE(V1) {
   //-------------------------
   if (num_van == "van1") {
     if (t.hasStartTime()) {
-      data.rl1_r = t.getStartHour() * 3600 + t.getStartMinute() * 60;
+      hour_start_rl1 = t.getStartHour();
+      minute_start_rl1 = t.getStartMinute();
+      data.rl1_r = hour_start_rl1 * 3600 + minute_start_rl1 * 60;
     }
     if (t.hasStopTime()) {
-      data.rl1_s = t.getStopHour() * 3600 + t.getStopMinute() * 60;
+      hour_stop_rl1 = t.getStopHour();
+      minute_stop_rl1 = t.getStopMinute();
+      data.rl1_s = hour_stop_rl1 * 3600 + minute_stop_rl1 * 60;
     }
   }
   //-------------------------
@@ -300,8 +304,8 @@ void temperature() {  // Nhiệt độ
   if (sensors.getDeviceCount() > 0) {
     temp = sensors.getTempCByIndex(0);
     s_temp = "Temp: " + String(temp) + "°C\n";
-    if (temp > 38 && sta_rl3 == LOW) on_fan();
-    else if (temp < 36 && sta_rl3 == HIGH) off_fan();
+    if (temp > 37 && sta_rl3 == LOW) on_fan();
+    else if (temp < 35 && sta_rl3 == HIGH) off_fan();
   }
 }
 //-------------------------

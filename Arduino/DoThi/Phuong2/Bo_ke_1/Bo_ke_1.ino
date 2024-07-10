@@ -304,8 +304,8 @@ void temperature() {  // Nhiệt độ
   if (sensors.getDeviceCount() > 0) {
     temp = sensors.getTempCByIndex(0);
     s_temp = "Temp: " + String(temp) + "°C\n";
-    if (temp > 38 && sta_rl3 == LOW) on_fan();
-    else if (temp < 36 && sta_rl3 == HIGH) off_fan();
+    if (temp > 37 && sta_rl3 == LOW) on_fan();
+    else if (temp < 35 && sta_rl3 == HIGH) off_fan();
   }
 }
 //-------------------------
