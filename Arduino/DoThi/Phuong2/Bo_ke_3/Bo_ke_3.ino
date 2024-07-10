@@ -146,7 +146,8 @@ void weekday_() {
   }
   char s_timer_van_1_[30];  // Tạo một mảng ký tự để lưu trữ chuỗi định dạng
   sprintf(s_timer_van_1_, "Van 1: %02d:%02d - %02d:%02d\n", hour_start_rl1, minute_start_rl1, hour_stop_rl1, minute_stop_rl1);
-  s_timer_van_1 = urlEncode(s_timer_van_1_);
+  //s_timer_van_1 = urlEncode(s_timer_van_1_);
+  s_timer_van_1 = urlEncode(hour_start_rl1);
 }
 void print_terminal() {
   String server_path = server_name + "batch/update?token=" + Main_TOKEN
