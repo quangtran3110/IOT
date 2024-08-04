@@ -1064,20 +1064,24 @@ void setup() {
   pcf8575_1.digitalWrite(pin_Fan, HIGH);
 
   timer1.setTimeout(5000L, []() {
-    timer_I = timer.setInterval(1589, []() {
+    timer_I = timer.setInterval(1789, []() {
       readcurrent();
       read_timerun_b1();
       //readcurrent1();
       //readcurrent2();
       readcurrent3();
       //temperature();
+      read_modbus();
+      up();
       timer.restartTimer(timer_I);
     });
+    /*
     timer.setInterval(5033L, []() {
       read_modbus();
       up();
       timer.restartTimer(timer_I);
     });
+    */
     timer.setInterval(230L, MeasureCmForSmoothing);
     timer.setInterval(15005L, []() {
       rtctime();
