@@ -126,7 +126,7 @@ void monitor() {
   loadVoltage_V = busVoltage_V + (shuntVoltage_mV / 1000);
 
   if (key_pre == 1) {
-    Blynk.virtualWrite(V10, "Pre_RAW: ", sensorValue);
+    Blynk.virtualWrite(V10, "Pre_RAW: ", sensorValue, "\n");
   }
 }
 
