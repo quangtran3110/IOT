@@ -46,21 +46,26 @@ float power_mW = 0.0;
 float Result1;
 float value14 = 0;
 float temp[1], nhietdo;
-byte w;
+float sensorValue;
+byte w, key_pre = 0;
 byte reboot_num;
 int save_num;
 int time1, time2, time3;
 BlynkTimer timer;
 
-WidgetTerminal terminal(V0);
+WidgetTerminal terminal(V10);
 BLYNK_CONNECTED() {
 }
 
 
-BLYNK_WRITE(V0) {
-  if (param.asInt() == 1) {
+BLYNK_WRITE(V10) {
+  String dataS = param.asStr();
+  if (dataS == "pre_raw") {
     terminal.clear();
-    Blynk.virtualWrite(V0, "UPDATE FIRMWARE DEVICE");
+    key_pre = !key_pre;
+  } else if (dataS == "update") {
+    terminal.clear();
+    Blynk.virtualWrite(V10, "ESP UPDATE...");
     update_fw();
   }
 }
@@ -120,12 +125,13 @@ void monitor() {
   //power_mW = ina226.getBusPower();
   loadVoltage_V = busVoltage_V + (shuntVoltage_mV / 1000);
 
-  //Blynk.virtualWrite(V30, busVoltage_V);
-  //Blynk.virtualWrite(V31, current_mA / 1000);
+  if (key_pre == 1) {
+    Blynk.virtualWrite(V10, "Pre_RAW: ", sensorValue);
+  }
 }
 
 void pressure() {
-  float sensorValue = analogRead(A0);
+  sensorValue = analogRead(A0);
   float Result;
   Result = (((sensorValue - 197.5) * 5) / (1005 - 197.5));
 
