@@ -4,12 +4,12 @@
 #define BLYNK_PRINT Serial
 #define APP_DEBUG
 
-const char* ssid = "Wifi";
-const char* password = "Password";
+const char *ssid = "Wifi";
+const char *password = "Password";
 
+#include "EmonLib.h"
 #include <BlynkSimpleEsp8266.h>
 #include <ESP8266WiFi.h>
-#include "EmonLib.h"
 EnergyMonitor emon0, emon1;
 
 #include <ESP8266HTTPClient.h>
@@ -17,7 +17,6 @@ WiFiClient client;
 HTTPClient http;
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 String Main = "vcz0jVXPSGPK6XmFP5Dqi_etQA32VNPL";
-
 
 const int S0 = D0;
 const int S1 = D1;
@@ -82,7 +81,10 @@ void connectionstatus() {
 }
 
 void send_data_main() {
-  String server_path = server_name + "batch/update?token=" + Main + "&V41=" + float(Irms0) + "&V42=" + float(Irms1) + "&V22=" + 1;
+  String server_path = server_name + "batch/update?token=" + Main +
+                       "&V41=" + float(Irms0) +
+                       "&V42=" + float(Irms1) +
+                       "&V22=" + 1;
   http.begin(client, server_path.c_str());
   int httpResponseCode = http.GET();
   if (httpResponseCode > 0) {
@@ -120,7 +122,7 @@ void loc2() {
   }
 }
 
-void readcurrent()  // C0 - NK1
+void readcurrent() // C0 - NK1
 {
   digitalWrite(S0, LOW);
   digitalWrite(S1, LOW);
@@ -138,16 +140,16 @@ void readcurrent()  // C0 - NK1
       if (xSetAmpe >= 3) {
         trip1 = true;
         off_NK1();
-        //Blynk.notify("Cái Cát - NK 1 lỗi: {Irms0}A!");
+        // Blynk.notify("Cái Cát - NK 1 lỗi: {Irms0}A!");
         xSetAmpe = 0;
       }
     } else {
       xSetAmpe = 0;
     }
   }
-  //Serial.println(Irms0);
+  // Serial.println(Irms0);
 }
-void readcurrent1()  // C1 - NK 2
+void readcurrent1() // C1 - NK 2
 {
   digitalWrite(S0, HIGH);
   digitalWrite(S1, LOW);
@@ -165,7 +167,7 @@ void readcurrent1()  // C1 - NK 2
       if (xSetAmpe1 >= 3) {
         trip2 = true;
         off_NK2();
-        //Blynk.notify("Cái Cát - NK 2 lỗi: {Irms1}A!");
+        // Blynk.notify("Cái Cát - NK 2 lỗi: {Irms1}A!");
         xSetAmpe1 = 0;
       }
     } else {
@@ -173,7 +175,7 @@ void readcurrent1()  // C1 - NK 2
     }
   }
 }
-BLYNK_WRITE(V1)  // data string
+BLYNK_WRITE(V1) // data string
 {
   int dataS = param.asInt();
   if (dataS == 1) {
@@ -226,7 +228,6 @@ BLYNK_WRITE(V2) {
     statusRualoc2 = HIGH;
   }
 }
-
 
 void setup() {
   pinMode(S0, OUTPUT);
