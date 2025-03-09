@@ -7,7 +7,7 @@
 #define BLYNK_TEMPLATE_NAME "SUPPORT ACTIVE"
 #define BLYNK_AUTH_TOKEN "g3GPiciujLdMuATrIxJ0zNInoUo72DiN"
 
-#define BLYNK_FIRMWARE_VERSION "240809.AP5"
+#define BLYNK_FIRMWARE_VERSION "250310.AP5"
 #define BLYNK_PRINT Serial
 #define I2C_ADDRESS 0x40
 #define APP_DEBUG
@@ -49,6 +49,7 @@ float temp[1], nhietdo;
 float sensorValue;
 byte w, key_pre = 0;
 byte reboot_num;
+bool p = true;
 int save_num;
 int time1, time2, time3;
 BlynkTimer timer;
@@ -141,42 +142,31 @@ void pressure() {
   value14 -= Result1;
   //Serial.println(Result1);
 }
-
+void pluse_arduino() {
+  p = !p;
+  digitalWrite(D6, p);
+}
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
-    WiFi.mode(WIFI_STA);
+    Serial.println("Khong ket noi WIFI");
     WiFi.begin(ssid, password);
-    Blynk.config(BLYNK_AUTH_TOKEN);
-    //Serial.println("Khong ket noi WIFI");
   }
   if ((WiFi.status() == WL_CONNECTED) && (!Blynk.connected())) {
     reboot_num = reboot_num + 1;
-    savedata();
-    //Serial.print("reboot_num: ");
-    //Serial.println(reboot_num);
-    if (reboot_num == 1) {
-      //Serial.println("Restart...");
-      //Serial.print("reboot_num: ");
-      //Serial.println(reboot_num);
+    if ((reboot_num == 1) || (reboot_num == 2)) {
+      Serial.println("...");
+      WiFi.disconnect();
       delay(1000);
-      ESP.restart();
+      WiFi.begin(ssid, password);
     }
     if (reboot_num % 5 == 0) {
-      //Serial.print("reboot_num: ");
-      //Serial.println(reboot_num);
-      delay(1000);
       ESP.restart();
     }
   }
   if (Blynk.connected()) {
     if (reboot_num != 0) {
       reboot_num = 0;
-      savedata();
     }
-    //Serial.print("reboot_num: ");
-    //Serial.println(reboot_num);
-    //Serial.println("Blynk OK");
-    //Blynk.virtualWrite(V35, save_num);
   }
 }
 void update_started() {
@@ -214,6 +204,7 @@ void setup() {
   Blynk.config(BLYNK_AUTH_TOKEN);
   delay(5000);
 
+  pinMode(D6, OUTPUT);
   Wire.begin();
   sensors.begin();
 
@@ -234,6 +225,7 @@ void setup() {
 
   timer.setTimeout(5000, []() {
     time1 = timer.setInterval(5612, []() {
+      pluse_arduino();
       tem();
       monitor();
       send_data();
