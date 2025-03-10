@@ -7,7 +7,7 @@
 #define BLYNK_TEMPLATE_NAME "SUPPORT ACTIVE"
 #define BLYNK_AUTH_TOKEN "g3GPiciujLdMuATrIxJ0zNInoUo72DiN"
 
-#define BLYNK_FIRMWARE_VERSION "250310.AP5"
+#define BLYNK_FIRMWARE_VERSION "250311.AP5"
 #define BLYNK_PRINT Serial
 #define I2C_ADDRESS 0x40
 #define APP_DEBUG
@@ -204,7 +204,7 @@ void setup() {
   Blynk.config(BLYNK_AUTH_TOKEN);
   delay(5000);
 
-  pinMode(D6, OUTPUT);
+  pinMode(D5, OUTPUT);
   Wire.begin();
   sensors.begin();
 
