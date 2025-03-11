@@ -7,7 +7,7 @@
 #define BLYNK_TEMPLATE_NAME "SUPPORT ACTIVE"
 #define BLYNK_AUTH_TOKEN "g3GPiciujLdMuATrIxJ0zNInoUo72DiN"
 
-#define BLYNK_FIRMWARE_VERSION "250311.AP5"
+#define BLYNK_FIRMWARE_VERSION "250312.AP5"
 #define BLYNK_PRINT Serial
 #define I2C_ADDRESS 0x40
 #define APP_DEBUG
@@ -144,7 +144,7 @@ void pressure() {
 }
 void pluse_arduino() {
   p = !p;
-  digitalWrite(D6, p);
+  digitalWrite(D5, p);
 }
 void connectionstatus() {
   if ((WiFi.status() != WL_CONNECTED)) {
