@@ -1,7 +1,7 @@
 #define BLYNK_TEMPLATE_ID "TMPL7Z9cnaGi"
 #define BLYNK_TEMPLATE_NAME "Truong THPT"
 #define BLYNK_AUTH_TOKEN "H3VsCxfjXq67ALREdZcKOANCQ_kdFqfg"
-#define BLYNK_FIRMWARE_VERSION "240602"
+#define BLYNK_FIRMWARE_VERSION "250319"
 
 #define Main_TOKEN "w3ZZc7F4pvOIwqozyrzYcBFVUE3XxSiW"
 const char* ssid = "net";
@@ -48,7 +48,7 @@ const word address = 0;
 #include <ESP8266HTTPClient.h>
 WiFiClient client;
 HTTPClient http;
-#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/IOT/main/Arduino/DoThi/Phuong1/thpt1/build/esp8266.esp8266.nodemcuv2/thpt1.ino.bin"
+#define URL_fw_Bin "https://raw.githubusercontent.com/quangtran3110/PlatformIO/main/Do_Thi/Phuong1/thpt1/.pio/build/nodemcuv2/firmware.bin"
 String server_name = "http://sgp1.blynk.cloud/external/api/";
 //-----------------------------
 #define pin_terminal "&V31="
