@@ -44,7 +44,7 @@ void loc1() {
   if (statusRualoc1 == HIGH) {
     digitalWrite(rl1, LOW);
     digitalWrite(rl2, LOW);
-    timer.setTimeout((6 * 60 * 1000), []() {
+    timer.setTimeout((3 * 60 * 1000), []() {
       digitalWrite(rl1, HIGH);
       digitalWrite(rl2, HIGH);
     });
@@ -53,7 +53,7 @@ void loc1() {
 void loc3() {
   if (statusRualoc3 == HIGH) {
     digitalWrite(rl3, LOW);
-    timer.setTimeout((5 * 60 * 1000), []() {
+    timer.setTimeout((3 * 60 * 1000), []() {
       digitalWrite(rl3, HIGH);
     });
   }
@@ -96,8 +96,8 @@ void setup() {
   digitalWrite(rl4, HIGH);
   //timer.setInterval(1503L, updata);
   //timer.setInterval(200L, readPressure);
-  timer.setInterval((10 * 60 * 1000), loc1);
-  timer.setInterval((10 * 61 * 1000), loc3);
+  timer.setInterval((6 * 60 * 1000), loc1);
+  timer.setInterval((6 * 61 * 1000), loc3);
   timer.setInterval(5013, status);
 }
 void loop() {
